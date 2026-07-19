@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Panel, StatTile } from "@/components/dashboard/primitives";
 import { PrecipitationChart } from "@/components/dashboard/precipitation-chart";
 import { TemperatureChart } from "@/components/dashboard/temperature-chart";
-import { meteoAhora } from "@/lib/sample-data";
+import { currentWeather } from "@/lib/sample-data";
 
 export const metadata: Metadata = {
   title: "Meteo",
@@ -22,10 +22,10 @@ export default function MeteoPage() {
       </header>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile label="Temperatura" value={meteoAhora.temperatura} hint="sensación 20,1 °C" />
-        <StatTile label="Viento" value={meteoAhora.viento} hint="racha 26 km/h" />
-        <StatTile label="Humedad relativa" value={meteoAhora.humedad} hint="punto de rocío 12 °C" />
-        <StatTile label="Precipitación 24 h" value={meteoAhora.precipitacion24h} hint="acumulado" />
+        <StatTile label="Temperatura" value={currentWeather.temperature} hint="sensación 20,1 °C" />
+        <StatTile label="Viento" value={currentWeather.wind} hint="racha 26 km/h" />
+        <StatTile label="Humedad relativa" value={currentWeather.humidity} hint="punto de rocío 12 °C" />
+        <StatTile label="Precipitación 24 h" value={currentWeather.precipitation24h} hint="acumulado" />
       </div>
 
       {/* Two measures, two scales -> two charts. Never a second y-axis. */}

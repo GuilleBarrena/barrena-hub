@@ -15,6 +15,12 @@ const ITEMS = [
     ),
   },
   {
+    href: "/dashboard/fields",
+    label: "Parcelas",
+    exact: false,
+    icon: <path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Zm0 5.5 9 4.5 9-4.5" />,
+  },
+  {
     href: "/dashboard/meteo",
     label: "Meteo",
     exact: false,

@@ -1,4 +1,4 @@
-import { dias, temperatura } from "@/lib/sample-data";
+import { days, temperature } from "@/lib/sample-data";
 
 const W = 600;
 const H = 220;
@@ -10,7 +10,7 @@ const TICKS = [10, 15, 20, 25, 30];
 const yMin = 8;
 const yMax = 34;
 
-const x = (i: number) => PAD.l + (i * plotW) / (dias.length - 1);
+const x = (i: number) => PAD.l + (i * plotW) / (days.length - 1);
 const y = (v: number) => PAD.t + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
 
 /**
@@ -19,7 +19,7 @@ const y = (v: number) => PAD.t + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
  * the title names what is plotted.
  */
 export function TemperatureChart() {
-  const { media, min, max } = temperatura;
+  const { mean, min, max } = temperature;
 
   const band =
     max.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ") +
@@ -28,8 +28,8 @@ export function TemperatureChart() {
       .map((v, i) => `${x(min.length - 1 - i).toFixed(1)},${y(min[min.length - 1 - i]).toFixed(1)}`)
       .join(" ");
 
-  const line = media.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-  const last = media.length - 1;
+  const line = mean.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const last = mean.length - 1;
 
   return (
     <figure className="m-0">
@@ -75,7 +75,7 @@ export function TemperatureChart() {
           strokeLinejoin="round"
         />
 
-        {media.map((v, i) => (
+        {mean.map((v, i) => (
           <circle
             key={i}
             cx={x(i)}
@@ -85,22 +85,22 @@ export function TemperatureChart() {
             stroke="var(--color-card)"
             strokeWidth="2"
           >
-            <title>{`${dias[i]}: media ${v} °C (mín ${min[i]} °C, máx ${max[i]} °C)`}</title>
+            <title>{`${days[i]}: media ${v} °C (mín ${min[i]} °C, máx ${max[i]} °C)`}</title>
           </circle>
         ))}
 
         {/* Selective direct label: the last point only, never every point */}
         <text
           x={x(last)}
-          y={y(media[last]) - 12}
+          y={y(mean[last]) - 12}
           textAnchor="end"
           className="fill-foreground"
           style={{ fontSize: 11, fontWeight: 600 }}
         >
-          {media[last]} °C
+          {mean[last]} °C
         </text>
 
-        {dias.map((d, i) => (
+        {days.map((d, i) => (
           <text
             key={d}
             x={x(i)}

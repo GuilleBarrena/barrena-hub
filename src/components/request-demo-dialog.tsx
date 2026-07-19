@@ -4,11 +4,12 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 
-const FIELDS = [
-  { name: "nombre", label: "Nombre y apellidos", type: "text", autoComplete: "name" },
-  { name: "explotacion", label: "Explotación", type: "text", autoComplete: "organization" },
+// Data keys are English; labels stay Spanish, matching the UI.
+const FORM_FIELDS = [
+  { name: "fullName", label: "Nombre y apellidos", type: "text", autoComplete: "name" },
+  { name: "farm", label: "Explotación", type: "text", autoComplete: "organization" },
   { name: "email", label: "Correo electrónico", type: "email", autoComplete: "email" },
-  { name: "telefono", label: "Teléfono", type: "tel", autoComplete: "tel" },
+  { name: "phone", label: "Teléfono", type: "tel", autoComplete: "tel" },
 ] as const;
 
 export function RequestDemoDialog({
@@ -53,7 +54,7 @@ export function RequestDemoDialog({
           </Dialog.Description>
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-            {FIELDS.map((field) => (
+            {FORM_FIELDS.map((field) => (
               <div key={field.name} className="flex flex-col gap-1.5">
                 <label
                   htmlFor={field.name}

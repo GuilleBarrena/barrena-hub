@@ -1,4 +1,4 @@
-import { dias, precipitacion } from "@/lib/sample-data";
+import { days, precipitation } from "@/lib/sample-data";
 
 const W = 600;
 const H = 220;
@@ -9,7 +9,7 @@ const plotH = H - PAD.t - PAD.b;
 const TICKS = [0, 5, 10, 15];
 const yMax = 16;
 
-const step = plotW / precipitacion.length;
+const step = plotW / precipitation.length;
 // Thin marks: a column filling its whole slot reads as a heavy block. Cap the
 // width so the surface gap between bars stays generous.
 const barW = Math.min(34, step * 0.46);
@@ -63,13 +63,13 @@ export function PrecipitationChart() {
           </g>
         ))}
 
-        {precipitacion.map((v, i) => {
+        {precipitation.map((v, i) => {
           const cx = PAD.l + step * i + step / 2;
           return (
             <g key={i}>
               {v > 0 ? (
                 <path d={columnPath(cx, y(v), base, barW)} fill="var(--color-chart-precip)">
-                  <title>{`${dias[i]}: ${v} mm`}</title>
+                  <title>{`${days[i]}: ${v} mm`}</title>
                 </path>
               ) : (
                 // A zero reads as an empty slot, not a missing one.
@@ -81,7 +81,7 @@ export function PrecipitationChart() {
                   stroke="var(--color-chart-grid)"
                   strokeWidth="2"
                 >
-                  <title>{`${dias[i]}: 0 mm`}</title>
+                  <title>{`${days[i]}: 0 mm`}</title>
                 </line>
               )}
               {v > 0 && (
@@ -102,7 +102,7 @@ export function PrecipitationChart() {
                 className="fill-muted-foreground"
                 style={{ fontSize: 10 }}
               >
-                {dias[i]}
+                {days[i]}
               </text>
             </g>
           );

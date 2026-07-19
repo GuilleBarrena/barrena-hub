@@ -50,7 +50,7 @@ export function StatTile({
   );
 }
 
-const NIVEL: Record<string, { dot: string; label: string }> = {
+const LEVELS: Record<string, { dot: string; label: string }> = {
   good: { dot: "bg-brand-primary", label: "Favorable" },
   warning: { dot: "bg-brand-accent", label: "Aviso" },
   serious: { dot: "bg-red-600", label: "Crítico" },
@@ -61,26 +61,26 @@ const NIVEL: Record<string, { dot: string; label: string }> = {
  * communicated by colour alone.
  */
 export function AlertRow({
-  nivel,
-  titulo,
-  detalle,
+  level,
+  title,
+  detail,
 }: {
-  nivel: keyof typeof NIVEL | string;
-  titulo: string;
-  detalle: string;
+  level: keyof typeof LEVELS | string;
+  title: string;
+  detail: string;
 }) {
-  const s = NIVEL[nivel] ?? NIVEL.warning;
+  const s = LEVELS[level] ?? LEVELS.warning;
   return (
     <li className="flex items-start gap-3 py-2.5">
       <span className={`mt-1.5 size-2 shrink-0 rounded-full ${s.dot}`} aria-hidden="true" />
       <span className="min-w-0">
         <span className="flex flex-wrap items-center gap-x-2">
-          <span className="text-sm font-medium text-foreground">{titulo}</span>
+          <span className="text-sm font-medium text-foreground">{title}</span>
           <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             {s.label}
           </span>
         </span>
-        <span className="mt-0.5 block text-[12px] text-muted-foreground">{detalle}</span>
+        <span className="mt-0.5 block text-[12px] text-muted-foreground">{detail}</span>
       </span>
     </li>
   );

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { AlertRow, Panel, StatTile } from "@/components/dashboard/primitives";
-import { actividad, alertas, resumenFinca } from "@/lib/sample-data";
+import { alerts, farmSummary, fleetActivity } from "@/lib/sample-data";
 
 export const metadata: Metadata = {
   title: "Inicio",
   description: "Resumen operativo de la explotación.",
 };
 
-const ESTADO: Record<string, string> = {
+const STATUS_COLOR: Record<string, string> = {
   "En curso": "text-brand-primary",
   Detenido: "text-brand-accent",
   Finalizado: "text-muted-foreground",
@@ -26,10 +26,10 @@ export default function DashboardHome() {
       </header>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile label="Superficie" value={resumenFinca.hectareas} hint="12 parcelas" />
-        <StatTile label="Vehículos activos" value={resumenFinca.vehiculosActivos} hint="de 9 en flota" />
-        <StatTile label="Cobertura" value={resumenFinca.cobertura} hint="campaña en curso" />
-        <StatTile label="Tareas abiertas" value={resumenFinca.tareasAbiertas} hint="4 vencen hoy" />
+        <StatTile label="Superficie" value={farmSummary.hectares} hint="12 parcelas" />
+        <StatTile label="Vehículos activos" value={farmSummary.activeVehicles} hint="de 9 en flota" />
+        <StatTile label="Cobertura" value={farmSummary.coverage} hint="campaña en curso" />
+        <StatTile label="Tareas abiertas" value={farmSummary.openTasks} hint="4 vencen hoy" />
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-5">
@@ -55,14 +55,14 @@ export default function DashboardHome() {
                 </tr>
               </thead>
               <tbody>
-                {actividad.map((row) => (
-                  <tr key={row.vehiculo} className="border-b border-border/60 last:border-0">
-                    <td className="py-2.5 font-medium text-foreground">{row.vehiculo}</td>
-                    <td className="py-2.5 text-muted-foreground">{row.parcela}</td>
-                    <td className={`py-2.5 font-medium ${ESTADO[row.estado] ?? ""}`}>
-                      {row.estado}
+                {fleetActivity.map((row) => (
+                  <tr key={row.vehicle} className="border-b border-border/60 last:border-0">
+                    <td className="py-2.5 font-medium text-foreground">{row.vehicle}</td>
+                    <td className="py-2.5 text-muted-foreground">{row.field}</td>
+                    <td className={`py-2.5 font-medium ${STATUS_COLOR[row.status] ?? ""}`}>
+                      {row.status}
                     </td>
-                    <td className="py-2.5 tabular-nums text-muted-foreground">{row.horas}</td>
+                    <td className="py-2.5 tabular-nums text-muted-foreground">{row.hours}</td>
                   </tr>
                 ))}
               </tbody>
@@ -76,8 +76,8 @@ export default function DashboardHome() {
           className="lg:col-span-2"
         >
           <ul className="divide-y divide-border">
-            {alertas.map((a) => (
-              <AlertRow key={a.titulo} {...a} />
+            {alerts.map((a) => (
+              <AlertRow key={a.title} {...a} />
             ))}
           </ul>
         </Panel>
