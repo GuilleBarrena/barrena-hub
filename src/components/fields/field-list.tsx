@@ -3,10 +3,29 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
+import { ResourceTable, type Column } from "@/components/dashboard/resource-table";
 import { Button } from "@/components/ui/button";
 import { formatHectares } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import type { Field } from "@/lib/fields/types";
+
+const COLUMNS: Column<Field>[] = [
+  { header: "Parcela", cell: (f) => f.name },
+  { header: "Cultivo", cell: (f) => f.cropType, className: "text-muted-foreground" },
+  {
+    header: "Superficie",
+    cell: (f) => formatHectares(f.areaHectares),
+    className: "tabular-nums text-muted-foreground",
+  },
+  {
+    header: "Origen",
+    cell: (f) => (
+      <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        {f.source === "sample" ? "Muestra" : "Dibujada"}
+      </span>
+    ),
+  },
+];
 
 export function FieldList() {
   const [fields, setFields] = useState<Field[] | null>(null);
@@ -19,11 +38,6 @@ export function FieldList() {
   }, []);
 
   useEffect(load, [load]);
-
-  async function remove(id: string) {
-    await getFieldRepository().remove(id);
-    load();
-  }
 
   // null = not loaded yet. Storage is browser-only, so the first paint has
   // nothing to show and must not claim the list is empty.
@@ -45,66 +59,15 @@ export function FieldList() {
         </Button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl bg-card ring-1 ring-black/5 shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[560px] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-border text-left">
-                {["Parcela", "Cultivo", "Superficie", "Origen", ""].map((h, i) => (
-                  <th
-                    key={h || i}
-                    scope="col"
-                    className="px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {fields.map((f) => (
-                <tr
-                  key={f.id}
-                  className="border-b border-border/60 transition-colors last:border-0 hover:bg-surface"
-                >
-                  <td className="px-5 py-3 font-medium text-foreground">
-                    {/* Deliberately not a full-row overlay link: it would sit on
-                        top of the delete button and swallow its clicks. */}
-                    <Link
-                      href={`/dashboard/fields/${f.id}`}
-                      className="rounded underline-offset-4 outline-none hover:underline
-                                 focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      {f.name}
-                    </Link>
-                  </td>
-                  <td className="px-5 py-3 text-muted-foreground">{f.cropType}</td>
-                  <td className="px-5 py-3 tabular-nums text-muted-foreground">
-                    {formatHectares(f.areaHectares)}
-                  </td>
-                  <td className="px-5 py-3">
-                    <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      {f.source === "sample" ? "Muestra" : "Dibujada"}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-right">
-                    {f.source === "user" && (
-                      <button
-                        type="button"
-                        onClick={() => remove(f.id)}
-                        className="rounded-md px-2 py-1 text-[12px] text-muted-foreground outline-none
-                                   transition-colors hover:text-red-600 focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        Eliminar
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ResourceTable
+        rows={fields}
+        columns={COLUMNS}
+        hrefFor={(f) => `/dashboard/fields/${f.id}`}
+        onDelete={async (f) => {
+          await getFieldRepository().remove(f.id);
+          load();
+        }}
+      />
 
       <p className="mt-6 text-[11px] text-muted-foreground">
         Las parcelas marcadas como muestra son datos de ejemplo. Las que dibuje se

@@ -50,6 +50,50 @@ export function StatTile({
   );
 }
 
+const LEVEL_DOT: Record<string, string> = {
+  good: "bg-brand-primary",
+  warning: "bg-brand-accent",
+  serious: "bg-red-600",
+};
+
+/**
+ * Status badge. The dot is never the only carrier of meaning - the label
+ * always ships alongside it.
+ */
+export function StatusBadge({
+  level,
+  label,
+}: {
+  level: "good" | "warning" | "serious";
+  label: string;
+}) {
+  return (
+    <span className="inline-flex items-center gap-2 whitespace-nowrap">
+      <span
+        className={`size-2 shrink-0 rounded-full ${LEVEL_DOT[level] ?? LEVEL_DOT.warning}`}
+        aria-hidden="true"
+      />
+      <span className="text-foreground">{label}</span>
+    </span>
+  );
+}
+
+/** Key/value list used by the resource detail pages. */
+export function DetailList({ items }: { items: [string, string][] }) {
+  return (
+    <dl className="mt-4 flex flex-col gap-3 text-sm">
+      {items.map(([k, v]) => (
+        <div key={k} className="flex items-baseline justify-between gap-4">
+          <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+            {k}
+          </dt>
+          <dd className="text-right tabular-nums text-foreground">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 const LEVELS: Record<string, { dot: string; label: string }> = {
   good: { dot: "bg-brand-primary", label: "Favorable" },
   warning: { dot: "bg-brand-accent", label: "Aviso" },

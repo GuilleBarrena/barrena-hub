@@ -21,6 +21,29 @@ const ITEMS = [
     icon: <path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Zm0 5.5 9 4.5 9-4.5" />,
   },
   {
+    href: "/dashboard/vehicles",
+    label: "Vehículos",
+    exact: false,
+    icon: (
+      <>
+        <path d="M3 16.5V12l2-4.5h9l3 4.5h4v4.5" />
+        <circle cx="7.5" cy="17" r="1.8" />
+        <circle cx="17" cy="17" r="1.8" />
+      </>
+    ),
+  },
+  {
+    href: "/dashboard/workers",
+    label: "Operarios",
+    exact: false,
+    icon: (
+      <>
+        <circle cx="12" cy="8" r="3.2" />
+        <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" />
+      </>
+    ),
+  },
+  {
     href: "/dashboard/meteo",
     label: "Meteo",
     exact: false,
