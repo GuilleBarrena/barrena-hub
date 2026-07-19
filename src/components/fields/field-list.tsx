@@ -63,8 +63,21 @@ export function FieldList() {
             </thead>
             <tbody>
               {fields.map((f) => (
-                <tr key={f.id} className="border-b border-border/60 last:border-0">
-                  <td className="px-5 py-3 font-medium text-foreground">{f.name}</td>
+                <tr
+                  key={f.id}
+                  className="border-b border-border/60 transition-colors last:border-0 hover:bg-surface"
+                >
+                  <td className="px-5 py-3 font-medium text-foreground">
+                    {/* Deliberately not a full-row overlay link: it would sit on
+                        top of the delete button and swallow its clicks. */}
+                    <Link
+                      href={`/dashboard/fields/${f.id}`}
+                      className="rounded underline-offset-4 outline-none hover:underline
+                                 focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      {f.name}
+                    </Link>
+                  </td>
                   <td className="px-5 py-3 text-muted-foreground">{f.cropType}</td>
                   <td className="px-5 py-3 tabular-nums text-muted-foreground">
                     {formatHectares(f.areaHectares)}
