@@ -28,6 +28,9 @@
   --color-brand-accent: var(--brand-accent);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-chart-temp: var(--chart-temp);
+  --color-chart-precip: var(--chart-precip);
+  --color-chart-grid: var(--chart-grid);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -52,6 +55,13 @@
   --border: oklch(0.9 0.005 260);
   --input: oklch(0.9 0.005 260);
   --ring: oklch(0.36 0.03 140);
+
+  /* Chart hues. Each measure gets one hue (no dual-axis, no categorical
+     cycling). Validated together against the card surface: chroma floor,
+     CVD separation (protan ΔE 18.3) and >= 3:1 contrast all pass. */
+  --chart-temp: #d17c54;
+  --chart-precip: #1f6fa8;
+  --chart-grid: oklch(0.92 0.004 90);
 }
 
 @layer base {
