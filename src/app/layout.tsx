@@ -13,8 +13,9 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   ),
   title: {
-    default: "CampoBase — Control operativo total para su explotación agrícola",
-    template: "%s — CampoBase",
+    default:
+      "Hub by barrenarobotics — Control operativo total para su explotación agrícola",
+    template: "%s — Hub by barrenarobotics",
   },
 };
 

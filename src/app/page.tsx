@@ -12,14 +12,15 @@ import { FeatureSection } from "@/components/feature-section";
 import { RequestDemoDialog } from "@/components/request-demo-dialog";
 
 export const metadata: Metadata = {
-  // `absolute` opts out of the "%s — CampoBase" template in the root layout.
+  // `absolute` opts out of the title template in the root layout.
   title: {
-    absolute: "CampoBase — Control operativo total para su explotación agrícola",
+    absolute:
+      "Hub by barrenarobotics — Control operativo total para su explotación agrícola",
   },
   description:
     "Plataforma agro para trazabilidad de vehículos por finca, evolución satelital, alertas meteorológicas y gestión de operarios.",
   openGraph: {
-    title: "CampoBase — Control operativo agrícola",
+    title: "Hub by barrenarobotics — Control operativo agrícola",
     description:
       "Trazabilidad de flota, evolución satelital, alertas meteorológicas y gestión de cuadrillas en una única interfaz técnica.",
     type: "website",
@@ -45,10 +46,14 @@ export default function Landing() {
       {/* Header */}
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <div className="size-6 bg-brand-primary rounded-[4px]" />
+          <div className="flex items-baseline gap-2">
+            <div className="size-6 self-center bg-brand-primary rounded-[4px]" />
             <span className="text-sm font-semibold tracking-tight uppercase">
-              CampoBase
+              Hub
+            </span>
+            {/* Company name is lowercase by design - do not apply `uppercase`. */}
+            <span className="hidden sm:inline text-[11px] lowercase text-muted-foreground">
+              by barrenarobotics
             </span>
           </div>
           <Button variant="ghost">Acceder</Button>
@@ -242,7 +247,7 @@ export default function Landing() {
             </p>
             <RequestDemoDialog
               title="Agendar consultoría técnica"
-              description="Revisamos su operación actual y le mostramos cómo encaja CampoBase."
+              description="Revisamos su operación actual y le mostramos cómo encaja Hub."
             >
               <Button
                 variant="inverted"
@@ -261,12 +266,13 @@ export default function Landing() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <div className="size-5 bg-brand-primary/20 rounded-[4px]" />
-              <span className="text-xs font-semibold tracking-tight uppercase text-muted-foreground">
-                CampoBase
+              <span className="text-xs font-semibold tracking-tight text-muted-foreground">
+                <span className="uppercase">Hub</span>{" "}
+                <span className="font-normal lowercase">by barrenarobotics</span>
               </span>
             </div>
             <p className="text-[12px] text-muted-foreground">
-              © 2026 CampoBase Tech. Todos los derechos reservados.
+              © 2026 barrenarobotics. Todos los derechos reservados.
             </p>
           </div>
         </div>
