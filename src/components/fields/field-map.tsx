@@ -14,9 +14,6 @@ import {
 import { FARM_CENTER, INITIAL_ZOOM } from "@/lib/fields/seed";
 import type { Field, LatLng } from "@/lib/fields/types";
 
-const DRAW_COLOR = "#d17c54";
-const EXISTING_COLOR = "#fbfaf8";
-
 export function FieldMap({
   points,
   onAddPoint,
@@ -94,7 +91,7 @@ export function FieldMap({
     for (const f of existing) {
       if (f.ring.length < 3) continue;
       L.polygon(f.ring, {
-        color: EXISTING_COLOR,
+        className: "field-context",
         weight: 1.5,
         opacity: 0.9,
         fillOpacity: 0.08,
@@ -112,8 +109,8 @@ export function FieldMap({
 
     if (points.length > 1) {
       const shape = closed
-        ? L.polygon(points, { color: DRAW_COLOR, weight: 2, fillOpacity: 0.25 })
-        : L.polyline(points, { color: DRAW_COLOR, weight: 2 });
+        ? L.polygon(points, { className: "field-shape", weight: 2, fillOpacity: 0.25 })
+        : L.polyline(points, { className: "field-shape", weight: 2 });
       shape.addTo(layer);
     }
 
@@ -121,9 +118,8 @@ export function FieldMap({
       const isFirst = i === 0;
       const marker = L.circleMarker(p, {
         radius: isFirst && !closed ? 7 : 5,
-        color: DRAW_COLOR,
+        className: "field-vertex",
         weight: 2,
-        fillColor: "#ffffff",
         fillOpacity: 1,
       }).addTo(layer);
 

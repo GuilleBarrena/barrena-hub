@@ -78,6 +78,29 @@
   }
 }
 
+/* Leaflet vector styling.
+   Colour comes from the design token rather than a hardcoded hex. Leaflet
+   writes stroke/fill as SVG presentation attributes, which any CSS rule
+   outranks, so these win without !important. Note that var() is NOT reliably
+   resolved inside presentation attributes - which is exactly why this is a
+   class rather than a colour passed through Leaflet's options. */
+.field-shape {
+  stroke: var(--color-brand-accent);
+  fill: var(--color-brand-accent);
+}
+
+.field-vertex {
+  stroke: var(--color-brand-accent);
+  fill: var(--color-card);
+}
+
+/* Neighbouring fields shown as context: deliberately not the accent, so the
+   field being drawn stays the only accented shape on the map. */
+.field-context {
+  stroke: var(--color-background);
+  fill: var(--color-background);
+}
+
 /* Radix Dialog enter transitions, driven by data-state. Replaces the one
    thing tw-animate-css would have been pulled in for. */
 @keyframes overlay-in {

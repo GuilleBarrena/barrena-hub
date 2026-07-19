@@ -13,8 +13,6 @@ import {
 } from "@/lib/map/providers";
 import type { Field } from "@/lib/fields/types";
 
-const FIELD_COLOR = "#d17c54";
-
 /** Read-only counterpart to FieldMap: renders one field and frames it. */
 export function FieldViewMap({ field }: { field: Field }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -56,7 +54,7 @@ export function FieldViewMap({ field }: { field: Field }) {
 
     shapeRef.current?.remove();
     const polygon = L.polygon(field.ring, {
-      color: FIELD_COLOR,
+      className: "field-shape",
       weight: 2,
       fillOpacity: 0.25,
     }).addTo(map);
