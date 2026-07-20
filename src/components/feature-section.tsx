@@ -1,6 +1,7 @@
 import Image, { type StaticImageData } from "next/image";
 
 export function FeatureSection({
+  id,
   index,
   eyebrow,
   title,
@@ -12,6 +13,7 @@ export function FeatureSection({
   tinted,
   tag,
 }: {
+  id?: string;
   index: string;
   eyebrow: string;
   title: string;
@@ -24,7 +26,10 @@ export function FeatureSection({
   tag?: string;
 }) {
   return (
-    <section className={tinted ? "bg-surface py-16 md:py-24" : "bg-background py-16 md:py-24"}>
+    <section
+      id={id}
+      className={`scroll-mt-14 ${tinted ? "bg-surface py-16 md:py-24" : "bg-background py-16 md:py-24"}`}
+    >
       <div className="mx-auto max-w-screen-xl px-6">
         <div
           className={`grid gap-10 md:gap-16 md:grid-cols-2 md:items-center ${
