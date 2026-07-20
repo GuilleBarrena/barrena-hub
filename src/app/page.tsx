@@ -7,6 +7,7 @@ import featureTracking from "@/assets/feature-tracking.jpg";
 import { Button } from "@/components/ui/button";
 import { FeatureSection } from "@/components/feature-section";
 import { WaitlistDialog } from "@/components/waitlist-dialog";
+import { MobileMenu } from "@/components/mobile-menu";
 
 const ROOT_SITE = "https://barrenarobotics.com";
 
@@ -55,13 +56,20 @@ export default function Landing() {
               Barrena Robotics
             </span>
           </div>
-          <div className="flex items-center gap-1 sm:gap-3">
-            <Button asChild variant="ghost" className="px-2 hidden sm:inline-flex">
-              <a href={ROOT_SITE}>← barrenarobotics.com</a>
-            </Button>
-            <Button asChild variant="ghost">
-              <a href="/dashboard">Acceder</a>
-            </Button>
+          <div className="flex items-center gap-3">
+            {/* Desktop: inline links. Wrapped in a plain div so `hidden`
+                controls display without fighting the Button's base
+                `inline-flex` utility. */}
+            <div className="hidden items-center gap-3 sm:flex">
+              <Button asChild variant="ghost" className="px-2">
+                <a href={ROOT_SITE}>← barrenarobotics.com</a>
+              </Button>
+              <Button asChild variant="ghost">
+                <a href="/dashboard">Acceder</a>
+              </Button>
+            </div>
+            {/* Mobile: slide-in menu */}
+            <MobileMenu rootSite={ROOT_SITE} />
           </div>
         </div>
         <div className="h-px w-full bg-foreground/5" />
@@ -179,6 +187,7 @@ export default function Landing() {
 
       {/* Módulo 01 — protagonista: el kit de guiado autónomo */}
       <FeatureSection
+        id="kit"
         index="01"
         eyebrow="Kit de guiado autónomo"
         title="Su tractor de viña trabaja solo, sin GPS RTK"
@@ -286,7 +295,7 @@ export default function Landing() {
       </section>
 
       {/* También incluido, gratis — módulos secundarios */}
-      <section className="bg-background py-16 md:py-24">
+      <section id="incluido" className="bg-background py-16 md:py-24 scroll-mt-14">
         <div className="mx-auto max-w-screen-xl px-6">
           <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
             También incluido, gratis

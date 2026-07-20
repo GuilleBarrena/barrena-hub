@@ -131,9 +131,30 @@
   animation: content-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* Mobile menu: overlay fades in, panel slides from the right edge. Uses its
+   own data-slots so it doesn't inherit the centered-dialog scale transition. */
+@keyframes panel-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+[data-slot="menu-overlay"][data-state="open"] {
+  animation: overlay-in 180ms ease-out;
+}
+
+[data-slot="menu-panel"][data-state="open"] {
+  animation: panel-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-slot="dialog-overlay"],
-  [data-slot="dialog-content"] {
+  [data-slot="dialog-content"],
+  [data-slot="menu-overlay"],
+  [data-slot="menu-panel"] {
     animation: none !important;
   }
 }
