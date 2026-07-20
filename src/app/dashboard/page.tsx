@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AlertRow, Panel, StatTile } from "@/components/dashboard/primitives";
+import { ActionablesPanel } from "@/components/dashboard/actionables-panel";
 import { alerts, farmSummary, fleetActivity } from "@/lib/sample-data";
 
 export const metadata: Metadata = {
@@ -30,6 +31,11 @@ export default function DashboardHome() {
         <StatTile label="Vehículos activos" value={farmSummary.activeVehicles} hint="de 9 en flota" />
         <StatTile label="Cobertura" value={farmSummary.coverage} hint="campaña en curso" />
         <StatTile label="Tareas abiertas" value={farmSummary.openTasks} hint="4 vencen hoy" />
+      </div>
+
+      {/* Capa de IA: convierte todos los datos de entrada en acciones. */}
+      <div className="mt-4">
+        <ActionablesPanel />
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-5">
