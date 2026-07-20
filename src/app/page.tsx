@@ -3,26 +3,25 @@ import Image from "next/image";
 
 import satelliteMap from "@/assets/satellite-map.jpg";
 import featureTracking from "@/assets/feature-tracking.jpg";
-import featureSatellite from "@/assets/feature-satellite.jpg";
-import featureWeather from "@/assets/feature-weather.jpg";
-import featureWorkers from "@/assets/feature-workers.jpg";
 
 import { Button } from "@/components/ui/button";
 import { FeatureSection } from "@/components/feature-section";
-import { RequestDemoDialog } from "@/components/request-demo-dialog";
+import { WaitlistDialog } from "@/components/waitlist-dialog";
+
+const ROOT_SITE = "https://barrenarobotics.com";
 
 export const metadata: Metadata = {
   // `absolute` opts out of the title template in the root layout.
   title: {
     absolute:
-      "Hub by barrenarobotics — Control operativo total para su explotación agrícola",
+      "Hub · Barrena Robotics — La consola de la agricultura autónoma",
   },
   description:
-    "Plataforma agro para trazabilidad de vehículos por finca, evolución satelital, alertas meteorológicas y gestión de operarios.",
+    "Hub es el centro de operaciones de Barrena Robotics. Supervise sus máquinas autónomas, monitorice sus cultivos y coordine sus cuadrillas desde una única interfaz técnica. Gratis para toda explotación.",
   openGraph: {
-    title: "Hub by barrenarobotics — Control operativo agrícola",
+    title: "Hub · Barrena Robotics — La consola de la agricultura autónoma",
     description:
-      "Trazabilidad de flota, evolución satelital, alertas meteorológicas y gestión de cuadrillas en una única interfaz técnica.",
+      "El centro de operaciones para su flota autónoma: telemetría del kit de guiado, evolución satelital, meteo y cuadrillas en una sola pantalla.",
     type: "website",
     locale: "es_ES",
     images: [
@@ -30,7 +29,7 @@ export const metadata: Metadata = {
         url: satelliteMap.src,
         width: satelliteMap.width,
         height: satelliteMap.height,
-        alt: "Vista satelital de parcelas agrícolas con trazas GPS",
+        alt: "Vista satelital de parcelas agrícolas con trazas de guiado autónomo",
       },
     ],
   },
@@ -51,14 +50,19 @@ export default function Landing() {
             <span className="text-sm font-semibold tracking-tight uppercase">
               Hub
             </span>
-            {/* Company name is lowercase by design - do not apply `uppercase`. */}
-            <span className="hidden sm:inline text-[11px] lowercase text-muted-foreground">
-              by barrenarobotics
+            <span className="text-[11px] text-muted-foreground">·</span>
+            <span className="text-sm font-semibold tracking-tight text-foreground">
+              Barrena Robotics
             </span>
           </div>
-          <Button asChild variant="ghost">
-            <a href="/dashboard">Acceder</a>
-          </Button>
+          <div className="flex items-center gap-1 sm:gap-3">
+            <Button asChild variant="ghost" className="px-2 hidden sm:inline-flex">
+              <a href={ROOT_SITE}>← barrenarobotics.com</a>
+            </Button>
+            <Button asChild variant="ghost">
+              <a href="/dashboard">Acceder</a>
+            </Button>
+          </div>
         </div>
         <div className="h-px w-full bg-foreground/5" />
       </nav>
@@ -68,25 +72,22 @@ export default function Landing() {
         <div className="mx-auto max-w-screen-xl px-6">
           <span className="mb-4 inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
             <span className="size-1.5 rounded-full bg-brand-accent" />
-            Tecnología de precisión · IA
+            La consola de la agricultura autónoma
           </span>
           <h1 className="text-balance text-3xl md:text-5xl font-semibold leading-tight tracking-tight text-foreground max-w-3xl">
-            Sus datos del campo, convertidos en decisiones
+            Opere su explotación agrícola desde una sola pantalla
           </h1>
           <p className="mt-4 max-w-[52ch] text-pretty text-base md:text-lg text-muted-foreground">
-            Hub vigila vehículos, cultivos, meteo y cuadrillas en una única
-            interfaz técnica — y una capa de IA lo cruza todo para decirle qué
-            hacer primero. Deje de mirar paneles: conozca la siguiente acción.
+            Hub es el centro de operaciones de Barrena Robotics. Supervise sus
+            máquinas autónomas, monitorice sus cultivos y coordine sus cuadrillas
+            desde una única interfaz técnica. Gratis para toda explotación.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <RequestDemoDialog>
-              <Button>Solicitar Demo</Button>
-            </RequestDemoDialog>
+            <WaitlistDialog>
+              <Button>Solicitar acceso anticipado</Button>
+            </WaitlistDialog>
             <Button asChild variant="secondary">
-              <a href="/dashboard">Ver el panel</a>
-            </Button>
-            <Button asChild variant="ghost" className="px-2">
-              <a href="#inteligencia">Saber más</a>
+              <a href={ROOT_SITE}>Conocer el kit autónomo</a>
             </Button>
           </div>
         </div>
@@ -100,7 +101,7 @@ export default function Landing() {
               <div className="relative aspect-[3/4] md:aspect-[16/10] w-full overflow-hidden rounded-xl outline-1 -outline-offset-1 outline-black/5">
                 <Image
                   src={satelliteMap}
-                  alt="Vista satelital de parcelas agrícolas con trazas GPS"
+                  alt="Vista satelital de parcelas agrícolas con trazas de guiado autónomo"
                   fill
                   // `preload` replaces the deprecated `priority` prop in Next.js 16.
                   preload
@@ -119,7 +120,7 @@ export default function Landing() {
                   <span className="relative inline-flex size-2 rounded-full bg-green-500" />
                 </span>
                 <span className="text-[11px] font-medium text-foreground">
-                  Tractor John Deere 6R · En curso
+                  Tractor Barrena · Guiado autónomo en curso
                 </span>
               </div>
               <div className="rounded-full bg-background/90 px-3 py-1.5 backdrop-blur ring-1 ring-black/5">
@@ -175,117 +176,45 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Section intro */}
-      <section id="capacidades" className="bg-background pt-16 md:pt-24 pb-4 scroll-mt-14">
-        <div className="mx-auto max-w-screen-xl px-6">
-          <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
-            Capacidades técnicas
-          </span>
-          <h2 className="mt-3 text-balance text-3xl md:text-4xl font-semibold tracking-tight text-foreground max-w-2xl">
-            Cuatro módulos, una sola operación
-          </h2>
-          <p className="mt-4 max-w-[56ch] text-sm md:text-base text-muted-foreground">
-            Visibilidad total sobre cada hectárea, cada máquina y cada cuadrilla.
-          </p>
-        </div>
-      </section>
-
+      {/* Módulo 01 — protagonista: flota autónoma */}
       <FeatureSection
         index="01"
-        eyebrow="Trazabilidad de flota"
-        title="Rastreo de vehículos por finca"
-        description="Visualice en tiempo real la trayectoria y las pasadas de cada vehículo por parcela para asegurar la cobertura total del terreno y evitar solapamientos costosos."
+        eyebrow="Flota autónoma"
+        title="Supervise sus máquinas autónomas en tiempo real"
+        description="Visualice cada pasada de sus tractores Barrena, replay de sesiones de guiado autónomo y alertas de intervención. La única plataforma que ve lo que su máquina ve."
         bullets={[
-          "Histórico de pasadas por parcela y por vehículo",
-          "Detección automática de zonas no tratadas",
-          "Registro de horas de trabajo y consumo",
+          "Telemetría en vivo del kit de guiado",
+          "Replay de trayectorias y cobertura por parcela",
+          "Alertas cuando la máquina requiere atención humana",
         ]}
         image={featureTracking}
-        imageAlt="Vista aérea de tractor con trazas GPS sobre parcelas"
+        imageAlt="Tractor con kit de guiado autónomo y trazas sobre parcelas"
+        tag="Requiere kit Barrena"
       />
 
-      <FeatureSection
-        index="02"
-        eyebrow="Salud del cultivo"
-        title="Evolución satelital de la finca"
-        description="Monitorización histórica de índices de vegetación (NDVI) para detectar anomalías hídricas o de vigor antes de que sean visibles al ojo humano."
-        bullets={[
-          "Mapas NDVI actualizados por revisita satelital",
-          "Comparativa entre campañas y parcelas",
-          "Alertas de zonas con caída de vigor",
-        ]}
-        image={featureSatellite}
-        imageAlt="Mapa NDVI satelital con índices de vegetación"
-        reverse
-        tinted
-      />
-
-      <FeatureSection
-        index="03"
-        eyebrow="Meteorología local"
-        title="Predicción del tiempo con alertas"
-        description="Predicción ultra-local por finca con avisos críticos de helada, viento, lluvia o estrés hídrico. Reciba notificaciones antes de programar tareas sensibles."
-        bullets={[
-          "Alertas push de helada, granizo y viento",
-          "Ventanas óptimas para pulverización y siembra",
-          "Estaciones propias integradas",
-        ]}
-        image={featureWeather}
-        imageAlt="Cielo tormentoso sobre finca con estación meteorológica"
-      />
-
-      <FeatureSection
-        index="04"
-        eyebrow="Cuadrillas y tareas"
-        title="Control de operarios y gestión de tareas"
-        description="Asigne partes de trabajo diarios, supervise el progreso de las cuadrillas y reciba confirmación desde el campo con foto y coordenadas."
-        bullets={[
-          "Órdenes de trabajo digitales con checklist",
-          "Fichaje y ubicación en tiempo real",
-          "Partes cerrados con evidencia fotográfica",
-        ]}
-        image={featureWorkers}
-        imageAlt="Operarios agrícolas revisando tareas en tablet"
-        reverse
-        tinted
-      />
-
-      {/* Capa de inteligencia (IA) */}
-      <section id="inteligencia" className="bg-background py-16 md:py-24 scroll-mt-14">
+      {/* Inteligencia operativa sobre los datos de la flota */}
+      <section id="inteligencia" className="bg-surface py-16 md:py-24 scroll-mt-14">
         <div className="mx-auto max-w-screen-xl px-6">
           <div className="flex items-center gap-3 mb-5">
             <span className="text-[10px] font-mono font-semibold tracking-[0.2em] uppercase text-brand-accent">
-              05
+              02
             </span>
             <span className="h-px w-8 bg-brand-accent/40" />
             <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-              Capa de inteligencia
+              Inteligencia operativa
             </span>
           </div>
 
           <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
             <div>
               <h3 className="text-balance text-2xl md:text-4xl font-semibold tracking-tight text-foreground">
-                Una IA que convierte los datos en acciones
+                Recomendaciones accionables desde los datos de su flota
               </h3>
               <p className="mt-4 max-w-[48ch] text-pretty text-sm md:text-base text-muted-foreground leading-relaxed">
-                La capa de IA lee toda la operación a la vez —meteo, parcelas,
-                flota y cuadrillas— y devuelve una lista corta de acciones
-                priorizadas, con impacto, esfuerzo y los pasos concretos para
-                empezar hoy. Y un agente con el que puede conversar sobre cada una.
+                El Hub aprende de cada pasada de sus máquinas y le sugiere cuándo
+                tratar, dónde intervenir y qué parcelas priorizar. La IA no
+                reemplaza al agricultor: le da criterio con datos reales del campo.
               </p>
-              <ul className="mt-6 flex flex-col gap-3">
-                {[
-                  "Razonamiento cruzado entre todas las fuentes de datos",
-                  "Priorizadas por impacto, esfuerzo y confianza",
-                  "Un agente que responde con el contexto de su finca",
-                ].map((b) => (
-                  <li key={b} className="flex items-start gap-3 text-sm text-foreground">
-                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-primary" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button asChild>
                   <a href="/dashboard">Ver acciones en el panel</a>
@@ -303,7 +232,7 @@ export default function Landing() {
                   Acciones de hoy
                 </span>
                 <span className="text-[11px] text-muted-foreground">
-                  6 · 4 módulos
+                  Datos de su flota
                 </span>
               </div>
               <ul className="mt-3 flex flex-col gap-2.5">
@@ -319,8 +248,8 @@ export default function Landing() {
                     dot: "bg-red-600",
                     label: "Crítica",
                     labelClass: "text-red-700",
-                    title: "Resolver la Claas Lexion fuera de servicio",
-                    impact: "Restablece la cosecha",
+                    title: "Revisar intervención pendiente del tractor Barrena",
+                    impact: "Restablece el guiado autónomo",
                   },
                   {
                     dot: "bg-brand-accent",
@@ -354,28 +283,92 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* También incluido, gratis — módulos secundarios */}
+      <section className="bg-background py-16 md:py-24">
+        <div className="mx-auto max-w-screen-xl px-6">
+          <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
+            También incluido, gratis
+          </span>
+          <h2 className="mt-3 text-balance text-2xl md:text-3xl font-semibold tracking-tight text-foreground max-w-2xl">
+            Toda la explotación, tenga o no máquinas Barrena
+          </h2>
+          <p className="mt-4 max-w-[56ch] text-sm md:text-base text-muted-foreground">
+            El Hub es gratuito para cualquier explotación. Estas capacidades
+            funcionan sin hardware Barrena, desde el primer día.
+          </p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {[
+              {
+                index: "03",
+                eyebrow: "Salud del cultivo",
+                title: "Evolución satelital de la finca",
+                description:
+                  "Índices de vegetación (NDVI) por parcela para detectar anomalías de vigor antes de que sean visibles.",
+              },
+              {
+                index: "04",
+                eyebrow: "Meteorología local",
+                title: "Predicción del tiempo con alertas",
+                description:
+                  "Predicción ultra-local por finca con avisos de helada, viento y lluvia antes de programar tareas sensibles.",
+              },
+              {
+                index: "05",
+                eyebrow: "Cuadrillas y tareas",
+                title: "Control de operarios y tareas",
+                description:
+                  "Asigne partes de trabajo, supervise el progreso de las cuadrillas y reciba confirmación desde el campo.",
+              },
+            ].map((card) => (
+              <div
+                key={card.index}
+                className="flex flex-col rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-[10px] font-mono font-semibold tracking-[0.2em] uppercase text-brand-accent">
+                    {card.index}
+                  </span>
+                  <span className="h-px w-6 bg-brand-accent/40" />
+                  <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                    {card.eyebrow}
+                  </span>
+                </div>
+                <h3 className="text-balance text-base md:text-lg font-semibold tracking-tight text-foreground">
+                  {card.title}
+                </h3>
+                <p className="mt-2 text-[13px] text-muted-foreground leading-relaxed">
+                  {card.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-surface py-16">
         <div className="mx-auto max-w-screen-xl px-6">
           <div className="rounded-2xl bg-brand-primary p-8 md:p-12 ring-1 ring-black/5">
             <h2 className="text-balance text-2xl md:text-3xl font-medium text-primary-foreground max-w-2xl">
-              Empiece a digitalizar su finca hoy mismo
+              Prepárese para la explotación autónoma
             </h2>
             <p className="mt-4 text-pretty text-sm md:text-base text-primary-foreground/70 max-w-[56ch]">
-              Únase a los gestores agrícolas que ya optimizan sus márgenes operativos
-              con datos reales del campo.
+              El Hub es gratuito. Regístrese en la lista de espera y sea de las
+              primeras explotaciones en operar con máquinas Barrena cuando abramos
+              el programa piloto.
             </p>
-            <RequestDemoDialog
-              title="Agendar consultoría técnica"
-              description="Revisamos su operación actual y le mostramos cómo encaja Hub."
+            <WaitlistDialog
+              title="Unirme a la lista de espera"
+              description="El Hub es gratuito. Capturamos su explotación para el programa piloto y le avisamos en cuanto abramos acceso."
             >
               <Button
                 variant="inverted"
                 className="mt-8 w-full md:w-auto px-6"
               >
-                Agendar consultoría técnica
+                Unirme a la lista de espera
               </Button>
-            </RequestDemoDialog>
+            </WaitlistDialog>
           </div>
         </div>
       </section>
@@ -388,11 +381,24 @@ export default function Landing() {
               <div className="size-5 bg-brand-primary/20 rounded-[4px]" />
               <span className="text-xs font-semibold tracking-tight text-muted-foreground">
                 <span className="uppercase">Hub</span>{" "}
-                <span className="font-normal lowercase">by barrenarobotics</span>
+                <span className="font-normal">· Barrena Robotics</span>
               </span>
             </div>
             <p className="text-[12px] text-muted-foreground">
-              © 2026 barrenarobotics. Todos los derechos reservados.
+              Un producto de{" "}
+              <a
+                href={ROOT_SITE}
+                className="font-medium text-foreground underline underline-offset-2 hover:text-brand-primary"
+              >
+                Barrena Robotics
+              </a>
+              .
+            </p>
+            <p className="text-[12px] text-muted-foreground">
+              Kit de guiado autónomo · IoT agrícola · Hub de operaciones
+            </p>
+            <p className="text-[12px] text-muted-foreground">
+              © 2026 Barrena Robotics. Todos los derechos reservados.
             </p>
           </div>
         </div>

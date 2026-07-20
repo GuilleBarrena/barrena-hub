@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   ),
   title: {
     default:
-      "Hub by barrenarobotics — Control operativo total para su explotación agrícola",
-    template: "%s — Hub by barrenarobotics",
+      "Hub · Barrena Robotics — La consola de la agricultura autónoma",
+    template: "%s — Hub · Barrena Robotics",
   },
 };
 
