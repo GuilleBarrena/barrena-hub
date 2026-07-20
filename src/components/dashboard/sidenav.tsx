@@ -65,7 +65,7 @@ const ITEMS = [
   },
 ];
 
-export function Sidenav() {
+export function Sidenav({ collapsed = false }: { collapsed?: boolean }) {
   const pathname = usePathname();
 
   const isActive = (href: string, exact: boolean) =>
@@ -83,8 +83,11 @@ export function Sidenav() {
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
+            aria-label={item.label}
+            title={collapsed ? item.label : undefined}
             className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors
                         outline-none focus-visible:ring-2 focus-visible:ring-ring
+                        ${collapsed ? "md:justify-center md:gap-0 md:px-0" : ""}
                         ${
                           active
                             ? "bg-surface-2 font-medium text-foreground"
@@ -103,7 +106,7 @@ export function Sidenav() {
             >
               {item.icon}
             </svg>
-            {item.label}
+            <span className={collapsed ? "md:hidden" : undefined}>{item.label}</span>
           </Link>
         );
       })}
