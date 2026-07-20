@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { DetailList, StatusBadge } from "@/components/dashboard/primitives";
+import { MaintenanceTracker } from "@/components/vehicles/maintenance-tracker";
 import { Button } from "@/components/ui/button";
 import { getVehicleRepository } from "@/lib/vehicles/repository";
 import { VEHICLE_STATUS, type Vehicle } from "@/lib/vehicles/types";
@@ -113,6 +114,8 @@ export function VehicleDetail() {
           )}
         </aside>
       </div>
+
+      <MaintenanceTracker vehicleId={vehicle.id} />
     </>
   );
 }
