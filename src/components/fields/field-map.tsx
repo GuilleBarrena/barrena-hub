@@ -49,12 +49,20 @@ export function FieldMap({
     const map = L.map(containerRef.current, {
       center: FARM_CENTER,
       zoom: INITIAL_ZOOM,
+      zoomControl: false,
     });
     mapRef.current = map;
 
     existingLayerRef.current = L.layerGroup().addTo(map);
     drawLayerRef.current = L.layerGroup().addTo(map);
-    L.control.scale({ imperial: false }).addTo(map);
+    // Controls live in the bottom-left corner, which the overlay panels leave
+    // clear, so the map reads as full-screen with cards floating over it.
+    L.control.zoom({ position: "bottomleft" }).addTo(map);
+    L.control.scale({ imperial: false, position: "bottomleft" }).addTo(map);
+
+    // The container is sized by the parent (a viewport-height box); recompute
+    // once the layout has settled.
+    requestAnimationFrame(() => map.invalidateSize());
 
     map.on("click", (e: L.LeafletMouseEvent) => {
       if (handlers.current.closed) return;
@@ -136,15 +144,16 @@ export function FieldMap({
   }, [points, closed, onCloseRing]);
 
   return (
-    <div className="relative">
+    <>
       <div
         ref={containerRef}
-        className="h-[420px] w-full overflow-hidden rounded-xl ring-1 ring-black/10 md:h-[520px]"
-        // Leaflet needs the container to have height before it initialises.
+        className="absolute inset-0 z-0"
+        // Leaflet needs the container to have height before it initialises;
+        // the positioned parent provides it.
         style={{ background: "#e8e6e1" }}
       />
 
-      <div className="pointer-events-none absolute right-3 top-3 z-[400] flex gap-1 rounded-lg bg-background/95 p-1 shadow-sm ring-1 ring-black/10">
+      <div className="pointer-events-none absolute right-3 top-3 z-[500] flex gap-1 rounded-lg bg-background/95 p-1 shadow-sm ring-1 ring-black/10 backdrop-blur">
         {SELECTABLE_PROVIDERS.map((id) => (
           <button
             key={id}
@@ -161,6 +170,6 @@ export function FieldMap({
           </button>
         ))}
       </div>
-    </div>
+    </>
   );
 }

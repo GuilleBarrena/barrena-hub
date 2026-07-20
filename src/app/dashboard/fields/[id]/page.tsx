@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { FieldDetail } from "@/components/fields/field-detail";
 
 /**
@@ -11,19 +10,8 @@ export const metadata: Metadata = {
   description: "Contorno y datos de la parcela.",
 };
 
+/** Full-screen map view: FieldDetail breaks out of the dashboard padding and
+ *  overlays its cards, so the page is just the component. */
 export default function FieldDetailPage() {
-  return (
-    <div className="mx-auto max-w-6xl">
-      <header className="mb-6">
-        <Link
-          href="/dashboard/fields"
-          className="text-[12px] text-muted-foreground underline-offset-4 hover:underline"
-        >
-          ← Parcelas
-        </Link>
-      </header>
-
-      <FieldDetail />
-    </div>
-  );
+  return <FieldDetail />;
 }
