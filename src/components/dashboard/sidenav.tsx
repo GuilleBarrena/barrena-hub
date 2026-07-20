@@ -44,6 +44,18 @@ const ITEMS = [
     ),
   },
   {
+    href: "/dashboard/operations",
+    label: "Operaciones",
+    exact: false,
+    icon: (
+      <>
+        <path d="M4 7h10M4 12h16M4 17h7" />
+        <circle cx="18" cy="7" r="1.6" />
+        <circle cx="15" cy="17" r="1.6" />
+      </>
+    ),
+  },
+  {
     href: "/dashboard/meteo",
     label: "Meteo",
     exact: false,
