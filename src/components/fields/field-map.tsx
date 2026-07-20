@@ -42,6 +42,7 @@ export function FieldMap({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileRef = useRef<L.TileLayer | null>(null);
+  const labelsRef = useRef<L.TileLayer | null>(null);
   const drawLayerRef = useRef<L.LayerGroup | null>(null);
   const existingLayerRef = useRef<L.LayerGroup | null>(null);
 
@@ -100,6 +101,17 @@ export function FieldMap({
     }).addTo(map);
 
     tileRef.current.bringToBack();
+
+    // Transparent place-name overlay for basemaps that have no labels of their
+    // own (satellite), so towns stay findable while drawing. It sits above the
+    // imagery but below the field vectors, which live in a higher pane.
+    labelsRef.current?.remove();
+    labelsRef.current = null;
+    if (provider.labelsUrl) {
+      labelsRef.current = L.tileLayer(provider.labelsUrl, {
+        maxZoom: provider.maxZoom,
+      }).addTo(map);
+    }
   }, [providerId]);
 
   // Fly to a searched location. Prefer the bounding box so a town frames as a

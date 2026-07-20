@@ -23,6 +23,7 @@ export function FieldViewMap({ field }: { field: Field }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileRef = useRef<L.TileLayer | null>(null);
+  const labelsRef = useRef<L.TileLayer | null>(null);
   const shapeRef = useRef<L.Polygon | null>(null);
 
   const [providerId, setProviderId] = useState<MapProviderId>(DEFAULT_MAP_PROVIDER_ID);
@@ -56,6 +57,17 @@ export function FieldViewMap({ field }: { field: Field }) {
       maxZoom: provider.maxZoom,
     }).addTo(map);
     tileRef.current.bringToBack();
+
+    // Transparent place-name overlay for basemaps that have no labels of their
+    // own (satellite). Added after the base so it draws on top of the imagery,
+    // but still under the field polygon, which lives in a higher pane.
+    labelsRef.current?.remove();
+    labelsRef.current = null;
+    if (provider.labelsUrl) {
+      labelsRef.current = L.tileLayer(provider.labelsUrl, {
+        maxZoom: provider.maxZoom,
+      }).addTo(map);
+    }
   }, [providerId]);
 
   useEffect(() => {
