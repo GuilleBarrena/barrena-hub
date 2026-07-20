@@ -56,7 +56,9 @@ export default function Landing() {
               by barrenarobotics
             </span>
           </div>
-          <Button variant="ghost">Acceder</Button>
+          <Button asChild variant="ghost">
+            <a href="/dashboard">Acceder</a>
+          </Button>
         </div>
         <div className="h-px w-full bg-foreground/5" />
       </nav>
