@@ -14,18 +14,30 @@ import {
 import { FARM_CENTER, INITIAL_ZOOM } from "@/lib/fields/seed";
 import type { Field, LatLng } from "@/lib/fields/types";
 
+/**
+ * A place to fly the map to. `seq` is bumped on every search so re-selecting
+ * the same location still moves the map.
+ */
+export interface MapFocus {
+  center: LatLng;
+  bounds?: [LatLng, LatLng];
+  seq: number;
+}
+
 export function FieldMap({
   points,
   onAddPoint,
   onCloseRing,
   closed,
   existing = [],
+  focus,
 }: {
   points: LatLng[];
   onAddPoint: (p: LatLng) => void;
   onCloseRing: () => void;
   closed: boolean;
   existing?: Field[];
+  focus?: MapFocus;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -89,6 +101,19 @@ export function FieldMap({
 
     tileRef.current.bringToBack();
   }, [providerId]);
+
+  // Fly to a searched location. Prefer the bounding box so a town frames as a
+  // town and a single address as a close-up, falling back to a fixed zoom.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !focus) return;
+
+    if (focus.bounds) {
+      map.flyToBounds(focus.bounds, { maxZoom: 17, duration: 1.1 });
+    } else {
+      map.flyTo(focus.center, 16, { duration: 1.1 });
+    }
+  }, [focus]);
 
   // Existing fields, as muted context beneath the one being drawn.
   useEffect(() => {

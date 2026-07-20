@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { FieldMapLoader } from "@/components/fields/field-map-loader";
+import { LocationSearch } from "@/components/fields/location-search";
+import type { MapFocus } from "@/components/fields/field-map";
 import { Button } from "@/components/ui/button";
 import { formatHectares, ringAreaHectares } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
@@ -28,6 +30,7 @@ export function FieldForm() {
   const [existing, setExisting] = useState<Field[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [focus, setFocus] = useState<MapFocus | undefined>();
 
   useEffect(() => {
     getFieldRepository()
@@ -84,15 +87,24 @@ export function FieldForm() {
         onCloseRing={closeRing}
         closed={closed}
         existing={existing}
+        focus={focus}
       />
 
-      {/* Top-left: back to the list. */}
-      <Link
-        href="/dashboard/fields"
-        className="absolute left-3 top-3 z-[500] inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
-      >
-        ← Parcelas
-      </Link>
+      {/* Top-left: back to the list + a place search to jump the map around,
+          the way Google Maps lets you fly to a location before working. */}
+      <div className="pointer-events-none absolute left-3 top-3 z-[500] flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2">
+        <Link
+          href="/dashboard/fields"
+          className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
+        >
+          ← Parcelas
+        </Link>
+        <LocationSearch
+          onSelect={(r) =>
+            setFocus({ center: r.center, bounds: r.bounds, seq: Date.now() })
+          }
+        />
+      </div>
 
       {/* One control panel over the map: a right rail on desktop, a bottom
           sheet on mobile — so drawing controls and the form never overlap and
