@@ -10,6 +10,7 @@ export function FeatureSection({
   imageAlt,
   reverse,
   tinted,
+  tag,
 }: {
   index: string;
   eyebrow: string;
@@ -20,6 +21,7 @@ export function FeatureSection({
   imageAlt: string;
   reverse?: boolean;
   tinted?: boolean;
+  tag?: string;
 }) {
   return (
     <section className={tinted ? "bg-surface py-16 md:py-24" : "bg-background py-16 md:py-24"}>
@@ -42,6 +44,12 @@ export function FeatureSection({
             <h3 className="text-balance text-2xl md:text-4xl font-semibold tracking-tight text-foreground">
               {title}
             </h3>
+            {tag && (
+              <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-brand-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-primary ring-1 ring-brand-primary/20">
+                <span className="size-1.5 rounded-full bg-brand-primary" />
+                {tag}
+              </span>
+            )}
             <p className="mt-4 text-pretty text-sm md:text-base text-muted-foreground leading-relaxed max-w-[48ch]">
               {description}
             </p>
