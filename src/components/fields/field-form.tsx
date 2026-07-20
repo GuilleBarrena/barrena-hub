@@ -1,15 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { FieldMapLoader } from "@/components/fields/field-map-loader";
+import { LocationSearch } from "@/components/fields/location-search";
+import type { MapFocus } from "@/components/fields/field-map";
 import { Button } from "@/components/ui/button";
 import { formatHectares, ringAreaHectares } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import type { Field, LatLng } from "@/lib/fields/types";
 
 const CROP_TYPES = ["Viñedo", "Cereal", "Olivar", "Almendro", "Hortícola", "Barbecho"];
+
+/** Full-bleed container: cancels the dashboard padding and fills the viewport,
+ *  so the drawing map reads edge-to-edge with the form floating over it. */
+const STAGE =
+  "relative -mx-5 -my-6 h-[calc(100dvh-5.75rem)] overflow-hidden bg-surface-2 " +
+  "md:-m-8 md:h-screen";
 
 export function FieldForm() {
   const router = useRouter();
@@ -21,6 +30,7 @@ export function FieldForm() {
   const [existing, setExisting] = useState<Field[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [focus, setFocus] = useState<MapFocus | undefined>();
 
   useEffect(() => {
     getFieldRepository()
@@ -45,6 +55,12 @@ export function FieldForm() {
   const areaHectares = points.length >= 3 ? ringAreaHectares(points) : 0;
   const canSave = closed && points.length >= 3 && name.trim().length > 0;
 
+  const status = closed
+    ? "Polígono cerrado."
+    : points.length === 0
+      ? "Haga clic en el mapa para marcar el primer vértice."
+      : `${points.length} ${points.length === 1 ? "vértice" : "vértices"}. Haga clic en el primero para cerrar.`;
+
   async function save() {
     if (!canSave) return;
     setSaving(true);
@@ -64,104 +80,130 @@ export function FieldForm() {
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      <div className="lg:col-span-2">
-        <FieldMapLoader
-          points={points}
-          onAddPoint={addPoint}
-          onCloseRing={closeRing}
-          closed={closed}
-          existing={existing}
-        />
+    <div className={STAGE}>
+      <FieldMapLoader
+        points={points}
+        onAddPoint={addPoint}
+        onCloseRing={closeRing}
+        closed={closed}
+        existing={existing}
+        focus={focus}
+      />
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Button type="button" variant="secondary" onClick={undo} disabled={points.length === 0}>
-            Deshacer punto
-          </Button>
-          <Button type="button" variant="secondary" onClick={clear} disabled={points.length === 0}>
-            Limpiar
-          </Button>
-          <Button type="button" onClick={closeRing} disabled={closed || points.length < 3}>
-            Cerrar polígono
-          </Button>
-          <p className="text-[12px] text-muted-foreground">
-            {closed
-              ? "Polígono cerrado."
-              : points.length === 0
-                ? "Haga clic en el mapa para marcar el primer vértice."
-                : `${points.length} ${points.length === 1 ? "vértice" : "vértices"}. Haga clic en el primero para cerrar.`}
-          </p>
-        </div>
+      {/* Top-left: back to the list + a place search to jump the map around,
+          the way Google Maps lets you fly to a location before working. */}
+      <div className="pointer-events-none absolute left-3 top-3 z-[500] flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2">
+        <Link
+          href="/dashboard/fields"
+          className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
+        >
+          ← Parcelas
+        </Link>
+        <LocationSearch
+          onSelect={(r) =>
+            setFocus({ center: r.center, bounds: r.bounds, seq: Date.now() })
+          }
+        />
       </div>
 
-      <aside className="rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm">
-        <h2 className="text-sm font-semibold tracking-tight text-foreground">
-          Datos de la parcela
-        </h2>
-
-        <div className="mt-4 flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="field-name"
-              className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
-            >
-              Nombre
-            </label>
-            <input
-              id="field-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Parcela 12"
-              className="h-10 rounded-lg bg-surface px-3 text-sm text-foreground outline-none
-                         ring-1 ring-input focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="field-crop"
-              className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
-            >
-              Cultivo
-            </label>
-            <select
-              id="field-crop"
-              value={cropType}
-              onChange={(e) => setCropType(e.target.value)}
-              className="h-10 rounded-lg bg-surface px-3 text-sm text-foreground outline-none
-                         ring-1 ring-input focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              {CROP_TYPES.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="rounded-lg bg-surface p-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-              Superficie calculada
-            </p>
-            <p className="mt-1 text-xl font-semibold tabular-nums text-foreground">
-              {points.length >= 3 ? formatHectares(areaHectares) : "—"}
-            </p>
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              Área geodésica sobre el elipsoide, no planar.
-            </p>
-          </div>
-
-          {error && (
-            <p role="alert" className="text-[12px] text-red-600">
-              {error}
-            </p>
-          )}
-
-          <Button type="button" onClick={save} disabled={!canSave || saving}>
-            {saving ? "Guardando…" : "Guardar parcela"}
-          </Button>
-
-          <p className="text-[11px] text-muted-foreground">
-            Se guarda en este navegador (localStorage), no en un servidor.
+      {/* One control panel over the map: a right rail on desktop, a bottom
+          sheet on mobile — so drawing controls and the form never overlap and
+          the map stays clear enough to draw on. */}
+      <aside
+        className="pointer-events-none absolute z-[500] flex flex-col
+                   inset-x-3 bottom-3 max-h-[62%]
+                   md:inset-x-auto md:bottom-auto md:left-auto md:right-3 md:top-16 md:max-h-[calc(100%-4.5rem)] md:w-[20rem]"
+      >
+        <div className="pointer-events-auto flex min-h-0 flex-col overflow-y-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
+          <h1 className="text-sm font-semibold tracking-tight text-foreground">
+            Añadir parcela
+          </h1>
+          <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
+            Haga clic sobre el mapa para marcar los vértices del contorno y cierre
+            el polígono para calcular la superficie.
           </p>
+
+          {/* Drawing controls + live status. */}
+          <div className="mt-4 flex flex-col gap-2 border-t border-foreground/5 pt-4">
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="secondary" onClick={undo} disabled={points.length === 0}>
+                Deshacer
+              </Button>
+              <Button type="button" variant="secondary" onClick={clear} disabled={points.length === 0}>
+                Limpiar
+              </Button>
+              <Button type="button" onClick={closeRing} disabled={closed || points.length < 3}>
+                Cerrar polígono
+              </Button>
+            </div>
+            <p className="text-[12px] text-muted-foreground">{status}</p>
+          </div>
+
+          {/* Field data + save. */}
+          <div className="mt-4 flex flex-col gap-4 border-t border-foreground/5 pt-4">
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="field-name"
+                className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+              >
+                Nombre
+              </label>
+              <input
+                id="field-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Parcela 12"
+                className="h-10 rounded-lg bg-surface px-3 text-sm text-foreground outline-none
+                           ring-1 ring-input focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="field-crop"
+                className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+              >
+                Cultivo
+              </label>
+              <select
+                id="field-crop"
+                value={cropType}
+                onChange={(e) => setCropType(e.target.value)}
+                className="h-10 rounded-lg bg-surface px-3 text-sm text-foreground outline-none
+                           ring-1 ring-input focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {CROP_TYPES.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="rounded-lg bg-surface p-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Superficie calculada
+              </p>
+              <p className="mt-1 text-xl font-semibold tabular-nums text-foreground">
+                {points.length >= 3 ? formatHectares(areaHectares) : "—"}
+              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Área geodésica sobre el elipsoide, no planar.
+              </p>
+            </div>
+
+            {error && (
+              <p role="alert" className="text-[12px] text-red-600">
+                {error}
+              </p>
+            )}
+
+            <Button type="button" onClick={save} disabled={!canSave || saving}>
+              {saving ? "Guardando…" : "Guardar parcela"}
+            </Button>
+
+            <p className="text-[11px] text-muted-foreground">
+              Se guarda en este navegador (localStorage), no en un servidor.
+            </p>
+          </div>
         </div>
       </aside>
     </div>

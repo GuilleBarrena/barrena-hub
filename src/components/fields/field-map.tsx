@@ -14,22 +14,35 @@ import {
 import { FARM_CENTER, INITIAL_ZOOM } from "@/lib/fields/seed";
 import type { Field, LatLng } from "@/lib/fields/types";
 
+/**
+ * A place to fly the map to. `seq` is bumped on every search so re-selecting
+ * the same location still moves the map.
+ */
+export interface MapFocus {
+  center: LatLng;
+  bounds?: [LatLng, LatLng];
+  seq: number;
+}
+
 export function FieldMap({
   points,
   onAddPoint,
   onCloseRing,
   closed,
   existing = [],
+  focus,
 }: {
   points: LatLng[];
   onAddPoint: (p: LatLng) => void;
   onCloseRing: () => void;
   closed: boolean;
   existing?: Field[];
+  focus?: MapFocus;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileRef = useRef<L.TileLayer | null>(null);
+  const labelsRef = useRef<L.TileLayer | null>(null);
   const drawLayerRef = useRef<L.LayerGroup | null>(null);
   const existingLayerRef = useRef<L.LayerGroup | null>(null);
 
@@ -49,12 +62,20 @@ export function FieldMap({
     const map = L.map(containerRef.current, {
       center: FARM_CENTER,
       zoom: INITIAL_ZOOM,
+      zoomControl: false,
     });
     mapRef.current = map;
 
     existingLayerRef.current = L.layerGroup().addTo(map);
     drawLayerRef.current = L.layerGroup().addTo(map);
-    L.control.scale({ imperial: false }).addTo(map);
+    // Controls live in the bottom-left corner, which the overlay panels leave
+    // clear, so the map reads as full-screen with cards floating over it.
+    L.control.zoom({ position: "bottomleft" }).addTo(map);
+    L.control.scale({ imperial: false, position: "bottomleft" }).addTo(map);
+
+    // The container is sized by the parent (a viewport-height box); recompute
+    // once the layout has settled.
+    requestAnimationFrame(() => map.invalidateSize());
 
     map.on("click", (e: L.LeafletMouseEvent) => {
       if (handlers.current.closed) return;
@@ -80,7 +101,31 @@ export function FieldMap({
     }).addTo(map);
 
     tileRef.current.bringToBack();
+
+    // Transparent place-name overlay for basemaps that have no labels of their
+    // own (satellite), so towns stay findable while drawing. It sits above the
+    // imagery but below the field vectors, which live in a higher pane.
+    labelsRef.current?.remove();
+    labelsRef.current = null;
+    if (provider.labelsUrl) {
+      labelsRef.current = L.tileLayer(provider.labelsUrl, {
+        maxZoom: provider.maxZoom,
+      }).addTo(map);
+    }
   }, [providerId]);
+
+  // Fly to a searched location. Prefer the bounding box so a town frames as a
+  // town and a single address as a close-up, falling back to a fixed zoom.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !focus) return;
+
+    if (focus.bounds) {
+      map.flyToBounds(focus.bounds, { maxZoom: 17, duration: 1.1 });
+    } else {
+      map.flyTo(focus.center, 16, { duration: 1.1 });
+    }
+  }, [focus]);
 
   // Existing fields, as muted context beneath the one being drawn.
   useEffect(() => {
@@ -136,15 +181,16 @@ export function FieldMap({
   }, [points, closed, onCloseRing]);
 
   return (
-    <div className="relative">
+    <>
       <div
         ref={containerRef}
-        className="h-[420px] w-full overflow-hidden rounded-xl ring-1 ring-black/10 md:h-[520px]"
-        // Leaflet needs the container to have height before it initialises.
+        className="absolute inset-0 z-0"
+        // Leaflet needs the container to have height before it initialises;
+        // the positioned parent provides it.
         style={{ background: "#e8e6e1" }}
       />
 
-      <div className="pointer-events-none absolute right-3 top-3 z-[400] flex gap-1 rounded-lg bg-background/95 p-1 shadow-sm ring-1 ring-black/10">
+      <div className="pointer-events-none absolute right-3 top-3 z-[500] flex gap-1 rounded-lg bg-background/95 p-1 shadow-sm ring-1 ring-black/10 backdrop-blur">
         {SELECTABLE_PROVIDERS.map((id) => (
           <button
             key={id}
@@ -161,6 +207,6 @@ export function FieldMap({
           </button>
         ))}
       </div>
-    </div>
+    </>
   );
 }

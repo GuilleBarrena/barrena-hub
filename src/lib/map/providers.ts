@@ -18,6 +18,13 @@ export interface RasterMapProvider {
   tileUrl: string;
   attribution: string;
   maxZoom: number;
+  /**
+   * Optional transparent reference layer drawn over the basemap: place names,
+   * boundaries and roads. Satellite imagery has no labels of its own, so this
+   * is what makes towns findable. Labelled basemaps (topo, street) leave it
+   * unset.
+   */
+  labelsUrl?: string;
   /** Set when the provider needs a token; read from env, never hardcoded. */
   requiresApiKey?: boolean;
 }
@@ -31,6 +38,9 @@ export const MAP_PROVIDERS: Record<MapProviderId, MapProvider> = {
     label: "Satélite",
     tileUrl:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    // Transparent labels overlay so towns and roads are readable over imagery.
+    labelsUrl:
+      "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
     attribution: "Imagery © Esri, Maxar, Earthstar Geographics",
     maxZoom: 19,
   },

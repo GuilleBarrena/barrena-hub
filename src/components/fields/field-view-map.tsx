@@ -13,11 +13,17 @@ import {
 } from "@/lib/map/providers";
 import type { Field } from "@/lib/fields/types";
 
-/** Read-only counterpart to FieldMap: renders one field and frames it. */
+/**
+ * Read-only counterpart to FieldMap: renders one field and frames it, filling
+ * whatever container it is dropped into so the parent can overlay cards on top
+ * (a full-screen, Google-Maps-style view). Zoom and scale controls are pushed
+ * to the bottom-left corner, which the overlays deliberately leave clear.
+ */
 export function FieldViewMap({ field }: { field: Field }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileRef = useRef<L.TileLayer | null>(null);
+  const labelsRef = useRef<L.TileLayer | null>(null);
   const shapeRef = useRef<L.Polygon | null>(null);
 
   const [providerId, setProviderId] = useState<MapProviderId>(DEFAULT_MAP_PROVIDER_ID);
@@ -25,9 +31,14 @@ export function FieldViewMap({ field }: { field: Field }) {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    const map = L.map(containerRef.current);
+    const map = L.map(containerRef.current, { zoomControl: false });
     mapRef.current = map;
-    L.control.scale({ imperial: false }).addTo(map);
+    L.control.zoom({ position: "bottomleft" }).addTo(map);
+    L.control.scale({ imperial: false, position: "bottomleft" }).addTo(map);
+
+    // The container is sized by the parent (a viewport-height box); recompute
+    // once the layout has settled so tiles and framing use the real size.
+    requestAnimationFrame(() => map.invalidateSize());
 
     return () => {
       map.remove();
@@ -46,6 +57,17 @@ export function FieldViewMap({ field }: { field: Field }) {
       maxZoom: provider.maxZoom,
     }).addTo(map);
     tileRef.current.bringToBack();
+
+    // Transparent place-name overlay for basemaps that have no labels of their
+    // own (satellite). Added after the base so it draws on top of the imagery,
+    // but still under the field polygon, which lives in a higher pane.
+    labelsRef.current?.remove();
+    labelsRef.current = null;
+    if (provider.labelsUrl) {
+      labelsRef.current = L.tileLayer(provider.labelsUrl, {
+        maxZoom: provider.maxZoom,
+      }).addTo(map);
+    }
   }, [providerId]);
 
   useEffect(() => {
@@ -61,18 +83,18 @@ export function FieldViewMap({ field }: { field: Field }) {
     shapeRef.current = polygon;
 
     // Frame the field rather than guessing a centre and zoom.
-    map.fitBounds(polygon.getBounds(), { padding: [24, 24] });
+    map.fitBounds(polygon.getBounds(), { padding: [48, 48] });
   }, [field]);
 
   return (
-    <div className="relative">
+    <>
       <div
         ref={containerRef}
-        className="h-[360px] w-full overflow-hidden rounded-xl ring-1 ring-black/10 md:h-[480px]"
+        className="absolute inset-0 z-0"
         style={{ background: "#e8e6e1" }}
       />
 
-      <div className="pointer-events-none absolute right-3 top-3 z-[400] flex gap-1 rounded-lg bg-background/95 p-1 shadow-sm ring-1 ring-black/10">
+      <div className="pointer-events-none absolute right-3 top-3 z-[500] flex gap-1 rounded-lg bg-background/95 p-1 shadow-sm ring-1 ring-black/10 backdrop-blur">
         {SELECTABLE_PROVIDERS.map((id) => (
           <button
             key={id}
@@ -89,6 +111,6 @@ export function FieldViewMap({ field }: { field: Field }) {
           </button>
         ))}
       </div>
-    </div>
+    </>
   );
 }
