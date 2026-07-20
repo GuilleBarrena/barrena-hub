@@ -56,7 +56,9 @@ export default function Landing() {
               by barrenarobotics
             </span>
           </div>
-          <Button variant="ghost">Acceder</Button>
+          <Button asChild variant="ghost">
+            <a href="/dashboard">Acceder</a>
+          </Button>
         </div>
         <div className="h-px w-full bg-foreground/5" />
       </nav>
@@ -64,22 +66,27 @@ export default function Landing() {
       {/* Hero */}
       <section className="bg-background py-12">
         <div className="mx-auto max-w-screen-xl px-6">
-          <span className="mb-4 inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
-            Tecnología de precisión
+          <span className="mb-4 inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
+            <span className="size-1.5 rounded-full bg-brand-accent" />
+            Tecnología de precisión · IA
           </span>
           <h1 className="text-balance text-3xl md:text-5xl font-semibold leading-tight tracking-tight text-foreground max-w-3xl">
-            Control operativo total para su explotación agrícola
+            Sus datos del campo, convertidos en decisiones
           </h1>
-          <p className="mt-4 max-w-[46ch] text-pretty text-base md:text-lg text-muted-foreground">
-            Gestione trazabilidad de vehículos, evolución de cultivos y cuadrillas desde
-            una única interfaz técnica diseñada para el campo.
+          <p className="mt-4 max-w-[52ch] text-pretty text-base md:text-lg text-muted-foreground">
+            Hub vigila vehículos, cultivos, meteo y cuadrillas en una única
+            interfaz técnica — y una capa de IA lo cruza todo para decirle qué
+            hacer primero. Deje de mirar paneles: conozca la siguiente acción.
           </p>
-          <div className="mt-8 flex items-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <RequestDemoDialog>
               <Button>Solicitar Demo</Button>
             </RequestDemoDialog>
             <Button asChild variant="secondary">
-              <a href="#capacidades">Saber más</a>
+              <a href="/dashboard">Ver el panel</a>
+            </Button>
+            <Button asChild variant="ghost" className="px-2">
+              <a href="#inteligencia">Saber más</a>
             </Button>
           </div>
         </div>
@@ -118,6 +125,15 @@ export default function Landing() {
               <div className="rounded-full bg-background/90 px-3 py-1.5 backdrop-blur ring-1 ring-black/5">
                 <span className="text-[11px] font-medium text-muted-foreground">
                   Finca La Esperanza · Parcela 04
+                </span>
+              </div>
+              <div className="max-w-[15rem] rounded-lg bg-background/95 px-3 py-2 backdrop-blur ring-1 ring-black/5">
+                <span className="flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-wider text-brand-primary">
+                  <span className="size-1.5 rounded-full bg-brand-primary" />
+                  Acción recomendada por IA
+                </span>
+                <span className="mt-1 block text-[11px] font-medium leading-snug text-foreground">
+                  Riego antihelada esta madrugada · viñedo sensible
                 </span>
               </div>
             </div>
@@ -233,6 +249,110 @@ export default function Landing() {
         reverse
         tinted
       />
+
+      {/* Capa de inteligencia (IA) */}
+      <section id="inteligencia" className="bg-background py-16 md:py-24 scroll-mt-14">
+        <div className="mx-auto max-w-screen-xl px-6">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="text-[10px] font-mono font-semibold tracking-[0.2em] uppercase text-brand-accent">
+              05
+            </span>
+            <span className="h-px w-8 bg-brand-accent/40" />
+            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+              Capa de inteligencia
+            </span>
+          </div>
+
+          <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
+            <div>
+              <h3 className="text-balance text-2xl md:text-4xl font-semibold tracking-tight text-foreground">
+                Una IA que convierte los datos en acciones
+              </h3>
+              <p className="mt-4 max-w-[48ch] text-pretty text-sm md:text-base text-muted-foreground leading-relaxed">
+                La capa de IA lee toda la operación a la vez —meteo, parcelas,
+                flota y cuadrillas— y devuelve una lista corta de acciones
+                priorizadas, con impacto, esfuerzo y los pasos concretos para
+                empezar hoy. Y un agente con el que puede conversar sobre cada una.
+              </p>
+              <ul className="mt-6 flex flex-col gap-3">
+                {[
+                  "Razonamiento cruzado entre todas las fuentes de datos",
+                  "Priorizadas por impacto, esfuerzo y confianza",
+                  "Un agente que responde con el contexto de su finca",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-3 text-sm text-foreground">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-primary" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button asChild>
+                  <a href="/dashboard">Ver acciones en el panel</a>
+                </Button>
+                <Button asChild variant="secondary">
+                  <a href="/dashboard/agent">Hablar con el agente</a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Vista previa de acciones, con el mismo lenguaje visual del panel */}
+            <div className="rounded-2xl bg-card p-4 ring-1 ring-black/5 shadow-sm md:p-5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold tracking-tight text-foreground">
+                  Acciones de hoy
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  6 · 4 módulos
+                </span>
+              </div>
+              <ul className="mt-3 flex flex-col gap-2.5">
+                {[
+                  {
+                    dot: "bg-red-600",
+                    label: "Crítica",
+                    labelClass: "text-red-700",
+                    title: "Proteger Parcela 04 ante la helada del sábado",
+                    impact: "Evita daño en el viñedo",
+                  },
+                  {
+                    dot: "bg-red-600",
+                    label: "Crítica",
+                    labelClass: "text-red-700",
+                    title: "Resolver la Claas Lexion fuera de servicio",
+                    impact: "Restablece la cosecha",
+                  },
+                  {
+                    dot: "bg-brand-accent",
+                    label: "Alta",
+                    labelClass: "text-brand-accent",
+                    title: "Reprogramar la pulverización de Parcela 11",
+                    impact: "Evita deriva por viento",
+                  },
+                ].map((a) => (
+                  <li
+                    key={a.title}
+                    className="rounded-xl bg-surface-2/60 px-3 py-2.5 ring-1 ring-black/5"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className={`size-2 shrink-0 rounded-full ${a.dot}`} />
+                      <span className={`text-[10px] font-semibold uppercase tracking-wider ${a.labelClass}`}>
+                        {a.label}
+                      </span>
+                    </span>
+                    <span className="mt-1 block text-[13px] font-medium leading-snug text-foreground">
+                      {a.title}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                      ◆ {a.impact}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="bg-surface py-16">
