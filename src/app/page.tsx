@@ -78,9 +78,10 @@ export default function Landing() {
             Opere su explotación agrícola desde una sola pantalla
           </h1>
           <p className="mt-4 max-w-[52ch] text-pretty text-base md:text-lg text-muted-foreground">
-            Hub es el centro de operaciones de Barrena Robotics. Supervise sus
-            máquinas autónomas, monitorice sus cultivos y coordine sus cuadrillas
-            desde una única interfaz técnica. Gratis para toda explotación.
+            Hub es el centro de operaciones de Barrena Robotics. Sus tractores
+            trabajan solos con el kit de guiado autónomo, la IA decide dónde
+            actuar y usted lo supervisa todo —cultivos, meteo y cuadrillas— desde
+            una única interfaz técnica. Gratis para toda explotación.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <WaitlistDialog>
@@ -176,19 +177,19 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Módulo 01 — protagonista: flota autónoma */}
+      {/* Módulo 01 — protagonista: el kit de guiado autónomo */}
       <FeatureSection
         index="01"
-        eyebrow="Flota autónoma"
-        title="Supervise sus máquinas autónomas en tiempo real"
-        description="Visualice cada pasada de sus tractores Barrena, replay de sesiones de guiado autónomo y alertas de intervención. La única plataforma que ve lo que su máquina ve."
+        eyebrow="Kit de guiado autónomo"
+        title="Su tractor de viña trabaja solo, sin GPS RTK"
+        description="El kit de guiado por visión de Barrena convierte cualquier tractor de viña en una máquina autónoma: conduce, corrige la línea y cubre la parcela sola. El Hub es donde usted la ve trabajar en tiempo real — solo interviene cuando la máquina lo pide."
         bullets={[
-          "Telemetría en vivo del kit de guiado",
-          "Replay de trayectorias y cobertura por parcela",
-          "Alertas cuando la máquina requiere atención humana",
+          "Guiado autónomo por visión, sin depender de GPS RTK",
+          "Telemetría en vivo y replay de cada sesión de guiado",
+          "Avisos solo cuando la máquina necesita una mano",
         ]}
         image={featureTracking}
-        imageAlt="Tractor con kit de guiado autónomo y trazas sobre parcelas"
+        imageAlt="Tractor de viña con kit de guiado autónomo trabajando sin conductor"
         tag="Requiere kit Barrena"
       />
 
@@ -208,12 +209,13 @@ export default function Landing() {
           <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
             <div>
               <h3 className="text-balance text-2xl md:text-4xl font-semibold tracking-tight text-foreground">
-                Recomendaciones accionables desde los datos de su flota
+                La IA decide dónde y cuándo actuar
               </h3>
               <p className="mt-4 max-w-[48ch] text-pretty text-sm md:text-base text-muted-foreground leading-relaxed">
-                El Hub aprende de cada pasada de sus máquinas y le sugiere cuándo
-                tratar, dónde intervenir y qué parcelas priorizar. La IA no
-                reemplaza al agricultor: le da criterio con datos reales del campo.
+                El Hub analiza sin descanso cada pasada de sus máquinas y adelanta
+                el trabajo: le dice cuándo tratar, dónde intervenir y qué parcelas
+                priorizar. La operación avanza sola; a usted le quedan solo las
+                decisiones que importan.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button asChild>
