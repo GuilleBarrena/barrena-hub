@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { OperationList } from "@/components/operations/operation-list";
+
+import { OperationCalendar } from "@/components/operations/operation-calendar";
 import { OperationsViewTabs } from "@/components/operations/operations-view-tabs";
 
 export const metadata: Metadata = {
-  title: "Operaciones",
-  description: "Trabajos que enlazan operario, parcela y vehículo.",
+  title: "Calendario de operaciones",
+  description: "Las operaciones de campo organizadas por día en un calendario mensual.",
 };
 
-export default function OperationsPage() {
+export default function OperationsCalendarPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <header className="mb-6">
@@ -15,13 +16,12 @@ export default function OperationsPage() {
           Operaciones
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Trabajos de campo: cada uno enlaza un operario, una parcela y, si procede,
-          un vehículo.
+          Cada trabajo de campo situado en su día. Pulsa una operación para ver su detalle.
         </p>
       </header>
 
       <OperationsViewTabs />
-      <OperationList />
+      <OperationCalendar />
     </div>
   );
 }
