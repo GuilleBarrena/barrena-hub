@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { SelectField, TextField } from "@/components/ui/form";
 import { Button } from "@barrena/ui/button";
+import { logout } from "@/lib/auth/session";
 import { saveUserProfile, useUserProfile, type UserProfile } from "@/lib/users/data";
 
 const LANGUAGES: [string, string][] = [
@@ -24,6 +26,7 @@ function initials(name: string): string {
 /** The signed-in user's own profile card + editable fields. */
 export function UserView() {
   const stored = useUserProfile();
+  const router = useRouter();
   const [form, setForm] = useState<UserProfile>(stored);
   const [saved, setSaved] = useState(false);
 
@@ -36,6 +39,11 @@ export function UserView() {
     event.preventDefault();
     saveUserProfile(form);
     setSaved(true);
+  }
+
+  function closeSession() {
+    logout();
+    router.replace("/login");
   }
 
   return (
@@ -95,5 +103,11 @@ export function UserView() {
         )}
       </div>
     </form>
+
+    <div className="border-t border-border pt-5 mt-5">
+      <Button variant="destructive" onClick={closeSession}>
+        Cerrar sesión
+      </Button>
+    </div>
   );
 }
