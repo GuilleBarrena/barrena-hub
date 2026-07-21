@@ -42,7 +42,7 @@ export function WorkerForm() {
         phone: phone.trim(),
         status,
       });
-      router.push("/dashboard/workers");
+      router.push("/workers");
       router.refresh();
     } catch {
       setError("No se pudo guardar el operario en este navegador.");

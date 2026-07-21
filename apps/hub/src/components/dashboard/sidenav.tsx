@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 
 const ITEMS = [
   {
-    href: "/dashboard",
+    href: "/",
     label: "Inicio",
-    // Exact match: every dashboard route starts with /dashboard, so a prefix
+    // Exact match: every dashboard route starts with /, so a prefix
     // test would keep "Inicio" lit on every child page.
     exact: true,
     icon: (
@@ -15,13 +15,13 @@ const ITEMS = [
     ),
   },
   {
-    href: "/dashboard/fields",
+    href: "/fields",
     label: "Parcelas",
     exact: false,
     icon: <path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Zm0 5.5 9 4.5 9-4.5" />,
   },
   {
-    href: "/dashboard/vehicles",
+    href: "/vehicles",
     label: "Vehículos",
     exact: false,
     icon: (
@@ -33,7 +33,7 @@ const ITEMS = [
     ),
   },
   {
-    href: "/dashboard/workers",
+    href: "/workers",
     label: "Operarios",
     exact: false,
     icon: (
@@ -44,7 +44,7 @@ const ITEMS = [
     ),
   },
   {
-    href: "/dashboard/operations",
+    href: "/operations",
     label: "Operaciones",
     exact: false,
     icon: (
@@ -56,7 +56,7 @@ const ITEMS = [
     ),
   },
   {
-    href: "/dashboard/meteo",
+    href: "/meteo",
     label: "Meteo",
     exact: false,
     icon: (
@@ -64,7 +64,7 @@ const ITEMS = [
     ),
   },
   {
-    href: "/dashboard/agent",
+    href: "/agent",
     label: "Agente",
     exact: false,
     icon: (

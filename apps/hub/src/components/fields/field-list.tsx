@@ -55,14 +55,14 @@ export function FieldList() {
           {formatHectares(totalHectares)} en total
         </p>
         <Button asChild>
-          <Link href="/dashboard/fields/new">Añadir parcela</Link>
+          <Link href="/fields/new">Añadir parcela</Link>
         </Button>
       </div>
 
       <ResourceTable
         rows={fields}
         columns={COLUMNS}
-        hrefFor={(f) => `/dashboard/fields/${f.id}`}
+        hrefFor={(f) => `/fields/${f.id}`}
         onDelete={async (f) => {
           await getFieldRepository().remove(f.id);
           load();

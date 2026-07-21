@@ -12,7 +12,7 @@ export default function NewVehiclePage() {
     <div className="mx-auto max-w-6xl">
       <header className="mb-6">
         <Link
-          href="/dashboard/vehicles"
+          href="/vehicles"
           className="text-[12px] text-muted-foreground underline-offset-4 hover:underline"
         >
           ← Vehículos

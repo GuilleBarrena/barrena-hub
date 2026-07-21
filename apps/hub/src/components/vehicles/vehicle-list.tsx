@@ -54,14 +54,14 @@ export function VehicleList() {
           {operational} operativos
         </p>
         <Button asChild>
-          <Link href="/dashboard/vehicles/new">Añadir vehículo</Link>
+          <Link href="/vehicles/new">Añadir vehículo</Link>
         </Button>
       </div>
 
       <ResourceTable
         rows={vehicles}
         columns={COLUMNS}
-        hrefFor={(v) => `/dashboard/vehicles/${v.id}`}
+        hrefFor={(v) => `/vehicles/${v.id}`}
         onDelete={async (v) => {
           await getVehicleRepository().remove(v.id);
           load();

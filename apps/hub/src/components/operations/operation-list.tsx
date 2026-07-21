@@ -95,14 +95,14 @@ export function OperationList() {
           {active} activas
         </p>
         <Button asChild>
-          <Link href="/dashboard/operations/new">Añadir operación</Link>
+          <Link href="/operations/new">Añadir operación</Link>
         </Button>
       </div>
 
       <ResourceTable
         rows={operations}
         columns={columns(refs)}
-        hrefFor={(o) => `/dashboard/operations/${o.id}`}
+        hrefFor={(o) => `/operations/${o.id}`}
         onDelete={async (o) => {
           await getOperationRepository().remove(o.id);
           load();

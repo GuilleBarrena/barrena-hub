@@ -77,7 +77,7 @@ export function ActionableCard({ item }: { item: Accionable }) {
           ))}
         </div>
         <Link
-          href={`/dashboard/agent?accion=${encodeURIComponent(item.titulo)}`}
+          href={`/agent?accion=${encodeURIComponent(item.titulo)}`}
           className="shrink-0 text-[12px] font-medium text-brand-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
         >
           Preguntar al agente →

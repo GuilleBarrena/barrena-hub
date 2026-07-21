@@ -71,7 +71,7 @@ export function FieldForm() {
         cropType,
         ring: points,
       });
-      router.push("/dashboard/fields");
+      router.push("/fields");
       router.refresh();
     } catch {
       setError("No se pudo guardar la parcela en este navegador.");
@@ -94,7 +94,7 @@ export function FieldForm() {
           the way Google Maps lets you fly to a location before working. */}
       <div className="pointer-events-none absolute left-3 top-3 z-[500] flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2">
         <Link
-          href="/dashboard/fields"
+          href="/fields"
           className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
           ← Parcelas

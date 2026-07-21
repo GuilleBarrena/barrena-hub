@@ -94,7 +94,7 @@ export function OperationDetail() {
           únicamente en este dispositivo.
         </p>
         <Button asChild variant="secondary" className="mt-4">
-          <Link href="/dashboard/operations">Volver al listado</Link>
+          <Link href="/operations">Volver al listado</Link>
         </Button>
       </div>
     );
@@ -110,7 +110,7 @@ export function OperationDetail() {
 
   async function remove() {
     await getOperationRepository().remove(operation.id);
-    router.push("/dashboard/operations");
+    router.push("/operations");
     router.refresh();
   }
 
@@ -133,18 +133,18 @@ export function OperationDetail() {
               ["Tipo", operation.operationType],
               [
                 "Parcela",
-                field ? refLink(`/dashboard/fields/${field.id}`, field.name) : "—",
+                field ? refLink(`/fields/${field.id}`, field.name) : "—",
               ],
               [
                 "Operario",
                 operator
-                  ? refLink(`/dashboard/workers/${operator.id}`, operator.name)
+                  ? refLink(`/workers/${operator.id}`, operator.name)
                   : "—",
               ],
               [
                 "Vehículo",
                 vehicle ? (
-                  refLink(`/dashboard/vehicles/${vehicle.id}`, vehicle.name)
+                  refLink(`/vehicles/${vehicle.id}`, vehicle.name)
                 ) : (
                   <span className="text-muted-foreground">Sin vehículo</span>
                 ),

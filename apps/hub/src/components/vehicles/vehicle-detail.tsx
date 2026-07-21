@@ -47,7 +47,7 @@ export function VehicleDetail() {
           únicamente en este dispositivo.
         </p>
         <Button asChild variant="secondary" className="mt-4">
-          <Link href="/dashboard/vehicles">Volver al listado</Link>
+          <Link href="/vehicles">Volver al listado</Link>
         </Button>
       </div>
     );
@@ -58,7 +58,7 @@ export function VehicleDetail() {
 
   async function remove() {
     await getVehicleRepository().remove(vehicle.id);
-    router.push("/dashboard/vehicles");
+    router.push("/vehicles");
     router.refresh();
   }
 

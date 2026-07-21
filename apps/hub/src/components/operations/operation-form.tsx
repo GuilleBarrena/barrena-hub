@@ -97,7 +97,7 @@ export function OperationForm() {
         scheduledFor,
         notes: notes.trim() ? notes.trim() : undefined,
       });
-      router.push("/dashboard/operations");
+      router.push("/operations");
       router.refresh();
     } catch {
       setError("No se pudo guardar la operación en este navegador.");

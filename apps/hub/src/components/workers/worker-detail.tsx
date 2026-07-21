@@ -46,7 +46,7 @@ export function WorkerDetail() {
           únicamente en este dispositivo.
         </p>
         <Button asChild variant="secondary" className="mt-4">
-          <Link href="/dashboard/workers">Volver al listado</Link>
+          <Link href="/workers">Volver al listado</Link>
         </Button>
       </div>
     );
@@ -57,7 +57,7 @@ export function WorkerDetail() {
 
   async function remove() {
     await getWorkerRepository().remove(worker.id);
-    router.push("/dashboard/workers");
+    router.push("/workers");
     router.refresh();
   }
 

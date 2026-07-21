@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 import satelliteMap from "@/assets/satellite-map.jpg";
 import featureTracking from "@/assets/feature-tracking.jpg";
@@ -10,10 +11,20 @@ import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureSection } from "@barrena/ui/feature-section";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
+import { SiteHeader } from "@barrena/ui/site-header";
 import { WaitlistDialog } from "@/components/waitlist-dialog";
-import { MobileMenu } from "@/components/mobile-menu";
 
-const ROOT_SITE = "https://barrenarobotics.com";
+// The Hub console lives in its own app; this is its product page on the
+// marketing site. Override the console URL with NEXT_PUBLIC_HUB_URL.
+const HUB_URL =
+  process.env.NEXT_PUBLIC_HUB_URL ?? "https://hub.barrenarobotics.com";
+
+// In-page section anchors, shared by the header nav and the mobile menu.
+const NAV_LINKS = [
+  { href: "#kit", label: "El W-1" },
+  { href: "#inteligencia", label: "Inteligencia operativa" },
+  { href: "#incluido", label: "También incluido" },
+];
 
 export const metadata: Metadata = {
   // `absolute` opts out of the title template in the root layout.
@@ -48,27 +59,22 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       {/* Header */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-6">
-          <Wordmark product="Hub" />
-          <div className="flex items-center gap-3">
-            {/* Desktop: inline links. Wrapped in a plain div so `hidden`
-                controls display without fighting the Button's base
-                `inline-flex` utility. */}
-            <div className="hidden items-center gap-3 sm:flex">
-              <Button asChild variant="ghost" className="px-2">
-                <a href={ROOT_SITE}>← barrenarobotics.com</a>
-              </Button>
-              <Button asChild variant="ghost">
-                <a href="/dashboard">Acceder</a>
-              </Button>
-            </div>
-            {/* Mobile: slide-in menu */}
-            <MobileMenu rootSite={ROOT_SITE} />
-          </div>
-        </div>
-        <div className="h-px w-full bg-foreground/5" />
-      </nav>
+      <SiteHeader
+        product="Hub"
+        links={NAV_LINKS}
+        actions={
+          <>
+            <Button asChild variant="ghost" className="px-2">
+              <Link href="/">← Barrena Robotics</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <a href={HUB_URL}>Acceder al Hub</a>
+            </Button>
+          </>
+        }
+        menuPrimaryAction={{ href: HUB_URL, label: "Acceder al Hub" }}
+        menuBackLink={{ href: "/", label: "← Barrena Robotics" }}
+      />
 
       {/* Hero */}
       <section className="bg-background py-12">
@@ -82,16 +88,16 @@ export default function Landing() {
           </h1>
           <p className="mt-4 max-w-[52ch] text-pretty text-base md:text-lg text-muted-foreground">
             Hub es el centro de operaciones de Barrena Robotics. Sus tractores
-            trabajan solos con el kit de guiado autónomo, la IA decide dónde
-            actuar y usted lo supervisa todo —cultivos, meteo y cuadrillas— desde
-            una única interfaz técnica. Gratis para toda explotación.
+            trabajan solos con el W-1, la IA decide dónde actuar y usted lo
+            supervisa todo —cultivos, meteo y cuadrillas— desde una única
+            interfaz técnica. Gratis para toda explotación.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <WaitlistDialog>
               <Button>Solicitar acceso anticipado</Button>
             </WaitlistDialog>
             <Button asChild variant="secondary">
-              <a href={ROOT_SITE}>Conocer el kit autónomo</a>
+              <Link href="/w-1">Conocer el W-1</Link>
             </Button>
           </div>
         </div>
@@ -180,19 +186,24 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Módulo 01 — protagonista: el kit de guiado autónomo */}
+      {/* Módulo 01 — protagonista: el W-1 */}
       <FeatureSection
         id="kit"
         index="01"
-        eyebrow="Kit de guiado autónomo"
-        title="Su tractor de viña trabaja solo, sin GPS RTK"
-        description="El kit de guiado por visión de Barrena convierte cualquier tractor de viña en una máquina autónoma: conduce, corrige la línea y cubre la parcela sola. El Hub es donde usted la ve trabajar en tiempo real — solo interviene cuando la máquina lo pide."
+        eyebrow="El kit · W-1"
+        title="Su tractor de viña trabaja solo con el W-1"
+        description="El W-1, el kit de guiado por visión de Barrena, convierte cualquier tractor de viña en una máquina autónoma: conduce, corrige la línea y cubre la parcela sola. El Hub es donde usted la ve trabajar en tiempo real — solo interviene cuando la máquina lo pide."
         bullets={[
           "Guiado autónomo por visión, sin depender de GPS RTK",
           "Telemetría en vivo y replay de cada sesión de guiado",
           "Avisos solo cuando la máquina necesita una mano",
         ]}
-        tag="Requiere kit Barrena"
+        tag="Requiere el W-1"
+        actions={
+          <Button asChild variant="secondary">
+            <Link href="/w-1">Ver el W-1</Link>
+          </Button>
+        }
         media={
           <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-black/5">
             <Image
@@ -217,10 +228,10 @@ export default function Landing() {
         actions={
           <>
             <Button asChild>
-              <a href="/dashboard">Ver acciones en el panel</a>
+              <a href={HUB_URL}>Ver acciones en el panel</a>
             </Button>
             <Button asChild variant="secondary">
-              <a href="/dashboard/agent">Hablar con el agente</a>
+              <a href={`${HUB_URL}/agent`}>Hablar con el agente</a>
             </Button>
           </>
         }
@@ -361,16 +372,16 @@ export default function Landing() {
             <Wordmark product="Hub" variant="footer" />
             <p className="text-[12px] text-muted-foreground">
               Un producto de{" "}
-              <a
-                href={ROOT_SITE}
+              <Link
+                href="/"
                 className="font-medium text-foreground underline underline-offset-2 hover:text-brand-primary"
               >
                 Barrena Robotics
-              </a>
+              </Link>
               .
             </p>
             <p className="text-[12px] text-muted-foreground">
-              Kit de guiado autónomo · IoT agrícola · Hub de operaciones
+              W-1 · IoT agrícola · Hub de operaciones
             </p>
             <p className="text-[12px] text-muted-foreground">
               © 2026 Barrena Robotics. Todos los derechos reservados.
