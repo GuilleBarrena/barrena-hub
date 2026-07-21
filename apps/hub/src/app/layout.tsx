@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/dashboard/sidebar";
-import { HubHeader } from "@/components/dashboard/hub-header";
+import { AppFrame } from "@/components/auth/app-frame";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,19 +27,9 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${inter.variable} h-full`}>
       <body className="min-h-full">
-        {/* App shell: the sidebar is a real column from md up, a horizontal
-            strip below it. Every page now lives at the root, so the shell
-            lives in the root layout. */}
-        <div className="min-h-screen bg-surface font-sans text-foreground antialiased md:flex">
-          <Sidebar />
-          {/* Content column: a fixed top header over the scrolling page. */}
-          <div className="flex min-w-0 flex-1 flex-col">
-            <HubHeader />
-            <main className="min-w-0 flex-1 px-5 py-6 md:px-8 md:py-8">
-              {children}
-            </main>
-          </div>
-        </div>
+        {/* Auth gate: `/login` renders bare, every other route renders inside
+            the dashboard shell once a localStorage session is present. */}
+        <AppFrame>{children}</AppFrame>
       </body>
     </html>
   );

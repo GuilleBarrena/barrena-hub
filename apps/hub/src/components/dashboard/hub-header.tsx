@@ -1,4 +1,5 @@
 import { NotificationsMenu } from "./notifications-menu";
+import { LogoutButton } from "./logout-button";
 
 /**
  * Barra superior del panel. La navegación principal vive en la barra lateral,
@@ -16,6 +17,7 @@ export function HubHeader() {
                  md:sticky md:top-0 md:px-8"
     >
       <NotificationsMenu />
+      <LogoutButton />
     </header>
   );
 }
