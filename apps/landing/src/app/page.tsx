@@ -10,7 +10,6 @@ import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureSection } from "@barrena/ui/feature-section";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { LandingHeader } from "@/components/landing-header";
 import { HUB_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -46,9 +45,6 @@ const nav = [
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-      {/* Header */}
-      <LandingHeader />
-
       {/* Hero */}
       <section id="top" className="bg-background pt-14 pb-6 md:pt-20">
         <div className="mx-auto grid max-w-screen-xl gap-10 px-6 md:grid-cols-2 md:items-center md:gap-16">

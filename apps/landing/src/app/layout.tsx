@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { LandingHeader } from "@/components/landing-header";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,7 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} h-full`}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {/* The marketing header lives in the layout, so it renders once on
+            every route — no per-page duplication. */}
+        <LandingHeader />
+        {children}
+      </body>
     </html>
   );
 }

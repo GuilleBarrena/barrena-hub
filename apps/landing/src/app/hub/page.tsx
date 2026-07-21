@@ -11,7 +11,6 @@ import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureSection } from "@barrena/ui/feature-section";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { LandingHeader } from "@/components/landing-header";
 import { HUB_URL } from "@/lib/site";
 import { WaitlistDialog } from "@/components/waitlist-dialog";
 
@@ -47,9 +46,6 @@ export const metadata: Metadata = {
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-      {/* Header */}
-      <LandingHeader />
-
       {/* Hero */}
       <section className="bg-background py-12">
         <div className="mx-auto max-w-screen-xl px-6">

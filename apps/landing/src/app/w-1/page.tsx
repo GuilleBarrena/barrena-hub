@@ -9,7 +9,6 @@ import { SectionEyebrow } from "@barrena/ui/section-eyebrow";
 import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { LandingHeader } from "@/components/landing-header";
 
 export const metadata: Metadata = {
   title: {
@@ -137,8 +136,6 @@ const KIT = [
 export default function W1() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-      <LandingHeader />
-
       {/* Hero */}
       <section id="producto" className="bg-background pt-14 pb-6 md:pt-20">
         <div className="mx-auto max-w-screen-xl px-6 text-center">
