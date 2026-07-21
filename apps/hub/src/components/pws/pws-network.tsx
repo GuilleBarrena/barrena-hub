@@ -4,8 +4,9 @@ import Link from "next/link";
 
 import { Panel, StatTile } from "@/components/dashboard/primitives";
 import { StationObservation } from "@/components/pws/station-observation";
-import { SAMPLE_STATIONS } from "@/lib/pws/seed";
-import { PROVIDER_LABELS, usePwsSettings } from "@/lib/pws/settings";
+import { FARM_CENTER } from "@/lib/fields/seed";
+import { usePwsSettings } from "@/lib/pws/settings";
+import { useNearbyStations } from "@/lib/pws/use-nearby-stations";
 import {
   formatObservedAt,
   formatPrecip,
@@ -13,67 +14,105 @@ import {
   formatWind,
   windCardinal,
 } from "@/lib/pws/format";
+import { formatDistance } from "@/lib/pws/nearby";
 
 /**
- * The PWS network readout for the meteo page: a headline from a representative
- * station, then every station in the network with its normalized readings.
- *
- * Units and the provider label come from settings (the one place they're
- * configured); the stations themselves don't — they're the sample network.
+ * The PWS network readout for the meteo page: real stations around the farm,
+ * with a headline from the nearest one. With no API key it prompts to configure
+ * it — there is no sample fallback.
  */
 export function PwsNetwork() {
-  const { units, provider, apiKey } = usePwsSettings();
-  const stations = SAMPLE_STATIONS;
-  // Representative station for the headline tiles.
-  const lead = stations[0];
-  const o = lead.observation;
+  const { units } = usePwsSettings();
+  const { state, reload } = useNearbyStations(FARM_CENTER);
 
   return (
     <section>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-primary">
-          Red de estaciones · vía {PROVIDER_LABELS[provider]}
-        </p>
-        {apiKey.trim() === "" && (
+      <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-primary">
+        Red de estaciones · vía Weather Underground
+      </p>
+
+      {state.status === "unconfigured" && (
+        <Panel
+          title="Conecta tu API meteorológica"
+          subtitle="El servicio lee las estaciones de Weather Underground con tu API key."
+        >
+          <p className="text-sm text-muted-foreground">
+            Aún no hay ninguna API key configurada, así que no se pueden traer lecturas reales.
+          </p>
           <Link
             href="/settings"
-            className="rounded-full bg-surface-2 px-3 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-brand-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
-            API sin configurar · Ajustes →
+            Configurar API →
           </Link>
-        )}
-      </div>
+        </Panel>
+      )}
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile
-          label="Temperatura"
-          value={formatTemp(o.temperatureC, units)}
-          hint={`${lead.name} · punto de rocío ${formatTemp(o.dewpointC, units)}`}
-        />
-        <StatTile
-          label="Viento"
-          value={`${formatWind(o.windSpeedKph, units)} ${windCardinal(o.windDirDeg)}`}
-          hint={`racha ${formatWind(o.windGustKph, units)}`}
-        />
-        <StatTile label="Humedad relativa" value={`${o.humidityPct} %`} hint="media de la estación" />
-        <StatTile
-          label="Precipitación hoy"
-          value={formatPrecip(o.precipTotalMm, units)}
-          hint="acumulado desde medianoche"
-        />
-      </div>
+      {state.status === "loading" && (
+        <p className="text-sm text-muted-foreground">Cargando estaciones cercanas…</p>
+      )}
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
-        {stations.map((station) => (
-          <Panel
-            key={station.id}
-            title={station.name}
-            subtitle={`${station.id} · ${formatObservedAt(station.observation.observedAt)}`}
+      {state.status === "error" && (
+        <Panel title="No se pudieron cargar las estaciones" subtitle="Revisa la configuración de la API.">
+          <p className="text-sm text-red-600">{state.message}</p>
+          <button
+            type="button"
+            onClick={reload}
+            className="mt-3 text-sm font-medium text-brand-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <StationObservation observation={station.observation} units={units} columns={4} />
-          </Panel>
-        ))}
-      </div>
+            Reintentar
+          </button>
+        </Panel>
+      )}
+
+      {state.status === "ready" && state.stations.length === 0 && (
+        <p className="text-sm text-muted-foreground">
+          No se han encontrado estaciones públicas alrededor de la finca.
+        </p>
+      )}
+
+      {state.status === "ready" && state.stations.length > 0 && (
+        <>
+          {(() => {
+            const lead = state.stations[0];
+            const o = lead.observation;
+            return (
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <StatTile
+                  label="Temperatura"
+                  value={formatTemp(o.temperatureC, units)}
+                  hint={`${lead.name} · punto de rocío ${formatTemp(o.dewpointC, units)}`}
+                />
+                <StatTile
+                  label="Viento"
+                  value={`${formatWind(o.windSpeedKph, units)} ${windCardinal(o.windDirDeg)}`}
+                  hint={`racha ${formatWind(o.windGustKph, units)}`}
+                />
+                <StatTile label="Humedad relativa" value={`${o.humidityPct} %`} hint="estación más cercana" />
+                <StatTile
+                  label="Precipitación hoy"
+                  value={formatPrecip(o.precipTotalMm, units)}
+                  hint="acumulado desde medianoche"
+                />
+              </div>
+            );
+          })()}
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {state.stations.map((station) => (
+              <Panel
+                key={station.id}
+                title={station.name}
+                subtitle={`${station.id} · ${formatDistance(station.distanceM)} · ${formatObservedAt(
+                  station.observation.observedAt,
+                )}`}
+              >
+                <StationObservation observation={station.observation} units={units} columns={4} />
+              </Panel>
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }

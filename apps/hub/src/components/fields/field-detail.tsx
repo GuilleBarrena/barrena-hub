@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FieldViewMapLoader } from "@/components/fields/field-view-map-loader";
 import { NearbyStations } from "@/components/pws/nearby-stations";
 import { Button } from "@barrena/ui/button";
-import { formatHectares, toGeoJSON } from "@/lib/fields/geo";
+import { formatHectares, ringCentroid, toGeoJSON } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import { alertsForField } from "@/lib/fields/signals";
 import type { Field } from "@/lib/fields/types";
@@ -38,11 +38,13 @@ export function FieldDetail() {
   const [copied, setCopied] = useState(false);
 
   // Called unconditionally (before the early returns) so hook order stays fixed
-  // whether the field is still loading, missing, or found.
+  // whether the field is still loading, missing, or found. Stations are looked
+  // up from the field's centroid, so the hook takes a coordinate, not the field.
   const { units } = usePwsSettings();
-  const { stations, activeId, setActiveId } = useNearbyStations(
-    state.status === "found" ? state.field : null,
-  );
+  const center =
+    state.status === "found" ? ringCentroid(state.field.ring) : null;
+  const { state: nearby, activeId, setActiveId, reload } = useNearbyStations(center);
+  const stations = nearby.status === "ready" ? nearby.stations : [];
 
   useEffect(() => {
     let active = true;
@@ -223,9 +225,10 @@ export function FieldDetail() {
         </div>
 
         <NearbyStations
-          stations={stations}
+          state={nearby}
           activeId={activeId}
           onActivate={setActiveId}
+          onRetry={reload}
           units={units}
         />
       </div>
