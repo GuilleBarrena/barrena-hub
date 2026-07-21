@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Panel, StatTile } from "@/components/dashboard/primitives";
+import { Panel } from "@/components/dashboard/primitives";
 import { PrecipitationChart } from "@/components/dashboard/precipitation-chart";
 import { TemperatureChart } from "@/components/dashboard/temperature-chart";
-import { currentWeather } from "@/lib/sample-data";
+import { PwsNetwork } from "@/components/pws/pws-network";
 
 export const metadata: Metadata = {
   title: "Meteo",
-  description: "Predicción local y alertas meteorológicas por finca.",
+  description: "Red de estaciones meteorológicas personales y predicción local.",
 };
 
 export default function MeteoPage() {
@@ -17,31 +17,31 @@ export default function MeteoPage() {
           Meteo
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Predicción local para Finca La Esperanza · próximos 7 días.
+          Lecturas en directo de las estaciones cercanas y predicción para Finca La Esperanza.
         </p>
       </header>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile label="Temperatura" value={currentWeather.temperature} hint="sensación 20,1 °C" />
-        <StatTile label="Viento" value={currentWeather.wind} hint="racha 26 km/h" />
-        <StatTile label="Humedad relativa" value={currentWeather.humidity} hint="punto de rocío 12 °C" />
-        <StatTile label="Precipitación 24 h" value={currentWeather.precipitation24h} hint="acumulado" />
-      </div>
+      <PwsNetwork />
 
       {/* Two measures, two scales -> two charts. Never a second y-axis. */}
-      <div className="mt-4 grid gap-4 xl:grid-cols-2">
-        <Panel title="Temperatura" subtitle="Media diaria y rango mínima-máxima, en °C.">
-          <TemperatureChart />
-        </Panel>
+      <div className="mt-8">
+        <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-primary">
+          Predicción · próximos 7 días
+        </p>
+        <div className="grid gap-4 xl:grid-cols-2">
+          <Panel title="Temperatura" subtitle="Media diaria y rango mínima-máxima, en °C.">
+            <TemperatureChart />
+          </Panel>
 
-        <Panel title="Precipitación" subtitle="Acumulado diario previsto, en mm.">
-          <PrecipitationChart />
-        </Panel>
+          <Panel title="Precipitación" subtitle="Acumulado diario previsto, en mm.">
+            <PrecipitationChart />
+          </Panel>
+        </div>
       </div>
 
       <p className="mt-6 text-[11px] text-muted-foreground">
         Todos los valores mostrados son datos de muestra; no proceden de ninguna
-        estación ni servicio de predicción.
+        estación ni servicio de predicción reales.
       </p>
     </div>
   );

@@ -1,9 +1,18 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const ITEMS = [
+interface NavItem {
+  href: string;
+  label: string;
+  /** Light only on an exact path match, rather than any prefix. */
+  exact: boolean;
+  icon: ReactNode;
+}
+
+const ITEMS: NavItem[] = [
   {
     href: "/",
     label: "Inicio",
@@ -77,51 +86,75 @@ const ITEMS = [
   },
 ];
 
+/** Utility items that belong at the foot of the rail, away from the primary
+ *  navigation. Settings is the classic example. */
+const BOTTOM_ITEMS: NavItem[] = [
+  {
+    href: "/settings",
+    label: "Ajustes",
+    exact: false,
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M18 6l-1.4 1.4M7.4 16.6 6 18" />
+      </>
+    ),
+  },
+];
+
 export function Sidenav({ collapsed = false }: { collapsed?: boolean }) {
   const pathname = usePathname();
 
   const isActive = (href: string, exact: boolean) =>
     exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 
+  const renderItem = (item: NavItem) => {
+    const active = isActive(item.href, item.exact);
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-current={active ? "page" : undefined}
+        aria-label={item.label}
+        title={collapsed ? item.label : undefined}
+        className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors
+                    outline-none focus-visible:ring-2 focus-visible:ring-ring
+                    ${collapsed ? "md:justify-center md:gap-0 md:px-0" : ""}
+                    ${
+                      active
+                        ? "bg-surface-2 font-medium text-foreground"
+                        : "text-muted-foreground hover:bg-surface-2/60 hover:text-foreground"
+                    }`}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className={`size-4 shrink-0 ${active ? "text-brand-primary" : "text-muted-foreground"}`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {item.icon}
+        </svg>
+        <span className={collapsed ? "md:hidden" : undefined}>{item.label}</span>
+      </Link>
+    );
+  };
+
   return (
+    // Full-height column on desktop so the bottom group can be pushed to the
+    // foot with `mt-auto`; a plain horizontal strip below md, where the two
+    // groups simply sit end to end.
     <nav
       aria-label="Navegación del panel"
-      className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible"
+      className="flex gap-1 overflow-x-auto md:h-full md:flex-col md:overflow-visible"
     >
-      {ITEMS.map((item) => {
-        const active = isActive(item.href, item.exact);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            aria-label={item.label}
-            title={collapsed ? item.label : undefined}
-            className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors
-                        outline-none focus-visible:ring-2 focus-visible:ring-ring
-                        ${collapsed ? "md:justify-center md:gap-0 md:px-0" : ""}
-                        ${
-                          active
-                            ? "bg-surface-2 font-medium text-foreground"
-                            : "text-muted-foreground hover:bg-surface-2/60 hover:text-foreground"
-                        }`}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className={`size-4 shrink-0 ${active ? "text-brand-primary" : "text-muted-foreground"}`}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              {item.icon}
-            </svg>
-            <span className={collapsed ? "md:hidden" : undefined}>{item.label}</span>
-          </Link>
-        );
-      })}
+      <div className="flex gap-1 md:flex-col">{ITEMS.map(renderItem)}</div>
+      <div className="flex gap-1 md:mt-auto md:flex-col md:border-t md:border-border md:pt-2">
+        {BOTTOM_ITEMS.map(renderItem)}
+      </div>
     </nav>
   );
 }

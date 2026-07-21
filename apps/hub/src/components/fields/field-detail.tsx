@@ -5,12 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FieldViewMapLoader } from "@/components/fields/field-view-map-loader";
+import { NearbyStations } from "@/components/pws/nearby-stations";
 import { Button } from "@barrena/ui/button";
 import { formatHectares, toGeoJSON } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import { alertsForField } from "@/lib/fields/signals";
 import type { Field } from "@/lib/fields/types";
-import { currentWeather } from "@/lib/sample-data";
+import { useNearbyStations } from "@/lib/pws/use-nearby-stations";
+import { usePwsSettings } from "@/lib/pws/settings";
 
 type State =
   | { status: "loading" }
@@ -34,6 +36,13 @@ export function FieldDetail() {
   const router = useRouter();
   const [state, setState] = useState<State>({ status: "loading" });
   const [copied, setCopied] = useState(false);
+
+  // Called unconditionally (before the early returns) so hook order stays fixed
+  // whether the field is still loading, missing, or found.
+  const { units } = usePwsSettings();
+  const { stations, activeId, setActiveId } = useNearbyStations(
+    state.status === "found" ? state.field : null,
+  );
 
   useEffect(() => {
     let active = true;
@@ -96,7 +105,12 @@ export function FieldDetail() {
 
   return (
     <div className={STAGE}>
-      <FieldViewMapLoader field={field} />
+      <FieldViewMapLoader
+        field={field}
+        stations={stations}
+        activeStationId={activeId}
+        onStationHover={setActiveId}
+      />
 
       {/* Top-left: back + the field's identity card, Google-Maps style. Height
           is capped on small screens so it never reaches the bottom info column. */}
@@ -208,28 +222,12 @@ export function FieldDetail() {
           )}
         </div>
 
-        <div className="pointer-events-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
-          <p className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            Meteo · ahora
-            <span className="font-normal normal-case tracking-normal text-muted-foreground/70">Finca</span>
-          </p>
-          <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3">
-            {(
-              [
-                ["Temperatura", currentWeather.temperature],
-                ["Viento", currentWeather.wind],
-                ["Humedad", currentWeather.humidity],
-                ["Precip. 24 h", currentWeather.precipitation24h],
-              ] as [string, string][]
-            ).map(([k, v]) => (
-              <div key={k} className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{k}</span>
-                <span className="text-base font-semibold tabular-nums text-foreground">{v}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-3 text-[10px] text-muted-foreground">Datos de muestra.</p>
-        </div>
+        <NearbyStations
+          stations={stations}
+          activeId={activeId}
+          onActivate={setActiveId}
+          units={units}
+        />
       </div>
     </div>
   );
