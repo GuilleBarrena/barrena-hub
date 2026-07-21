@@ -47,67 +47,69 @@ export function UserView() {
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-5">
-      <div className="flex items-center gap-3">
-        <span
-          aria-hidden="true"
-          className="grid size-11 shrink-0 place-items-center rounded-full bg-brand-accent text-sm font-semibold text-primary-foreground"
-        >
-          {initials(form.name)}
-        </span>
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-foreground">{form.name}</p>
-          <p className="truncate text-[12px] text-muted-foreground">{form.role}</p>
+    <div className="flex flex-col gap-5">
+      <form onSubmit={submit} className="flex flex-col gap-5">
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-brand-accent text-sm font-semibold text-primary-foreground"
+          >
+            {initials(form.name)}
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-foreground">{form.name}</p>
+            <p className="truncate text-[12px] text-muted-foreground">{form.role}</p>
+          </div>
         </div>
-      </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <TextField
-          id="user-name"
-          label="Nombre"
-          value={form.name}
-          onChange={(e) => set("name", e.target.value)}
-        />
-        <TextField
-          id="user-role"
-          label="Cargo"
-          value={form.role}
-          onChange={(e) => set("role", e.target.value)}
-        />
-        <TextField
-          id="user-email"
-          label="Email"
-          type="email"
-          value={form.email}
-          onChange={(e) => set("email", e.target.value)}
-        />
-        <TextField
-          id="user-phone"
-          label="Teléfono"
-          value={form.phone}
-          onChange={(e) => set("phone", e.target.value)}
-        />
-        <SelectField
-          id="user-language"
-          label="Idioma"
-          value={form.language}
-          onChange={(e) => set("language", e.target.value)}
-          options={LANGUAGES}
-        />
-      </div>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField
+            id="user-name"
+            label="Nombre"
+            value={form.name}
+            onChange={(e) => set("name", e.target.value)}
+          />
+          <TextField
+            id="user-role"
+            label="Cargo"
+            value={form.role}
+            onChange={(e) => set("role", e.target.value)}
+          />
+          <TextField
+            id="user-email"
+            label="Email"
+            type="email"
+            value={form.email}
+            onChange={(e) => set("email", e.target.value)}
+          />
+          <TextField
+            id="user-phone"
+            label="Teléfono"
+            value={form.phone}
+            onChange={(e) => set("phone", e.target.value)}
+          />
+          <SelectField
+            id="user-language"
+            label="Idioma"
+            value={form.language}
+            onChange={(e) => set("language", e.target.value)}
+            options={LANGUAGES}
+          />
+        </div>
 
-      <div className="flex items-center gap-3">
-        <Button type="submit">Guardar cambios</Button>
-        {saved && (
-          <span className="text-[12px] font-medium text-brand-primary">Guardado ✓</span>
-        )}
-      </div>
-    </form>
+        <div className="flex items-center gap-3">
+          <Button type="submit">Guardar cambios</Button>
+          {saved && (
+            <span className="text-[12px] font-medium text-brand-primary">Guardado ✓</span>
+          )}
+        </div>
+      </form>
 
-    <div className="border-t border-border pt-5 mt-5">
-      <Button variant="destructive" onClick={closeSession}>
-        Cerrar sesión
-      </Button>
+      <div className="border-t border-border pt-5">
+        <Button variant="destructive" onClick={closeSession}>
+          Cerrar sesión
+        </Button>
+      </div>
     </div>
   );
 }
