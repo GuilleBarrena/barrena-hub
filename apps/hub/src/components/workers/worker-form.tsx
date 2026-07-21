@@ -51,16 +51,18 @@ export function WorkerForm() {
   }
 
   return (
-    <div className="max-w-xl rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm">
-      <div className="flex flex-col gap-4">
-        <TextField
-          id="worker-name"
-          label="Nombre y apellidos"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Ana Beltrán"
-          autoComplete="off"
-        />
+    <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-black/5 sm:p-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <TextField
+            id="worker-name"
+            label="Nombre y apellidos"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ana Beltrán"
+            autoComplete="off"
+          />
+        </div>
 
         <SelectField
           id="worker-role"
@@ -97,15 +99,16 @@ export function WorkerForm() {
         />
 
         {error && (
-          <p role="alert" className="text-[12px] text-red-600">
+          <p role="alert" className="text-[12px] text-red-600 sm:col-span-2">
             {error}
           </p>
         )}
+      </div>
 
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-5">
         <Button type="button" onClick={save} disabled={!canSave || saving}>
           {saving ? "Guardando…" : "Guardar operario"}
         </Button>
-
         <p className="text-[11px] text-muted-foreground">
           Se guarda en este navegador (localStorage), no en un servidor. No introduzca
           datos personales reales.

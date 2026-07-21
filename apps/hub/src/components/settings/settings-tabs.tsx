@@ -35,7 +35,7 @@ export function SettingsTabs() {
   const current = TABS.find((t) => t.id === active) ?? TABS[0];
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <div
         role="tablist"
         aria-label="Secciones de ajustes"

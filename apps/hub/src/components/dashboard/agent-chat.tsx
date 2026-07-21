@@ -90,7 +90,7 @@ export function AgentChat() {
   const vacio = mensajes.length === 0;
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-8.5rem)] max-w-3xl flex-col md:h-[calc(100vh-6rem)]">
+    <div className="mx-auto flex h-[calc(100vh-8.5rem)] max-w-6xl flex-col md:h-[calc(100vh-6rem)]">
       {/* Cabecera */}
       <header className="mb-4 flex items-center justify-between gap-3">
         <div>
@@ -202,7 +202,7 @@ function MessageBubble({ mensaje }: { mensaje: MensajeChat }) {
         {esUsuario ? "Tú" : <BotIcon className="size-4" />}
       </div>
       <div
-        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed md:max-w-[46rem] ${
           esUsuario
             ? "bg-brand-primary text-primary-foreground"
             : "bg-surface-2 text-foreground"

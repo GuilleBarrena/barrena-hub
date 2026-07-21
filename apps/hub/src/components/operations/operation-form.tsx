@@ -123,15 +123,17 @@ export function OperationForm() {
   }
 
   return (
-    <div className="max-w-xl rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm">
-      <div className="flex flex-col gap-4">
-        <TextField
-          id="operation-name"
-          label="Nombre"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Siembra Parcela 02"
-        />
+    <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-black/5 sm:p-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <TextField
+            id="operation-name"
+            label="Nombre"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Siembra Parcela 02"
+          />
+        </div>
 
         <SelectField
           id="operation-type"
@@ -184,7 +186,7 @@ export function OperationForm() {
           onChange={(e) => setScheduledFor(e.target.value)}
         />
 
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5 sm:col-span-2">
           <label
             htmlFor="operation-notes"
             className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
@@ -202,15 +204,16 @@ export function OperationForm() {
         </div>
 
         {error && (
-          <p role="alert" className="text-[12px] text-red-600">
+          <p role="alert" className="text-[12px] text-red-600 sm:col-span-2">
             {error}
           </p>
         )}
+      </div>
 
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-5">
         <Button type="button" onClick={save} disabled={!canSave || saving}>
           {saving ? "Guardando…" : "Guardar operación"}
         </Button>
-
         <p className="text-[11px] text-muted-foreground">
           Se guarda en este navegador (localStorage), no en un servidor. El seguimiento
           por GPS solo está disponible en las operaciones de muestra con telemetría.
