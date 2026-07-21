@@ -43,7 +43,7 @@ export function VehicleForm() {
         status,
         engineHours: engineHours === "" ? 0 : hours,
       });
-      router.push("/dashboard/vehicles");
+      router.push("/vehicles");
       router.refresh();
     } catch {
       setError("No se pudo guardar el vehículo en este navegador.");

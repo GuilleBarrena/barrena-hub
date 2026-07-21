@@ -67,7 +67,7 @@ export function FieldDetail() {
             únicamente en este dispositivo.
           </p>
           <Button asChild variant="secondary" className="mt-4">
-            <Link href="/dashboard/fields">Volver al listado</Link>
+            <Link href="/fields">Volver al listado</Link>
           </Button>
         </div>
       </div>
@@ -90,7 +90,7 @@ export function FieldDetail() {
 
   async function remove() {
     await getFieldRepository().remove(field.id);
-    router.push("/dashboard/fields");
+    router.push("/fields");
     router.refresh();
   }
 
@@ -102,7 +102,7 @@ export function FieldDetail() {
           is capped on small screens so it never reaches the bottom info column. */}
       <div className="pointer-events-none absolute left-3 top-3 z-[500] flex max-h-[52%] w-[min(20rem,calc(100%-1.5rem))] flex-col gap-2 md:max-h-[calc(100%-1.5rem)]">
         <Link
-          href="/dashboard/fields"
+          href="/fields"
           className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
           ← Parcelas

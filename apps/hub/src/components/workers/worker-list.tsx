@@ -48,14 +48,14 @@ export function WorkerList() {
           {active === 1 ? "activo" : "activos"}
         </p>
         <Button asChild>
-          <Link href="/dashboard/workers/new">Añadir operario</Link>
+          <Link href="/workers/new">Añadir operario</Link>
         </Button>
       </div>
 
       <ResourceTable
         rows={workers}
         columns={COLUMNS}
-        hrefFor={(w) => `/dashboard/workers/${w.id}`}
+        hrefFor={(w) => `/workers/${w.id}`}
         onDelete={async (w) => {
           await getWorkerRepository().remove(w.id);
           load();

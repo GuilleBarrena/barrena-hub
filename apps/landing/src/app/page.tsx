@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+
+import heroImage from "@/assets/vitis-hero.jpg";
 
 import { Button } from "@barrena/ui/button";
 import { SectionEyebrow } from "@barrena/ui/section-eyebrow";
@@ -6,66 +10,41 @@ import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureSection } from "@barrena/ui/feature-section";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { VineyardVisual } from "@/components/vineyard-visual";
-
-// The Hub console lives in its own app. In production it sits on a subdomain;
-// override with NEXT_PUBLIC_HUB_URL (e.g. http://localhost:3000 in dev).
-const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL ?? "https://hub.barrenarobotics.com";
+import { HUB_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
     absolute: "Barrena Robotics — Robótica agrícola autónoma para el viñedo",
   },
   description:
-    "Convertimos cualquier tractor de viña en una máquina autónoma con guiado por visión, sin GPS RTK. Kit de guiado, sensórica agrícola y el Hub de operaciones.",
+    "Automatizamos el viñedo de la cepa a la nube: el W-1, un kit que convierte su tractor en autónomo, y el Hub, la consola que supervisa toda la explotación.",
   openGraph: {
     title: "Barrena Robotics — Robótica agrícola autónoma para el viñedo",
     description:
-      "Guiado autónomo por visión para tractores de viña, sensórica en campo e inteligencia operativa en una sola plataforma.",
+      "El W-1 convierte su tractor de viña en una máquina autónoma; el Hub supervisa toda la explotación desde una sola pantalla.",
     type: "website",
     locale: "es_ES",
+    images: [
+      {
+        url: heroImage.src,
+        width: heroImage.width,
+        height: heroImage.height,
+        alt: "Tractor de viña autónomo escaneando las hileras del viñedo de noche",
+      },
+    ],
   },
 };
 
 const nav = [
-  { href: "#kit", label: "El kit" },
-  { href: "#tecnologia", label: "Tecnología" },
-  { href: "#hub", label: "El Hub" },
+  { href: "#que-hacemos", label: "Qué hacemos" },
+  { href: "/w-1", label: "W-1" },
+  { href: "/hub", label: "Hub" },
   { href: "#contacto", label: "Contacto" },
 ];
 
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-      {/* Header */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-6">
-          <a href="#top">
-            <Wordmark />
-          </a>
-          <div className="hidden items-center gap-6 md:flex">
-            {nav.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <Button asChild variant="ghost" className="hidden px-2 sm:inline-flex">
-              <a href={HUB_URL}>Acceder al Hub</a>
-            </Button>
-            <Button asChild>
-              <a href="#contacto">Solicitar demo</a>
-            </Button>
-          </div>
-        </div>
-        <div className="h-px w-full bg-foreground/5" />
-      </nav>
-
       {/* Hero */}
       <section id="top" className="bg-background pt-14 pb-6 md:pt-20">
         <div className="mx-auto grid max-w-screen-xl gap-10 px-6 md:grid-cols-2 md:items-center md:gap-16">
@@ -75,20 +54,20 @@ export default function Landing() {
               Robótica agrícola autónoma
             </span>
             <h1 className="max-w-2xl text-balance text-4xl font-semibold leading-tight tracking-tight text-foreground md:text-5xl">
-              Su tractor de viña trabaja solo, sin GPS RTK
+              Automatizamos el viñedo, de la cepa a la nube
             </h1>
             <p className="mt-5 max-w-[52ch] text-pretty text-base text-muted-foreground md:text-lg">
-              Barrena Robotics convierte cualquier tractor de viña en una máquina
-              autónoma. El kit de guiado por visión conduce, corrige la línea y
-              cubre la parcela sola —y todo lo supervisa desde el Hub, nuestra
-              consola de operaciones.
+              Barrena Robotics combina el <strong className="font-semibold text-foreground">W-1</strong>
+              {" "}—un kit que convierte su tractor de viña en una máquina autónoma—
+              con el <strong className="font-semibold text-foreground">Hub</strong>, la
+              consola que supervisa toda la explotación desde una sola pantalla.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild>
-                <a href="#contacto">Solicitar una demo</a>
+                <Link href="/w-1">Ver el W-1</Link>
               </Button>
               <Button asChild variant="secondary">
-                <a href="#tecnologia">Ver cómo funciona</a>
+                <a href={HUB_URL}>Acceder al Hub</a>
               </Button>
             </div>
             <p className="mt-6 text-[13px] text-muted-foreground">
@@ -97,33 +76,25 @@ export default function Landing() {
             </p>
           </div>
 
-          {/* Vineyard visual with live-status overlay chips */}
-          <div className="relative overflow-hidden rounded-2xl bg-card p-3 shadow-sm ring-1 ring-black/5">
-            <div className="relative overflow-hidden rounded-xl outline-1 -outline-offset-1 outline-black/5">
-              <VineyardVisual />
-            </div>
-            <div className="absolute left-6 top-6 flex flex-col gap-2">
-              <div className="flex items-center gap-2 rounded-full bg-background/90 px-3 py-1.5 ring-1 ring-black/5 backdrop-blur">
-                <span className="relative flex size-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-60" />
-                  <span className="relative inline-flex size-2 rounded-full bg-green-500" />
-                </span>
-                <span className="text-[11px] font-medium text-foreground">
-                  Guiado autónomo en curso
-                </span>
-              </div>
-              <div className="rounded-full bg-background/90 px-3 py-1.5 ring-1 ring-black/5 backdrop-blur">
-                <span className="text-[11px] font-medium text-muted-foreground">
-                  Finca La Esperanza · Parcela 04
-                </span>
-              </div>
-            </div>
-            <div className="absolute bottom-6 right-6 rounded-lg bg-background/95 p-3 shadow-sm ring-1 ring-black/5 backdrop-blur">
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                Desviación de línea
+          {/* Always-dark hero frame: the night lidar shot reads the same in
+              light and dark themes, blended into a black panel. */}
+          <div className="relative overflow-hidden rounded-2xl bg-black ring-1 ring-white/10">
+            <Image
+              src={heroImage}
+              alt="Tractor de viña con el kit W-1 escaneando las hileras del viñedo de noche"
+              sizes="(min-width: 1280px) 608px, 100vw"
+              placeholder="blur"
+              preload
+              className="w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black" />
+            <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15 backdrop-blur">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
+                <span className="relative inline-flex size-2 rounded-full bg-green-400" />
               </span>
-              <span className="block text-lg font-semibold text-foreground">
-                ± 2.1 cm
+              <span className="text-[11px] font-medium text-white">
+                W-1 · Guiado autónomo en curso
               </span>
             </div>
           </div>
@@ -134,7 +105,7 @@ export default function Landing() {
       <section className="bg-surface py-8">
         <div className="mx-auto grid max-w-screen-xl grid-cols-2 gap-6 px-6 md:grid-cols-4">
           {[
-            { value: "± 2 cm", label: "Precisión de guiado" },
+            { value: "2,5 cm", label: "Precisión de guiado" },
             { value: "0", label: "Antenas RTK necesarias" },
             { value: "1 día", label: "Instalación en su tractor" },
             { value: "24/7", label: "Supervisión desde el Hub" },
@@ -151,93 +122,70 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 01 — El kit de guiado autónomo */}
+      {/* Qué hacemos — overview intro */}
+      <section id="que-hacemos" className="scroll-mt-14 bg-background pt-16 md:pt-24">
+        <div className="mx-auto max-w-screen-xl px-6">
+          <SectionEyebrow>Qué hacemos</SectionEyebrow>
+          <h2 className="mt-3 max-w-2xl text-balance text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+            Dos piezas, una explotación autónoma
+          </h2>
+          <p className="mt-4 max-w-[56ch] text-sm text-muted-foreground md:text-base">
+            El W-1 pone la autonomía en el campo; el Hub la convierte en
+            decisiones. Juntos, su viñedo se trabaja y se supervisa solo.
+          </p>
+        </div>
+      </section>
+
+      {/* Producto 01 — W-1 */}
       <FeatureSection
-        id="kit"
         index="01"
-        eyebrow="Kit de guiado autónomo"
-        title="Autonomía real para el viñedo, sobre su tractor actual"
-        description="El kit de Barrena se instala en tractores de viña convencionales y los convierte en máquinas autónomas. Nada de reemplazar su flota ni de desplegar antenas: guiado por visión, montado en un día, listo para trabajar la calle."
+        eyebrow="El kit · W-1"
+        title="El W-1: su tractor de viña, autónomo"
+        description="El W-1 es un kit de retrofit que convierte cualquier tractor de viña convencional en una máquina autónoma. Guiado por visión con 2,5 cm de precisión, montado en un día, sin desplegar antenas ni sustituir su flota."
         bullets={[
           "Guiado por visión, sin depender de GPS RTK ni corrección diferencial",
-          "Sigue la línea de la calle y corrige la trayectoria en tiempo real",
+          "Planifica y cubre la parcela entera: giros de cabecera automáticos",
           "Parada segura ante obstáculos, personas o fin de parcela",
-          "Compatible con tractores de viña estrechos ya en uso",
         ]}
+        actions={
+          <>
+            <Button asChild>
+              <Link href="/w-1">Ver el W-1</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <a href="#contacto">Solicitar demo</a>
+            </Button>
+          </>
+        }
         media={
-          <div className="rounded-2xl bg-card p-3 shadow-sm ring-1 ring-black/5">
-            <div className="overflow-hidden rounded-xl outline-1 -outline-offset-1 outline-black/5">
-              <VineyardVisual />
-            </div>
+          <div className="relative overflow-hidden rounded-2xl bg-black ring-1 ring-white/10">
+            <Image
+              src={heroImage}
+              alt="Kit W-1 montado en un tractor de viña, guiando entre las hileras"
+              sizes="(min-width: 768px) 50vw, 100vw"
+              placeholder="blur"
+              className="aspect-[4/3] w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-black" />
           </div>
         }
       />
 
-      {/* 02 — Tecnología / cómo funciona */}
-      <section id="tecnologia" className="scroll-mt-14 bg-surface py-16 md:py-24">
-        <div className="mx-auto max-w-screen-xl px-6">
-          <SectionEyebrow index="02" className="mb-5">
-            Cómo funciona
-          </SectionEyebrow>
-          <h2 className="max-w-2xl text-balance text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-            Visión artificial en el campo, inteligencia en el Hub
-          </h2>
-          <p className="mt-4 max-w-[56ch] text-sm text-muted-foreground md:text-base">
-            Tres capas trabajando juntas: la máquina ve y conduce, la nube
-            razona sobre lo que ocurre y usted decide desde una sola pantalla.
-          </p>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                index: "A",
-                title: "Percepción a bordo",
-                description:
-                  "Cámaras y cómputo en el tractor detectan la línea de la calle, obstáculos y el fin de parcela, y gobiernan la dirección varias veces por segundo.",
-              },
-              {
-                index: "B",
-                title: "Inteligencia en la nube",
-                description:
-                  "Cada pasada se sincroniza con el Hub, que cruza telemetría, sensórica y meteo para anticipar dónde y cuándo conviene actuar.",
-              },
-              {
-                index: "C",
-                title: "Supervisión y control",
-                description:
-                  "Usted ve la flota trabajar en vivo, recibe avisos solo cuando la máquina necesita una mano y aprueba las acciones que importan.",
-              },
-            ].map((step) => (
-              <FeatureCard
-                key={step.index}
-                badge={
-                  <span className="mb-4 flex size-8 items-center justify-center rounded-lg bg-brand-primary/10 font-mono text-sm font-semibold text-brand-primary ring-1 ring-brand-primary/20">
-                    {step.index}
-                  </span>
-                }
-                title={step.title}
-                description={step.description}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 03 — El Hub */}
+      {/* Producto 02 — Hub */}
       <FeatureSection
-        id="hub"
-        index="03"
-        eyebrow="El Hub"
-        title="Toda la explotación desde una sola consola"
-        description="El Hub es el centro de operaciones de Barrena Robotics: telemetría de la flota, evolución satelital del cultivo, meteo local y cuadrillas en una sola pantalla. Gratuito para toda explotación, tenga o no máquinas Barrena."
+        index="02"
+        eyebrow="La consola · Hub"
+        title="El Hub: toda la explotación en una pantalla"
+        description="El Hub es el centro de operaciones: telemetría del W-1, evolución satelital del cultivo, meteo local y cuadrillas en una sola pantalla. Gratuito para toda explotación, tenga o no máquinas Barrena."
         reverse
+        tinted
         actions={
           <>
             <Button asChild>
               <a href={HUB_URL}>Acceder al Hub</a>
             </Button>
             <Button asChild variant="secondary">
-              <a href="#contacto">Solicitar acceso</a>
+              <Link href="/hub">Ver el Hub</Link>
             </Button>
           </>
         }
@@ -301,7 +249,7 @@ export default function Landing() {
       />
 
       {/* Por qué Barrena */}
-      <section className="bg-surface py-16 md:py-24">
+      <section className="bg-background py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl px-6">
           <SectionEyebrow>Por qué Barrena</SectionEyebrow>
           <h2 className="mt-3 max-w-2xl text-balance text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
@@ -317,7 +265,7 @@ export default function Landing() {
               {
                 title: "Sobre su flota actual",
                 description:
-                  "El kit se monta en tractores de viña convencionales. No sustituye su inversión: la potencia.",
+                  "El W-1 se monta en tractores de viña convencionales. No sustituye su inversión: la potencia.",
               },
               {
                 title: "Menos manos, más cobertura",
@@ -336,14 +284,14 @@ export default function Landing() {
       </section>
 
       {/* CTA / contacto */}
-      <section id="contacto" className="scroll-mt-14 bg-background py-16">
+      <section id="contacto" className="scroll-mt-14 bg-surface py-16">
         <div className="mx-auto max-w-screen-xl px-6">
           <CtaBand
             title="Prepárese para la explotación autónoma"
-            description="Cuéntenos sobre su viñedo y organizamos una demo del kit de guiado autónomo. Sea de las primeras explotaciones en operar con máquinas Barrena."
+            description="Cuéntenos sobre su viñedo y organizamos una demo del W-1. Sea de las primeras explotaciones en operar con máquinas Barrena."
           >
             <Button asChild variant="inverted" className="w-full px-6 md:w-auto">
-              <a href="mailto:hola@barrenarobotics.com?subject=Quiero%20una%20demo%20del%20kit%20autónomo">
+              <a href="mailto:hola@barrenarobotics.com?subject=Quiero%20una%20demo%20del%20W-1">
                 Solicitar una demo
               </a>
             </Button>
@@ -364,8 +312,8 @@ export default function Landing() {
           <div className="flex flex-col gap-4">
             <Wordmark variant="footer" />
             <p className="max-w-[60ch] text-[12px] text-muted-foreground">
-              Robótica agrícola autónoma: kit de guiado por visión para tractores
-              de viña, sensórica IoT en campo y el Hub de operaciones.
+              Robótica agrícola autónoma: el W-1, kit de guiado por visión para
+              tractores de viña, y el Hub, la consola de operaciones.
             </p>
             <div className="flex flex-wrap gap-x-6 gap-y-1 text-[12px]">
               {nav.map((item) => (
@@ -377,12 +325,6 @@ export default function Landing() {
                   {item.label}
                 </a>
               ))}
-              <a
-                href={HUB_URL}
-                className="font-medium text-foreground underline underline-offset-2 hover:text-brand-primary"
-              >
-                Hub
-              </a>
             </div>
             <p className="text-[12px] text-muted-foreground">
               © 2026 Barrena Robotics. Todos los derechos reservados.

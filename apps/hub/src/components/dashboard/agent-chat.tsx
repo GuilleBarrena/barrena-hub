@@ -31,7 +31,7 @@ export function AgentChat() {
     }
   }, []);
 
-  // Enlace directo: /dashboard/agent?accion=... precarga una pregunta.
+  // Enlace directo: /agent?accion=... precarga una pregunta.
   useEffect(() => {
     if (iniciado.current) return;
     iniciado.current = true;

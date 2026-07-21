@@ -9,9 +9,12 @@
     "./wordmark": "./src/wordmark.tsx",
     "./feature-card": "./src/feature-card.tsx",
     "./feature-section": "./src/feature-section.tsx",
-    "./cta-band": "./src/cta-band.tsx"
+    "./cta-band": "./src/cta-band.tsx",
+    "./mobile-menu": "./src/mobile-menu.tsx",
+    "./site-header": "./src/site-header.tsx"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.19",
     "@radix-ui/react-slot": "^1.3.0"
   },
   "peerDependencies": {

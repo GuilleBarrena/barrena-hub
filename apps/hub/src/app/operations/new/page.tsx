@@ -1,31 +1,31 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { VehicleForm } from "@/components/vehicles/vehicle-form";
+import { OperationForm } from "@/components/operations/operation-form";
 
 export const metadata: Metadata = {
-  title: "Añadir vehículo",
-  description: "Alta de un vehículo en la flota.",
+  title: "Añadir operación",
+  description: "Alta de una operación de campo.",
 };
 
-export default function NewVehiclePage() {
+export default function NewOperationPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <header className="mb-6">
         <Link
-          href="/dashboard/vehicles"
+          href="/operations"
           className="text-[12px] text-muted-foreground underline-offset-4 hover:underline"
         >
-          ← Vehículos
+          ← Operaciones
         </Link>
         <h1 className="mt-2 text-xl font-semibold tracking-tight text-foreground md:text-2xl">
-          Añadir vehículo
+          Añadir operación
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Registre una máquina en la flota de la explotación.
+          Enlace un operario y una parcela, y opcionalmente un vehículo.
         </p>
       </header>
 
-      <VehicleForm />
+      <OperationForm />
     </div>
   );
 }
