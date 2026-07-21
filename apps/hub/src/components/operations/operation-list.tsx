@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { StatusBadge } from "@/components/dashboard/primitives";
 import { ResourceTable, type Column } from "@/components/dashboard/resource-table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { getOperationRepository } from "@/lib/operations/repository";
 import { loadOperationRefs, type OperationRefs } from "@/lib/operations/references";
 import { OPERATION_STATUS, type Operation } from "@/lib/operations/types";

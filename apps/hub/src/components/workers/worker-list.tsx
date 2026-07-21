@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { StatusBadge } from "@/components/dashboard/primitives";
 import { ResourceTable, type Column } from "@/components/dashboard/resource-table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { getWorkerRepository } from "@/lib/workers/repository";
 import { WORKER_STATUS, type Worker } from "@/lib/workers/types";
 

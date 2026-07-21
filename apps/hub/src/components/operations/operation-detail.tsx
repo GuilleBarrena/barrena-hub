@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 import { StatusBadge } from "@/components/dashboard/primitives";
 import { OperationTrackMapLoader } from "@/components/operations/operation-track-map-loader";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import type { Field } from "@/lib/fields/types";
 import { getOperationRepository } from "@/lib/operations/repository";
 import { loadOperationRefs, type OperationRefs } from "@/lib/operations/references";

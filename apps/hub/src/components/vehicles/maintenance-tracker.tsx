@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { SelectField, TextField } from "@/components/ui/form";
 import { getMaintenanceRepository } from "@/lib/vehicles/maintenance/repository";
 import {

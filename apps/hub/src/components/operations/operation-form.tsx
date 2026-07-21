@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { SelectField, TextField } from "@/components/ui/form";
 import { getOperationRepository } from "@/lib/operations/repository";
 import { loadOperationRefs } from "@/lib/operations/references";
