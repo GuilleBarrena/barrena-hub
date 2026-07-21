@@ -28,7 +28,7 @@ export interface Session {
  * signs in on the first click. Not a secret — there is no backend to protect.
  */
 export const DEMO_CREDENTIALS = {
-  email: "guillermobarrena@gmail.com",
+  email: "johndoe@gmail.com",
   password: "barrena2026",
 } as const;
 
@@ -103,7 +103,7 @@ export function login(email: string, password: string): LoginResult {
 
   const session: Session = {
     email: DEMO_CREDENTIALS.email,
-    name: "Guillermo Barrena",
+    name: "John Doe",
   };
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
