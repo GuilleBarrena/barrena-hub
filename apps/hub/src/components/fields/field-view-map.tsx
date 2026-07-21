@@ -12,19 +12,50 @@ import {
   type MapProviderId,
 } from "@/lib/map/providers";
 import type { Field } from "@/lib/fields/types";
+import type { NearbyStation } from "@/lib/pws/types";
+
+/** Reads the resolved value of a design token, so markers track the theme
+ *  instead of hardcoding a colour. */
+function tokenColor(name: string, fallback: string): string {
+  if (typeof window === "undefined") return fallback;
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
 
 /**
  * Read-only counterpart to FieldMap: renders one field and frames it, filling
  * whatever container it is dropped into so the parent can overlay cards on top
  * (a full-screen, Google-Maps-style view). Zoom and scale controls are pushed
  * to the bottom-left corner, which the overlays deliberately leave clear.
+ *
+ * It can also plot nearby PWS stations as points. The map stays presentational:
+ * it receives the already-derived `stations` and the `activeStationId`, and
+ * reports hover back through `onStationHover`. It never learns where the
+ * stations came from — deriving them is the caller's job.
  */
-export function FieldViewMap({ field }: { field: Field }) {
+export function FieldViewMap({
+  field,
+  stations = [],
+  activeStationId = null,
+  onStationHover,
+}: {
+  field: Field;
+  stations?: NearbyStation[];
+  activeStationId?: string | null;
+  onStationHover?: (id: string | null) => void;
+}) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileRef = useRef<L.TileLayer | null>(null);
   const labelsRef = useRef<L.TileLayer | null>(null);
   const shapeRef = useRef<L.Polygon | null>(null);
+  const markersRef = useRef<Map<string, L.CircleMarker>>(new Map());
+  // Kept in a ref so the marker event handlers (bound once, when markers are
+  // created) always call the latest callback without re-binding every render.
+  const hoverRef = useRef(onStationHover);
+  useEffect(() => {
+    hoverRef.current = onStationHover;
+  }, [onStationHover]);
 
   const [providerId, setProviderId] = useState<MapProviderId>(DEFAULT_MAP_PROVIDER_ID);
 
@@ -81,10 +112,62 @@ export function FieldViewMap({ field }: { field: Field }) {
       fillOpacity: 0.25,
     }).addTo(map);
     shapeRef.current = polygon;
-
-    // Frame the field rather than guessing a centre and zoom.
-    map.fitBounds(polygon.getBounds(), { padding: [48, 48] });
   }, [field]);
+
+  // Station markers + framing. Kept together because the frame has to hold the
+  // field and every station at once, so it depends on both.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || field.ring.length < 3) return;
+
+    const accent = tokenColor("--brand-accent", "#c2703d");
+
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current.clear();
+
+    for (const station of stations) {
+      const marker = L.circleMarker(station.location, {
+        radius: 6,
+        weight: 2,
+        color: "#ffffff",
+        fillColor: accent,
+        fillOpacity: 1,
+      })
+        .addTo(map)
+        .bindTooltip(station.name, { direction: "top", offset: [0, -6] });
+
+      marker.on("mouseover", () => hoverRef.current?.(station.id));
+      marker.on("mouseout", () => hoverRef.current?.(null));
+      markersRef.current.set(station.id, marker);
+    }
+
+    // Frame the field, extended to include every station so the points are on
+    // screen the moment the parcela opens.
+    const bounds = L.latLngBounds(field.ring);
+    stations.forEach((s) => bounds.extend(s.location));
+    map.fitBounds(bounds, { padding: [56, 56] });
+  }, [field, stations]);
+
+  // Reflect the active station: enlarge and recolour its marker, and pan it
+  // into view. Hovering a card upstream is what drives this.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const primary = tokenColor("--brand-primary", "#3b5a3b");
+    const accent = tokenColor("--brand-accent", "#c2703d");
+
+    markersRef.current.forEach((marker, id) => {
+      const active = id === activeStationId;
+      marker.setStyle({ fillColor: active ? primary : accent, radius: active ? 9 : 6 });
+      if (active) marker.bringToFront();
+    });
+
+    if (activeStationId) {
+      const marker = markersRef.current.get(activeStationId);
+      if (marker) map.panTo(marker.getLatLng(), { animate: true });
+    }
+  }, [activeStationId]);
 
   return (
     <>
