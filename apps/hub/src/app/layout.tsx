@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { HubHeader } from "@/components/dashboard/hub-header";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,9 +33,13 @@ export default function RootLayout({
             lives in the root layout. */}
         <div className="min-h-screen bg-surface font-sans text-foreground antialiased md:flex">
           <Sidebar />
-          <main className="min-w-0 flex-1 px-5 py-6 md:px-8 md:py-8">
-            {children}
-          </main>
+          {/* Content column: a fixed top header over the scrolling page. */}
+          <div className="flex min-w-0 flex-1 flex-col">
+            <HubHeader />
+            <main className="min-w-0 flex-1 px-5 py-6 md:px-8 md:py-8">
+              {children}
+            </main>
+          </div>
         </div>
       </body>
     </html>
