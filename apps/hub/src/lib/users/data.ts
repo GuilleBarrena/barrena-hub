@@ -22,8 +22,8 @@ export interface UserProfile {
 }
 
 export const DEFAULT_USER: UserProfile = {
-  name: "Guillermo Barrena",
-  email: "guillermobarrena@gmail.com",
+  name: "John Doe",
+  email: "johndoe@gmail.com",
   role: "Responsable de explotación",
   phone: "+34 600 000 000",
   language: "es-ES",
