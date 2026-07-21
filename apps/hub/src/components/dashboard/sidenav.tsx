@@ -24,10 +24,28 @@ const ITEMS: NavItem[] = [
     ),
   },
   {
-    href: "/fields",
-    label: "Parcelas",
+    href: "/agent",
+    label: "Agente",
     exact: false,
-    icon: <path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Zm0 5.5 9 4.5 9-4.5" />,
+    icon: (
+      <>
+        <rect x="4" y="8" width="16" height="11" rx="3" />
+        <path d="M12 8V4M9 4h6" />
+        <path d="M9.5 13.5h.01M14.5 13.5h.01" />
+      </>
+    ),
+  },
+  {
+    href: "/operations",
+    label: "Operaciones",
+    exact: false,
+    icon: (
+      <>
+        <path d="M4 7h10M4 12h16M4 17h7" />
+        <circle cx="18" cy="7" r="1.6" />
+        <circle cx="15" cy="17" r="1.6" />
+      </>
+    ),
   },
   {
     href: "/vehicles",
@@ -53,16 +71,10 @@ const ITEMS: NavItem[] = [
     ),
   },
   {
-    href: "/operations",
-    label: "Operaciones",
+    href: "/fields",
+    label: "Parcelas",
     exact: false,
-    icon: (
-      <>
-        <path d="M4 7h10M4 12h16M4 17h7" />
-        <circle cx="18" cy="7" r="1.6" />
-        <circle cx="15" cy="17" r="1.6" />
-      </>
-    ),
+    icon: <path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Zm0 5.5 9 4.5 9-4.5" />,
   },
   {
     href: "/meteo",
@@ -70,18 +82,6 @@ const ITEMS: NavItem[] = [
     exact: false,
     icon: (
       <path d="M7 18h9.5a3.5 3.5 0 0 0 .3-6.99A5.5 5.5 0 0 0 6.6 9.2 3.9 3.9 0 0 0 7 18Z" />
-    ),
-  },
-  {
-    href: "/agent",
-    label: "Agente",
-    exact: false,
-    icon: (
-      <>
-        <rect x="4" y="8" width="16" height="11" rx="3" />
-        <path d="M12 8V4M9 4h6" />
-        <path d="M9.5 13.5h.01M14.5 13.5h.01" />
-      </>
     ),
   },
 ];
