@@ -11,6 +11,9 @@ import {
   type PwsSettings,
 } from "@/lib/pws/settings";
 
+/** Clave de demostración que rellena el campo con un solo clic. */
+const TEST_API_KEY = "79d348006b8548a29348006b8588a279";
+
 const POLL_OPTIONS: [string, string][] = [
   ["0", "Bajo demanda"],
   ["5", "Cada 5 minutos"],
@@ -65,9 +68,20 @@ export function ApiSettingsForm() {
         id="apiKey"
         label={isEcowitt ? "Application key" : "API key"}
         hint={
-          isEcowitt
-            ? "application_key generada en tu cuenta de Ecowitt."
-            : "Clave de 32 caracteres de la PWS Contributor API."
+          isEcowitt ? (
+            "application_key generada en tu cuenta de Ecowitt."
+          ) : (
+            <>
+              Clave de 32 caracteres de la PWS Contributor API.{" "}
+              <button
+                type="button"
+                onClick={() => set("apiKey", TEST_API_KEY)}
+                className="font-medium text-brand-primary underline underline-offset-2 outline-none transition-colors hover:text-brand-primary/80 focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Utilizar api key de prueba.
+              </button>
+            </>
+          )
         }
         value={form.apiKey}
         onChange={(e) => set("apiKey", e.target.value)}
