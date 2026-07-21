@@ -106,7 +106,11 @@ export function UserView() {
       </form>
 
       <div className="border-t border-border pt-5">
-        <Button variant="destructive" onClick={closeSession}>
+        <Button
+          variant="secondary"
+          onClick={closeSession}
+          className="text-brand-accent hover:scale-100"
+        >
           Cerrar sesión
         </Button>
       </div>
