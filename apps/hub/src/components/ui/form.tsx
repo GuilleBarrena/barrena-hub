@@ -15,7 +15,7 @@ function Wrapper({
 }: {
   id: string;
   label: string;
-  hint?: string;
+  hint?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -34,7 +34,7 @@ export function TextField({
   label,
   hint,
   ...props
-}: ComponentProps<"input"> & { id: string; label: string; hint?: string }) {
+}: ComponentProps<"input"> & { id: string; label: string; hint?: ReactNode }) {
   return (
     <Wrapper id={id} label={label} hint={hint}>
       <input id={id} className={CONTROL} {...props} />
@@ -51,7 +51,7 @@ export function SelectField({
 }: Omit<ComponentProps<"select">, "children"> & {
   id: string;
   label: string;
-  hint?: string;
+  hint?: ReactNode;
   /** Plain strings, or [value, label] when the stored value differs. */
   options: readonly (string | [string, string])[];
 }) {
