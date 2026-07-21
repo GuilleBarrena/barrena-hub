@@ -11,20 +11,9 @@ import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureSection } from "@barrena/ui/feature-section";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { SiteHeader } from "@barrena/ui/site-header";
+import { LandingHeader } from "@/components/landing-header";
+import { HUB_URL } from "@/lib/site";
 import { WaitlistDialog } from "@/components/waitlist-dialog";
-
-// The Hub console lives in its own app; this is its product page on the
-// marketing site. Override the console URL with NEXT_PUBLIC_HUB_URL.
-const HUB_URL =
-  process.env.NEXT_PUBLIC_HUB_URL ?? "https://hub.barrenarobotics.com";
-
-// In-page section anchors, shared by the header nav and the mobile menu.
-const NAV_LINKS = [
-  { href: "#kit", label: "El W-1" },
-  { href: "#inteligencia", label: "Inteligencia operativa" },
-  { href: "#incluido", label: "También incluido" },
-];
 
 export const metadata: Metadata = {
   // `absolute` opts out of the title template in the root layout.
@@ -59,22 +48,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       {/* Header */}
-      <SiteHeader
-        product="Hub"
-        links={NAV_LINKS}
-        actions={
-          <>
-            <Button asChild variant="ghost" className="px-2">
-              <Link href="/">← Barrena Robotics</Link>
-            </Button>
-            <Button asChild variant="ghost">
-              <a href={HUB_URL}>Acceder al Hub</a>
-            </Button>
-          </>
-        }
-        menuPrimaryAction={{ href: HUB_URL, label: "Acceder al Hub" }}
-        menuBackLink={{ href: "/", label: "← Barrena Robotics" }}
-      />
+      <LandingHeader />
 
       {/* Hero */}
       <section className="bg-background py-12">
@@ -347,7 +321,7 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="bg-surface py-16">
+      <section id="contacto" className="scroll-mt-14 bg-surface py-16">
         <div className="mx-auto max-w-screen-xl px-6">
           <CtaBand
             title="Prepárese para la explotación autónoma"

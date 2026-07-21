@@ -10,11 +10,8 @@ import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureSection } from "@barrena/ui/feature-section";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { SiteHeader } from "@barrena/ui/site-header";
-
-// The Hub console lives in its own app. In production it sits on a subdomain;
-// override with NEXT_PUBLIC_HUB_URL (e.g. http://localhost:3000 in dev).
-const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL ?? "https://hub.barrenarobotics.com";
+import { LandingHeader } from "@/components/landing-header";
+import { HUB_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
@@ -50,20 +47,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       {/* Header */}
-      <SiteHeader
-        links={nav}
-        actions={
-          <>
-            <Button asChild variant="ghost" className="px-2">
-              <a href={HUB_URL}>Acceder al Hub</a>
-            </Button>
-            <Button asChild>
-              <a href="#contacto">Solicitar demo</a>
-            </Button>
-          </>
-        }
-        menuPrimaryAction={{ href: "#contacto", label: "Solicitar demo" }}
-      />
+      <LandingHeader />
 
       {/* Hero */}
       <section id="top" className="bg-background pt-14 pb-6 md:pt-20">

@@ -9,18 +9,7 @@ import { SectionEyebrow } from "@barrena/ui/section-eyebrow";
 import { Wordmark } from "@barrena/ui/wordmark";
 import { FeatureCard } from "@barrena/ui/feature-card";
 import { CtaBand } from "@barrena/ui/cta-band";
-import { SiteHeader } from "@barrena/ui/site-header";
-
-// The Hub console lives in its own app. Override with NEXT_PUBLIC_HUB_URL.
-const HUB_URL =
-  process.env.NEXT_PUBLIC_HUB_URL ?? "https://hub.barrenarobotics.com";
-
-const NAV_LINKS = [
-  { href: "#specs", label: "Especificaciones" },
-  { href: "#capacidades", label: "Capacidades" },
-  { href: "#kit", label: "El kit" },
-  { href: "#contacto", label: "Contacto" },
-];
+import { LandingHeader } from "@/components/landing-header";
 
 export const metadata: Metadata = {
   title: {
@@ -148,22 +137,7 @@ const KIT = [
 export default function W1() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-      <SiteHeader
-        product="W-1"
-        links={NAV_LINKS}
-        actions={
-          <>
-            <Button asChild variant="ghost" className="px-2">
-              <Link href="/">← Barrena Robotics</Link>
-            </Button>
-            <Button asChild variant="ghost">
-              <a href={HUB_URL}>Acceder al Hub</a>
-            </Button>
-          </>
-        }
-        menuPrimaryAction={{ href: "#contacto", label: "Solicitar una demo" }}
-        menuBackLink={{ href: "/", label: "← Barrena Robotics" }}
-      />
+      <LandingHeader />
 
       {/* Hero */}
       <section id="producto" className="bg-background pt-14 pb-6 md:pt-20">
