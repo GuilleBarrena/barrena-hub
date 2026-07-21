@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 
 // In-page navigation. Anchors match the `id`s set on the landing sections.
 const NAV_LINKS: { href: string; label: string }[] = [

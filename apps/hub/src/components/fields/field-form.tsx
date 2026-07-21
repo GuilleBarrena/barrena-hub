@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FieldMapLoader } from "@/components/fields/field-map-loader";
 import { LocationSearch } from "@/components/fields/location-search";
 import type { MapFocus } from "@/components/fields/field-map";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { formatHectares, ringAreaHectares } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import type { Field, LatLng } from "@/lib/fields/types";

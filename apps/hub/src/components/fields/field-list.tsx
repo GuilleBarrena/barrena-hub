@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { ResourceTable, type Column } from "@/components/dashboard/resource-table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { formatHectares } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import type { Field } from "@/lib/fields/types";

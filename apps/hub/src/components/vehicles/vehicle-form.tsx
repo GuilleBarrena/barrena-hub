@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { SelectField, TextField } from "@/components/ui/form";
 import { getVehicleRepository } from "@/lib/vehicles/repository";
 import {

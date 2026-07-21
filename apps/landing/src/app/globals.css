@@ -1,0 +1,45 @@
+@import "tailwindcss" source(none);
+@import "@barrena/ui/theme.css";
+@source "../";
+
+/* Autonomous guidance path: the highlighted line the vehicle follows down
+   the vineyard row, drawn once on load. Respects reduced-motion. */
+@keyframes trace-in {
+  from {
+    stroke-dashoffset: var(--trace-length);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes rove {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-6px);
+    opacity: 0.85;
+  }
+}
+
+.guidance-trace {
+  stroke-dasharray: var(--trace-length);
+  animation: trace-in 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.rover-dot {
+  animation: rove 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guidance-trace {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .rover-dot {
+    animation: none;
+  }
+}

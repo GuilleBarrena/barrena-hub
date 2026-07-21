@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FieldViewMapLoader } from "@/components/fields/field-view-map-loader";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { formatHectares, toGeoJSON } from "@/lib/fields/geo";
 import { getFieldRepository } from "@/lib/fields/repository";
 import { alertsForField } from "@/lib/fields/signals";

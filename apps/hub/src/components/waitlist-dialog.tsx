@@ -2,7 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 
 // Data keys are English; labels stay Spanish, matching the UI.
 type TextField = {

@@ -4,8 +4,12 @@ import Image from "next/image";
 import satelliteMap from "@/assets/satellite-map.jpg";
 import featureTracking from "@/assets/feature-tracking.jpg";
 
-import { Button } from "@/components/ui/button";
-import { FeatureSection } from "@/components/feature-section";
+import { Button } from "@barrena/ui/button";
+import { SectionEyebrow } from "@barrena/ui/section-eyebrow";
+import { Wordmark } from "@barrena/ui/wordmark";
+import { FeatureSection } from "@barrena/ui/feature-section";
+import { FeatureCard } from "@barrena/ui/feature-card";
+import { CtaBand } from "@barrena/ui/cta-band";
 import { WaitlistDialog } from "@/components/waitlist-dialog";
 import { MobileMenu } from "@/components/mobile-menu";
 
@@ -46,16 +50,7 @@ export default function Landing() {
       {/* Header */}
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-6">
-          <div className="flex items-baseline gap-2">
-            <div className="size-6 self-center bg-brand-primary rounded-[4px]" />
-            <span className="text-sm font-semibold tracking-tight uppercase">
-              Hub
-            </span>
-            <span className="text-[11px] text-muted-foreground">·</span>
-            <span className="text-sm font-semibold tracking-tight text-foreground">
-              Barrena Robotics
-            </span>
-          </div>
+          <Wordmark product="Hub" />
           <div className="flex items-center gap-3">
             {/* Desktop: inline links. Wrapped in a plain div so `hidden`
                 controls display without fighting the Button's base
@@ -197,109 +192,102 @@ export default function Landing() {
           "Telemetría en vivo y replay de cada sesión de guiado",
           "Avisos solo cuando la máquina necesita una mano",
         ]}
-        image={featureTracking}
-        imageAlt="Tractor de viña con kit de guiado autónomo trabajando sin conductor"
         tag="Requiere kit Barrena"
+        media={
+          <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-black/5">
+            <Image
+              src={featureTracking}
+              alt="Tractor de viña con kit de guiado autónomo trabajando sin conductor"
+              sizes="(min-width: 768px) 50vw, 100vw"
+              placeholder="blur"
+              className="aspect-[4/3] h-full w-full object-cover"
+            />
+          </div>
+        }
       />
 
       {/* Inteligencia operativa sobre los datos de la flota */}
-      <section id="inteligencia" className="bg-surface py-16 md:py-24 scroll-mt-14">
-        <div className="mx-auto max-w-screen-xl px-6">
-          <div className="flex items-center gap-3 mb-5">
-            <span className="text-[10px] font-mono font-semibold tracking-[0.2em] uppercase text-brand-accent">
-              02
-            </span>
-            <span className="h-px w-8 bg-brand-accent/40" />
-            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-              Inteligencia operativa
-            </span>
-          </div>
-
-          <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
-            <div>
-              <h3 className="text-balance text-2xl md:text-4xl font-semibold tracking-tight text-foreground">
-                La IA decide dónde y cuándo actuar
-              </h3>
-              <p className="mt-4 max-w-[48ch] text-pretty text-sm md:text-base text-muted-foreground leading-relaxed">
-                El Hub analiza sin descanso cada pasada de sus máquinas y adelanta
-                el trabajo: le dice cuándo tratar, dónde intervenir y qué parcelas
-                priorizar. La operación avanza sola; a usted le quedan solo las
-                decisiones que importan.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button asChild>
-                  <a href="/dashboard">Ver acciones en el panel</a>
-                </Button>
-                <Button asChild variant="secondary">
-                  <a href="/dashboard/agent">Hablar con el agente</a>
-                </Button>
-              </div>
+      <FeatureSection
+        id="inteligencia"
+        index="02"
+        eyebrow="Inteligencia operativa"
+        title="La IA decide dónde y cuándo actuar"
+        description="El Hub analiza sin descanso cada pasada de sus máquinas y adelanta el trabajo: le dice cuándo tratar, dónde intervenir y qué parcelas priorizar. La operación avanza sola; a usted le quedan solo las decisiones que importan."
+        tinted
+        actions={
+          <>
+            <Button asChild>
+              <a href="/dashboard">Ver acciones en el panel</a>
+            </Button>
+            <Button asChild variant="secondary">
+              <a href="/dashboard/agent">Hablar con el agente</a>
+            </Button>
+          </>
+        }
+        media={
+          // Vista previa de acciones, con el mismo lenguaje visual del panel
+          <div className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-black/5 md:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold tracking-tight text-foreground">
+                Acciones de hoy
+              </span>
+              <span className="text-[11px] text-muted-foreground">
+                Datos de su flota
+              </span>
             </div>
-
-            {/* Vista previa de acciones, con el mismo lenguaje visual del panel */}
-            <div className="rounded-2xl bg-card p-4 ring-1 ring-black/5 shadow-sm md:p-5">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold tracking-tight text-foreground">
-                  Acciones de hoy
-                </span>
-                <span className="text-[11px] text-muted-foreground">
-                  Datos de su flota
-                </span>
-              </div>
-              <ul className="mt-3 flex flex-col gap-2.5">
-                {[
-                  {
-                    dot: "bg-red-600",
-                    label: "Crítica",
-                    labelClass: "text-red-700",
-                    title: "Proteger Parcela 04 ante la helada del sábado",
-                    impact: "Evita daño en el viñedo",
-                  },
-                  {
-                    dot: "bg-red-600",
-                    label: "Crítica",
-                    labelClass: "text-red-700",
-                    title: "Revisar intervención pendiente del tractor Barrena",
-                    impact: "Restablece el guiado autónomo",
-                  },
-                  {
-                    dot: "bg-brand-accent",
-                    label: "Alta",
-                    labelClass: "text-brand-accent",
-                    title: "Reprogramar la pulverización de Parcela 11",
-                    impact: "Evita deriva por viento",
-                  },
-                ].map((a) => (
-                  <li
-                    key={a.title}
-                    className="rounded-xl bg-surface-2/60 px-3 py-2.5 ring-1 ring-black/5"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className={`size-2 shrink-0 rounded-full ${a.dot}`} />
-                      <span className={`text-[10px] font-semibold uppercase tracking-wider ${a.labelClass}`}>
-                        {a.label}
-                      </span>
+            <ul className="mt-3 flex flex-col gap-2.5">
+              {[
+                {
+                  dot: "bg-red-600",
+                  label: "Crítica",
+                  labelClass: "text-red-700",
+                  title: "Proteger Parcela 04 ante la helada del sábado",
+                  impact: "Evita daño en el viñedo",
+                },
+                {
+                  dot: "bg-red-600",
+                  label: "Crítica",
+                  labelClass: "text-red-700",
+                  title: "Revisar intervención pendiente del tractor Barrena",
+                  impact: "Restablece el guiado autónomo",
+                },
+                {
+                  dot: "bg-brand-accent",
+                  label: "Alta",
+                  labelClass: "text-brand-accent",
+                  title: "Reprogramar la pulverización de Parcela 11",
+                  impact: "Evita deriva por viento",
+                },
+              ].map((a) => (
+                <li
+                  key={a.title}
+                  className="rounded-xl bg-surface-2/60 px-3 py-2.5 ring-1 ring-black/5"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className={`size-2 shrink-0 rounded-full ${a.dot}`} />
+                    <span
+                      className={`text-[10px] font-semibold uppercase tracking-wider ${a.labelClass}`}
+                    >
+                      {a.label}
                     </span>
-                    <span className="mt-1 block text-[13px] font-medium leading-snug text-foreground">
-                      {a.title}
-                    </span>
-                    <span className="mt-0.5 block text-[11px] text-muted-foreground">
-                      ◆ {a.impact}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                  </span>
+                  <span className="mt-1 block text-[13px] font-medium leading-snug text-foreground">
+                    {a.title}
+                  </span>
+                  <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                    ◆ {a.impact}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
+        }
+      />
 
       {/* También incluido, gratis — módulos secundarios */}
       <section id="incluido" className="bg-background py-16 md:py-24 scroll-mt-14">
         <div className="mx-auto max-w-screen-xl px-6">
-          <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-accent">
-            También incluido, gratis
-          </span>
+          <SectionEyebrow>También incluido, gratis</SectionEyebrow>
           <h2 className="mt-3 text-balance text-2xl md:text-3xl font-semibold tracking-tight text-foreground max-w-2xl">
             Toda la explotación, tenga o no máquinas Barrena
           </h2>
@@ -332,26 +320,16 @@ export default function Landing() {
                   "Asigne partes de trabajo, supervise el progreso de las cuadrillas y reciba confirmación desde el campo.",
               },
             ].map((card) => (
-              <div
+              <FeatureCard
                 key={card.index}
-                className="flex flex-col rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-[10px] font-mono font-semibold tracking-[0.2em] uppercase text-brand-accent">
-                    {card.index}
-                  </span>
-                  <span className="h-px w-6 bg-brand-accent/40" />
-                  <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                badge={
+                  <SectionEyebrow index={card.index} className="mb-4">
                     {card.eyebrow}
-                  </span>
-                </div>
-                <h3 className="text-balance text-base md:text-lg font-semibold tracking-tight text-foreground">
-                  {card.title}
-                </h3>
-                <p className="mt-2 text-[13px] text-muted-foreground leading-relaxed">
-                  {card.description}
-                </p>
-              </div>
+                  </SectionEyebrow>
+                }
+                title={card.title}
+                description={card.description}
+              />
             ))}
           </div>
         </div>
@@ -360,27 +338,19 @@ export default function Landing() {
       {/* CTA */}
       <section className="bg-surface py-16">
         <div className="mx-auto max-w-screen-xl px-6">
-          <div className="rounded-2xl bg-brand-primary p-8 md:p-12 ring-1 ring-black/5">
-            <h2 className="text-balance text-2xl md:text-3xl font-medium text-primary-foreground max-w-2xl">
-              Prepárese para la explotación autónoma
-            </h2>
-            <p className="mt-4 text-pretty text-sm md:text-base text-primary-foreground/70 max-w-[56ch]">
-              El Hub es gratuito. Regístrese en la lista de espera y sea de las
-              primeras explotaciones en operar con máquinas Barrena cuando abramos
-              el programa piloto.
-            </p>
+          <CtaBand
+            title="Prepárese para la explotación autónoma"
+            description="El Hub es gratuito. Regístrese en la lista de espera y sea de las primeras explotaciones en operar con máquinas Barrena cuando abramos el programa piloto."
+          >
             <WaitlistDialog
               title="Unirme a la lista de espera"
               description="El Hub es gratuito. Capturamos su explotación para el programa piloto y le avisamos en cuanto abramos acceso."
             >
-              <Button
-                variant="inverted"
-                className="mt-8 w-full md:w-auto px-6"
-              >
+              <Button variant="inverted" className="w-full px-6 md:w-auto">
                 Unirme a la lista de espera
               </Button>
             </WaitlistDialog>
-          </div>
+          </CtaBand>
         </div>
       </section>
 
@@ -388,13 +358,7 @@ export default function Landing() {
       <footer className="bg-background py-10">
         <div className="mx-auto max-w-screen-xl px-6">
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <div className="size-5 bg-brand-primary/20 rounded-[4px]" />
-              <span className="text-xs font-semibold tracking-tight text-muted-foreground">
-                <span className="uppercase">Hub</span>{" "}
-                <span className="font-normal">· Barrena Robotics</span>
-              </span>
-            </div>
+            <Wordmark product="Hub" variant="footer" />
             <p className="text-[12px] text-muted-foreground">
               Un producto de{" "}
               <a

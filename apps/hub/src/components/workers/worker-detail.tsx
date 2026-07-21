@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { DetailList, StatusBadge } from "@/components/dashboard/primitives";
-import { Button } from "@/components/ui/button";
+import { Button } from "@barrena/ui/button";
 import { getWorkerRepository } from "@/lib/workers/repository";
 import { WORKER_STATUS, type Worker } from "@/lib/workers/types";
 
