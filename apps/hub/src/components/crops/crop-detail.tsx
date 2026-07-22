@@ -106,25 +106,37 @@ export function CropDetail() {
   }
 
   return (
-    <div className={STAGE}>
-      <CropViewMapLoader
-        crop={crop}
-        stations={stations}
-        activeStationId={activeId}
-        onStationHover={setActiveId}
-      />
+    // Two layouts from one tree. On mobile this is a normal, vertically
+    // scrolling page: a map hero followed by the info cards stacked in flow.
+    // From `md` up it becomes the immersive, full-bleed map with the cards
+    // floating over it in the corners (Google-Maps style).
+    <div className="-mx-5 -mt-6 md:relative md:-m-8 md:h-[calc(100dvh-3.5rem)] md:overflow-hidden md:bg-surface-2">
+      {/* Map. A fixed-height hero on mobile; fills the whole stage on desktop
+          so the corner cards can float over it. */}
+      {/* `z-0` gives the hero its own stacking context so the overlay controls
+          below (back link, layer toggle at z-[500]) stay contained and never
+          paint over the sticky mobile header when the page scrolls. */}
+      <div className="relative z-0 h-[46vh] min-h-[17rem] overflow-hidden bg-surface-2 md:absolute md:inset-0 md:h-full md:min-h-0">
+        <CropViewMapLoader
+          crop={crop}
+          stations={stations}
+          activeStationId={activeId}
+          onStationHover={setActiveId}
+        />
 
-      {/* Top-left: back + the crop's identity card, Google-Maps style. Height
-          is capped on small screens so it never reaches the bottom info column. */}
-      <div className="pointer-events-none absolute left-3 top-3 z-[500] flex max-h-[52%] w-[min(20rem,calc(100%-1.5rem))] flex-col gap-2 md:max-h-[calc(100%-1.5rem)]">
+        {/* Back control floats over the map on both layouts. */}
         <Link
           href="/crops"
-          className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
+          className="absolute left-3 top-3 z-[500] inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
           ← Cultivos
         </Link>
+      </div>
 
-        <div className="pointer-events-auto flex min-h-0 flex-col overflow-y-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
+      {/* Identity card. In flow below the map on mobile; floating top-left on
+          desktop (nudged down so it clears the back control). */}
+      <div className="relative z-10 px-5 pt-4 md:pointer-events-none md:absolute md:left-3 md:top-14 md:z-[500] md:flex md:max-h-[calc(100%-4.5rem)] md:w-[min(20rem,calc(100%-1.5rem))] md:flex-col md:px-0 md:pt-0">
+        <div className="pointer-events-auto flex flex-col rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur md:min-h-0 md:overflow-y-auto">
           <div className="flex items-start gap-2">
             <span className="mt-1.5 size-2 shrink-0 rounded-full bg-brand-accent" aria-hidden="true" />
             <div className="min-w-0">
@@ -188,10 +200,9 @@ export function CropDetail() {
         </div>
       </div>
 
-      {/* Bottom-right: alerts for this crop + the current weather readout,
-          stacked as a single info column so they never collide with the
-          identity card on narrow screens. */}
-      <div className="pointer-events-none absolute bottom-6 right-3 z-[500] flex max-h-[calc(100%-1.5rem)] w-[min(18rem,calc(100%-1.5rem))] flex-col gap-2 overflow-y-auto">
+      {/* Alerts + the nearby-station readout. Stacked in flow under the
+          identity card on mobile; floating bottom-right on desktop. */}
+      <div className="relative z-10 flex flex-col gap-3 px-5 pb-10 pt-3 md:pointer-events-none md:absolute md:bottom-6 md:right-3 md:z-[500] md:max-h-[calc(100%-1.5rem)] md:w-[min(18rem,calc(100%-1.5rem))] md:gap-2 md:overflow-y-auto md:px-0 md:pb-0 md:pt-0">
         <div className="pointer-events-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
           <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-primary">
             <span className="size-1.5 rounded-full bg-brand-primary" />

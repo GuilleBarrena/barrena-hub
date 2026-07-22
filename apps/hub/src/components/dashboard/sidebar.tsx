@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Sidenav } from "./sidenav";
 import { OrganizationSwitcher } from "./organization-switcher";
+import { NotificationsMenu } from "./notifications-menu";
 import { ACTIVE_ORGANIZATION } from "@/lib/organizations/data";
 
 const STORAGE_KEY = "hub:sidebar-collapsed";
@@ -90,6 +91,13 @@ export function Sidebar() {
             by barrenarobotics
           </span>
         </Link>
+
+        {/* App-level actions. Below md there is no top header bar, so the
+            notifications control lives here, merged into this strip. From md up
+            it moves to the sticky HubHeader instead. */}
+        <div className="flex items-center gap-0.5 md:hidden">
+          <NotificationsMenu />
+        </div>
 
         {/* Collapse control — a real column only exists from md up. */}
         <button
