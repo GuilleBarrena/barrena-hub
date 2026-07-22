@@ -18,7 +18,7 @@ const CROP_TYPES = ["Viñedo", "Cereal", "Olivar", "Almendro", "Hortícola", "Ba
  *  so the drawing map reads edge-to-edge with the form floating over it. */
 const STAGE =
   "relative -mx-5 -my-6 h-[calc(100dvh-5.75rem)] overflow-hidden bg-surface-2 " +
-  "md:-m-8 md:h-screen";
+  "md:-m-8 md:h-[calc(100dvh-3.5rem)]";
 
 export function CropForm() {
   const router = useRouter();
