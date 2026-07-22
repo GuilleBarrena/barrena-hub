@@ -23,7 +23,7 @@ type State =
  *  so the map reads edge-to-edge with the cards floating over it. */
 const STAGE =
   "relative -mx-5 -my-6 h-[calc(100dvh-5.75rem)] overflow-hidden bg-surface-2 " +
-  "md:-m-8 md:h-screen";
+  "md:-m-8 md:h-[calc(100dvh-3.5rem)]";
 
 const ALERT_META: Record<string, { dot: string; label: string }> = {
   good: { dot: "bg-brand-primary", label: "Favorable" },
