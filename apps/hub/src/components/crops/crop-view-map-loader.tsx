@@ -2,10 +2,10 @@
 
 import dynamic from "next/dynamic";
 
-/** Client-only, for the same reason as FieldMapLoader: Leaflet needs window.
+/** Client-only, for the same reason as CropMapLoader: Leaflet needs window.
  *  Fills its (positioned) parent so overlays can be layered on top. */
-export const FieldViewMapLoader = dynamic(
-  () => import("./field-view-map").then((m) => m.FieldViewMap),
+export const CropViewMapLoader = dynamic(
+  () => import("./crop-view-map").then((m) => m.CropViewMap),
   {
     ssr: false,
     loading: () => (

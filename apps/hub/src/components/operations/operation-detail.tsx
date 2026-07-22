@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { StatusBadge } from "@/components/dashboard/primitives";
 import { OperationTrackMapLoader } from "@/components/operations/operation-track-map-loader";
 import { Button } from "@barrena/ui/button";
-import type { Field } from "@/lib/fields/types";
+import type { Crop } from "@/lib/crops/types";
 import { getOperationRepository } from "@/lib/operations/repository";
 import { loadOperationRefs, type OperationRefs } from "@/lib/operations/references";
 import { trackStats } from "@/lib/operations/track";
@@ -34,7 +34,7 @@ function formatTime(iso: string): string {
 }
 
 /** Key/value list whose values may be links, so the ficha can point to the
- *  operator, field and vehicle detail pages. */
+ *  operator, crop and vehicle detail pages. */
 function InfoList({ items }: { items: [string, ReactNode][] }) {
   return (
     <dl className="mt-4 flex flex-col gap-3 text-sm">
@@ -104,9 +104,9 @@ export function OperationDetail() {
   const meta = OPERATION_STATUS[operation.status];
   const operator = refs.workers.get(operation.operatorId);
   const vehicle = operation.vehicleId ? refs.vehicles.get(operation.vehicleId) : undefined;
-  const field: Field | undefined = refs.fields.get(operation.fieldId);
+  const crop: Crop | undefined = refs.crops.get(operation.cropId);
   const stats = trackStats(operation.track);
-  const canTrack = Boolean(vehicle && field && operation.track && operation.track.length > 0);
+  const canTrack = Boolean(vehicle && crop && operation.track && operation.track.length > 0);
 
   async function remove() {
     await getOperationRepository().remove(operation.id);
@@ -133,7 +133,7 @@ export function OperationDetail() {
               ["Tipo", operation.operationType],
               [
                 "Parcela",
-                field ? refLink(`/fields/${field.id}`, field.name) : "—",
+                crop ? refLink(`/crops/${crop.id}`, crop.name) : "—",
               ],
               [
                 "Operario",
@@ -228,13 +228,13 @@ export function OperationDetail() {
             Seguimiento del vehículo
           </h2>
 
-          {canTrack && field ? (
+          {canTrack && crop ? (
             <>
               <p className="mt-1 text-[12px] text-muted-foreground">
-                Recorrido de {vehicle?.name} sobre {field.name}.
+                Recorrido de {vehicle?.name} sobre {crop.name}.
               </p>
               <div className="relative mt-4 h-[420px] overflow-hidden rounded-xl bg-surface-2 ring-1 ring-black/5">
-                <OperationTrackMapLoader field={field} track={operation.track ?? []} />
+                <OperationTrackMapLoader crop={crop} track={operation.track ?? []} />
               </div>
             </>
           ) : (

@@ -4,19 +4,19 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { FieldViewMapLoader } from "@/components/fields/field-view-map-loader";
+import { CropViewMapLoader } from "@/components/crops/crop-view-map-loader";
 import { NearbyStations } from "@/components/pws/nearby-stations";
 import { Button } from "@barrena/ui/button";
-import { formatHectares, ringCentroid, toGeoJSON } from "@/lib/fields/geo";
-import { getFieldRepository } from "@/lib/fields/repository";
-import { alertsForField } from "@/lib/fields/signals";
-import type { Field } from "@/lib/fields/types";
+import { formatHectares, ringCentroid, toGeoJSON } from "@/lib/crops/geo";
+import { getCropRepository } from "@/lib/crops/repository";
+import { alertsForCrop } from "@/lib/crops/signals";
+import type { Crop } from "@/lib/crops/types";
 import { useNearbyStations } from "@/lib/pws/use-nearby-stations";
 import { usePwsSettings } from "@/lib/pws/settings";
 
 type State =
   | { status: "loading" }
-  | { status: "found"; field: Field }
+  | { status: "found"; crop: Crop }
   | { status: "missing" };
 
 /** Full-bleed container: cancels the dashboard padding and fills the viewport,
@@ -31,28 +31,28 @@ const ALERT_META: Record<string, { dot: string; label: string }> = {
   serious: { dot: "bg-red-600", label: "Crítico" },
 };
 
-export function FieldDetail() {
+export function CropDetail() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [state, setState] = useState<State>({ status: "loading" });
   const [copied, setCopied] = useState(false);
 
   // Called unconditionally (before the early returns) so hook order stays fixed
-  // whether the field is still loading, missing, or found. Stations are looked
-  // up from the field's centroid, so the hook takes a coordinate, not the field.
+  // whether the crop is still loading, missing, or found. Stations are looked
+  // up from the crop's centroid, so the hook takes a coordinate, not the crop.
   const { units } = usePwsSettings();
   const center =
-    state.status === "found" ? ringCentroid(state.field.ring) : null;
+    state.status === "found" ? ringCentroid(state.crop.ring) : null;
   const { state: nearby, activeId, setActiveId, reload } = useNearbyStations(center);
   const stations = nearby.status === "ready" ? nearby.stations : [];
 
   useEffect(() => {
     let active = true;
-    getFieldRepository()
+    getCropRepository()
       .get(params.id)
-      .then((field) => {
+      .then((crop) => {
         if (!active) return;
-        setState(field ? { status: "found", field } : { status: "missing" });
+        setState(crop ? { status: "found", crop } : { status: "missing" });
       })
       .catch(() => active && setState({ status: "missing" }));
     return () => {
@@ -78,16 +78,16 @@ export function FieldDetail() {
             únicamente en este dispositivo.
           </p>
           <Button asChild variant="secondary" className="mt-4">
-            <Link href="/fields">Volver al listado</Link>
+            <Link href="/crops">Volver al listado</Link>
           </Button>
         </div>
       </div>
     );
   }
 
-  const { field } = state;
-  const geojson = JSON.stringify(toGeoJSON(field), null, 2);
-  const alerts = alertsForField(field.name);
+  const { crop } = state;
+  const geojson = JSON.stringify(toGeoJSON(crop), null, 2);
+  const alerts = alertsForCrop(crop.name);
 
   async function copyGeoJSON() {
     try {
@@ -100,25 +100,25 @@ export function FieldDetail() {
   }
 
   async function remove() {
-    await getFieldRepository().remove(field.id);
-    router.push("/fields");
+    await getCropRepository().remove(crop.id);
+    router.push("/crops");
     router.refresh();
   }
 
   return (
     <div className={STAGE}>
-      <FieldViewMapLoader
-        field={field}
+      <CropViewMapLoader
+        crop={crop}
         stations={stations}
         activeStationId={activeId}
         onStationHover={setActiveId}
       />
 
-      {/* Top-left: back + the field's identity card, Google-Maps style. Height
+      {/* Top-left: back + the crop's identity card, Google-Maps style. Height
           is capped on small screens so it never reaches the bottom info column. */}
       <div className="pointer-events-none absolute left-3 top-3 z-[500] flex max-h-[52%] w-[min(20rem,calc(100%-1.5rem))] flex-col gap-2 md:max-h-[calc(100%-1.5rem)]">
         <Link
-          href="/fields"
+          href="/crops"
           className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
           ← Parcelas
@@ -129,10 +129,10 @@ export function FieldDetail() {
             <span className="mt-1.5 size-2 shrink-0 rounded-full bg-brand-accent" aria-hidden="true" />
             <div className="min-w-0">
               <h1 className="truncate text-base font-semibold tracking-tight text-foreground">
-                {field.name}
+                {crop.name}
               </h1>
               <p className="mt-0.5 text-[12px] text-muted-foreground">
-                {field.cropType} · {formatHectares(field.areaHectares)}
+                {crop.cropType} · {formatHectares(crop.areaHectares)}
               </p>
             </div>
           </div>
@@ -140,18 +140,18 @@ export function FieldDetail() {
           <dl className="mt-4 flex flex-col gap-2.5 border-t border-foreground/5 pt-4 text-[13px]">
             {(
               [
-                ["Cultivo", field.cropType],
-                ["Superficie", formatHectares(field.areaHectares)],
-                ["Vértices", String(field.ring.length)],
+                ["Cultivo", crop.cropType],
+                ["Superficie", formatHectares(crop.areaHectares)],
+                ["Vértices", String(crop.ring.length)],
                 [
                   "Alta",
-                  new Date(field.createdAt).toLocaleDateString("es-ES", {
+                  new Date(crop.createdAt).toLocaleDateString("es-ES", {
                     day: "2-digit",
                     month: "long",
                     year: "numeric",
                   }),
                 ],
-                ["Origen", field.source === "sample" ? "Datos de muestra" : "Dibujada"],
+                ["Origen", crop.source === "sample" ? "Datos de muestra" : "Dibujada"],
               ] as [string, string][]
             ).map(([k, v]) => (
               <div key={k} className="flex items-baseline justify-between gap-4">
@@ -175,7 +175,7 @@ export function FieldDetail() {
             </Button>
           </details>
 
-          {field.source === "user" && (
+          {crop.source === "user" && (
             <button
               type="button"
               onClick={remove}
@@ -188,7 +188,7 @@ export function FieldDetail() {
         </div>
       </div>
 
-      {/* Bottom-right: alerts for this field + the current weather readout,
+      {/* Bottom-right: alerts for this crop + the current weather readout,
           stacked as a single info column so they never collide with the
           identity card on narrow screens. */}
       <div className="pointer-events-none absolute bottom-6 right-3 z-[500] flex max-h-[calc(100%-1.5rem)] w-[min(18rem,calc(100%-1.5rem))] flex-col gap-2 overflow-y-auto">

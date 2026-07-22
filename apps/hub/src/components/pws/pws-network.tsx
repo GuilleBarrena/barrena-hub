@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Panel, StatTile } from "@/components/dashboard/primitives";
 import { StationObservation } from "@/components/pws/station-observation";
-import { FARM_CENTER } from "@/lib/fields/seed";
+import { FARM_CENTER } from "@/lib/crops/seed";
 import { usePwsSettings } from "@/lib/pws/settings";
 import { useNearbyStations } from "@/lib/pws/use-nearby-stations";
 import {

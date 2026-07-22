@@ -11,7 +11,7 @@ import {
   SELECTABLE_PROVIDERS,
   type MapProviderId,
 } from "@/lib/map/providers";
-import type { Field } from "@/lib/fields/types";
+import type { Crop } from "@/lib/crops/types";
 import type { NearbyStation } from "@/lib/pws/types";
 
 /** Reads the resolved value of a design token, so markers track the theme
@@ -23,7 +23,7 @@ function tokenColor(name: string, fallback: string): string {
 }
 
 /**
- * Read-only counterpart to FieldMap: renders one field and frames it, filling
+ * Read-only counterpart to CropMap: renders one crop and frames it, filling
  * whatever container it is dropped into so the parent can overlay cards on top
  * (a full-screen, Google-Maps-style view). Zoom and scale controls are pushed
  * to the bottom-left corner, which the overlays deliberately leave clear.
@@ -33,13 +33,13 @@ function tokenColor(name: string, fallback: string): string {
  * reports hover back through `onStationHover`. It never learns where the
  * stations came from — deriving them is the caller's job.
  */
-export function FieldViewMap({
-  field,
+export function CropViewMap({
+  crop,
   stations = [],
   activeStationId = null,
   onStationHover,
 }: {
-  field: Field;
+  crop: Crop;
   stations?: NearbyStation[];
   activeStationId?: string | null;
   onStationHover?: (id: string | null) => void;
@@ -91,7 +91,7 @@ export function FieldViewMap({
 
     // Transparent place-name overlay for basemaps that have no labels of their
     // own (satellite). Added after the base so it draws on top of the imagery,
-    // but still under the field polygon, which lives in a higher pane.
+    // but still under the crop polygon, which lives in a higher pane.
     labelsRef.current?.remove();
     labelsRef.current = null;
     if (provider.labelsUrl) {
@@ -103,22 +103,22 @@ export function FieldViewMap({
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || field.ring.length < 3) return;
+    if (!map || crop.ring.length < 3) return;
 
     shapeRef.current?.remove();
-    const polygon = L.polygon(field.ring, {
-      className: "field-shape",
+    const polygon = L.polygon(crop.ring, {
+      className: "crop-shape",
       weight: 2,
       fillOpacity: 0.25,
     }).addTo(map);
     shapeRef.current = polygon;
-  }, [field]);
+  }, [crop]);
 
   // Station markers + framing. Kept together because the frame has to hold the
-  // field and every station at once, so it depends on both.
+  // crop and every station at once, so it depends on both.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || field.ring.length < 3) return;
+    if (!map || crop.ring.length < 3) return;
 
     const accent = tokenColor("--brand-accent", "#c2703d");
 
@@ -141,12 +141,12 @@ export function FieldViewMap({
       markersRef.current.set(station.id, marker);
     }
 
-    // Frame the field, extended to include every station so the points are on
+    // Frame the crop, extended to include every station so the points are on
     // screen the moment the parcela opens.
-    const bounds = L.latLngBounds(field.ring);
+    const bounds = L.latLngBounds(crop.ring);
     stations.forEach((s) => bounds.extend(s.location));
     map.fitBounds(bounds, { padding: [56, 56] });
-  }, [field, stations]);
+  }, [crop, stations]);
 
   // Reflect the active station: enlarge and recolour its marker, and pan it
   // into view. Hovering a card upstream is what drives this.

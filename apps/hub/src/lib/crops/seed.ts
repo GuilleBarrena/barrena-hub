@@ -1,8 +1,8 @@
 import { ringAreaHectares } from "./geo";
-import type { Field, LatLng } from "./types";
+import type { Crop, LatLng } from "./types";
 
 /**
- * SAMPLE fields, drawn over farmland near Olite (Navarra) purely so the map
+ * SAMPLE crops, drawn over farmland near Olite (Navarra) purely so the map
  * opens somewhere plausible. They are not real registered plots.
  *
  * Display names stay Spanish - the UI is Spanish.
@@ -10,7 +10,7 @@ import type { Field, LatLng } from "./types";
 export const FARM_CENTER: LatLng = [42.4795, -1.6512];
 export const INITIAL_ZOOM = 15;
 
-function sample(id: string, name: string, cropType: string, ring: LatLng[]): Field {
+function sample(id: string, name: string, cropType: string, ring: LatLng[]): Crop {
   return {
     id,
     name,
@@ -22,7 +22,7 @@ function sample(id: string, name: string, cropType: string, ring: LatLng[]): Fie
   };
 }
 
-export const SAMPLE_FIELDS: Field[] = [
+export const SAMPLE_CROPS: Crop[] = [
   sample("f-sample-01", "Parcela 01", "Viñedo", [
     [42.4832, -1.6584],
     [42.4834, -1.6521],

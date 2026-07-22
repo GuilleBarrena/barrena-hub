@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { FieldDetail } from "@/components/fields/field-detail";
+import { CropDetail } from "@/components/crops/crop-detail";
 
 /**
- * The field name lives in browser storage, so the server cannot know it at
+ * The crop name lives in browser storage, so the server cannot know it at
  * render time - hence a generic title rather than generateMetadata.
  */
 export const metadata: Metadata = {
@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: "Contorno y datos de la parcela.",
 };
 
-/** Full-screen map view: FieldDetail breaks out of the dashboard padding and
+/** Full-screen map view: CropDetail breaks out of the dashboard padding and
  *  overlays its cards, so the page is just the component. */
-export default function FieldDetailPage() {
-  return <FieldDetail />;
+export default function CropDetailPage() {
+  return <CropDetail />;
 }

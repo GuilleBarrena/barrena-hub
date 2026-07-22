@@ -8,7 +8,7 @@
 
 import { alerts } from "@/lib/sample-data";
 
-export type FieldAlert = (typeof alerts)[number];
+export type CropAlert = (typeof alerts)[number];
 
 /** Número de parcela a partir de un nombre como "Parcela 04" → 4. */
 function plotNumber(name: string): number | null {
@@ -32,8 +32,8 @@ function detailMatchesPlot(detail: string, plot: number): boolean {
 }
 
 /** Alertas de la finca que afectan a la parcela indicada. */
-export function alertsForField(fieldName: string): FieldAlert[] {
-  const plot = plotNumber(fieldName);
+export function alertsForCrop(cropName: string): CropAlert[] {
+  const plot = plotNumber(cropName);
   if (plot == null) return [];
   return alerts.filter((a) => detailMatchesPlot(a.detail, plot));
 }

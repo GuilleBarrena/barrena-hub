@@ -1,7 +1,7 @@
 /** [lat, lng] - the order Leaflet uses, kept consistent end to end. */
 export type LatLng = [number, number];
 
-export interface Field {
+export interface Crop {
   id: string;
   name: string;
   cropType: string;
@@ -16,7 +16,7 @@ export interface Field {
   source: "sample" | "user";
 }
 
-export type NewField = Omit<Field, "id" | "createdAt" | "areaHectares" | "source">;
+export type NewCrop = Omit<Crop, "id" | "createdAt" | "areaHectares" | "source">;
 
 /** GeoJSON Polygon, [lng, lat] per the spec - deliberately the reverse of LatLng. */
 export interface GeoJSONPolygon {

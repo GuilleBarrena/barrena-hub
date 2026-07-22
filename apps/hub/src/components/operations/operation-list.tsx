@@ -24,7 +24,7 @@ function columns(refs: OperationRefs): Column<Operation>[] {
     { header: "Tipo", cell: (o) => o.operationType, className: "text-muted-foreground" },
     {
       header: "Parcela",
-      cell: (o) => refs.fields.get(o.fieldId)?.name ?? "—",
+      cell: (o) => refs.crops.get(o.cropId)?.name ?? "—",
       className: "text-muted-foreground",
     },
     {
@@ -71,7 +71,7 @@ export function OperationList() {
       })
       .catch(() => {
         setOperations([]);
-        setRefs({ workers: new Map(), vehicles: new Map(), fields: new Map() });
+        setRefs({ workers: new Map(), vehicles: new Map(), crops: new Map() });
       });
   }, []);
 

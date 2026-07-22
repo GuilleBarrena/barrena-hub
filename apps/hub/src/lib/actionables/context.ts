@@ -7,7 +7,7 @@ import {
   precipitation,
   temperature,
 } from "@/lib/sample-data";
-import { SAMPLE_FIELDS } from "@/lib/fields/seed";
+import { SAMPLE_CROPS } from "@/lib/crops/seed";
 import { SAMPLE_VEHICLES } from "@/lib/vehicles/seed";
 import { VEHICLE_STATUS } from "@/lib/vehicles/types";
 import { SAMPLE_WORKERS } from "@/lib/workers/seed";
@@ -38,7 +38,7 @@ export function reunirDatos(): InstantaneaFinca {
     finca: "Finca La Esperanza",
     resumen: farmSummary,
     meteoActual: currentWeather,
-    parcelas: SAMPLE_FIELDS.map((f) => ({
+    parcelas: SAMPLE_CROPS.map((f) => ({
       nombre: f.name,
       cultivo: f.cropType,
       hectareas: Math.round(f.areaHectares * 10) / 10,

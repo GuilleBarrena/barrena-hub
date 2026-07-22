@@ -8,8 +8,8 @@ import dynamic from "next/dynamic";
  * wrapper exists and is itself a Client Component. Fills its (positioned)
  * parent so drawing controls and the form can be overlaid on top.
  */
-export const FieldMapLoader = dynamic(
-  () => import("./field-map").then((m) => m.FieldMap),
+export const CropMapLoader = dynamic(
+  () => import("./crop-map").then((m) => m.CropMap),
   {
     ssr: false,
     loading: () => (

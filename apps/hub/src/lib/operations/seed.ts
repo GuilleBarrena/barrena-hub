@@ -1,18 +1,18 @@
-import { SAMPLE_FIELDS } from "@/lib/fields/seed";
-import type { Field, LatLng } from "@/lib/fields/types";
+import { SAMPLE_CROPS } from "@/lib/crops/seed";
+import type { Crop, LatLng } from "@/lib/crops/types";
 import type { Operation, TrackPoint } from "./types";
 
 /**
- * SAMPLE operations. These wire together the sample operators, fields and
+ * SAMPLE operations. These wire together the sample operators, crops and
  * vehicles so the list and detail views have something to show. Not a real
  * work log.
  */
 
-const fieldById = (id: string): Field | undefined =>
-  SAMPLE_FIELDS.find((f) => f.id === id);
+const cropById = (id: string): Crop | undefined =>
+  SAMPLE_CROPS.find((f) => f.id === id);
 
 /**
- * Fabricate a plausible vehicle pass over a field: back-and-forth rows across
+ * Fabricate a plausible vehicle pass over a crop: back-and-forth rows across
  * its bounding box, inset from the edges so the trace sits inside the plot.
  * Real telemetry would replace this wholesale; it exists only so the tracking
  * map has a line to draw.
@@ -58,9 +58,9 @@ function serpentineTrack(
   return points;
 }
 
-const ring01 = fieldById("f-sample-01")?.ring ?? [];
-const ring02 = fieldById("f-sample-02")?.ring ?? [];
-const ring07 = fieldById("f-sample-07")?.ring ?? [];
+const ring01 = cropById("f-sample-01")?.ring ?? [];
+const ring02 = cropById("f-sample-02")?.ring ?? [];
+const ring07 = cropById("f-sample-07")?.ring ?? [];
 
 export const SAMPLE_OPERATIONS: Operation[] = [
   {
@@ -68,7 +68,7 @@ export const SAMPLE_OPERATIONS: Operation[] = [
     name: "Pulverización Parcela 01",
     operationType: "Pulverización",
     operatorId: "w-sample-02",
-    fieldId: "f-sample-01",
+    cropId: "f-sample-01",
     vehicleId: "v-sample-06",
     status: "completed",
     scheduledFor: "2026-07-15",
@@ -86,7 +86,7 @@ export const SAMPLE_OPERATIONS: Operation[] = [
     name: "Siembra Parcela 02",
     operationType: "Siembra",
     operatorId: "w-sample-05",
-    fieldId: "f-sample-02",
+    cropId: "f-sample-02",
     vehicleId: "v-sample-01",
     status: "in-progress",
     scheduledFor: "2026-07-20",
@@ -104,7 +104,7 @@ export const SAMPLE_OPERATIONS: Operation[] = [
     name: "Laboreo Parcela 07",
     operationType: "Laboreo",
     operatorId: "w-sample-02",
-    fieldId: "f-sample-07",
+    cropId: "f-sample-07",
     vehicleId: "v-sample-04",
     status: "planned",
     scheduledFor: "2026-07-24",
@@ -121,8 +121,8 @@ export const SAMPLE_OPERATIONS: Operation[] = [
     name: "Inspección Parcela 04",
     operationType: "Poda",
     operatorId: "w-sample-03",
-    fieldId: "f-sample-04",
-    // No vehicle: a walking field inspection needs no machine, and therefore
+    cropId: "f-sample-04",
+    // No vehicle: a walking crop inspection needs no machine, and therefore
     // has no track to draw.
     vehicleId: null,
     status: "planned",

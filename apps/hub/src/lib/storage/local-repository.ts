@@ -1,9 +1,9 @@
 /**
  * Generic browser-local repository.
  *
- * Fields, vehicles and workers all need the same storage behaviour, so it
+ * Crops, vehicles and workers all need the same storage behaviour, so it
  * lives here once. Each domain supplies a storage key, its read-only samples
- * and a `build` step for whatever it derives on create (a field computes its
+ * and a `build` step for whatever it derives on create (a crop computes its
  * area, for instance).
  *
  * Methods are async even though localStorage is synchronous, so an
