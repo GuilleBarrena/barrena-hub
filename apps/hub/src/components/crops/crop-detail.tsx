@@ -113,7 +113,10 @@ export function CropDetail() {
     <div className="-mx-5 -mt-6 md:relative md:-m-8 md:h-[calc(100dvh-3.5rem)] md:overflow-hidden md:bg-surface-2">
       {/* Map. A fixed-height hero on mobile; fills the whole stage on desktop
           so the corner cards can float over it. */}
-      <div className="relative h-[46vh] min-h-[17rem] overflow-hidden bg-surface-2 md:absolute md:inset-0 md:h-full md:min-h-0">
+      {/* `z-0` gives the hero its own stacking context so the overlay controls
+          below (back link, layer toggle at z-[500]) stay contained and never
+          paint over the sticky mobile header when the page scrolls. */}
+      <div className="relative z-0 h-[46vh] min-h-[17rem] overflow-hidden bg-surface-2 md:absolute md:inset-0 md:h-full md:min-h-0">
         <CropViewMapLoader
           crop={crop}
           stations={stations}
