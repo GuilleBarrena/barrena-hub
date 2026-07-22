@@ -31,14 +31,49 @@ export function createLocalStorageRepository<T extends StoredEntity, TDraft>(con
   /** Seeded rows. Returned by list() but never written to storage. */
   samples: T[];
   build: (draft: TDraft, base: StoredEntity) => T;
+  /**
+   * Storage keys this store used to live under. On first read, if the current
+   * key holds nothing, data from the first legacy key that has any is moved
+   * across and the legacy key cleared - so a renamed store keeps saved data.
+   */
+  legacyKeys?: string[];
+  /**
+   * Normalises a stored row whose persisted shape predates the current type
+   * (e.g. an attribute renamed on the entity). Applied to every row on read,
+   * so it must be idempotent. Runs after any legacy-key move.
+   */
+  migrateRow?: (row: unknown) => T;
 }): Repository<T, TDraft> {
+  let legacyMoved = false;
+  /** One-time: adopt data left under an old key if the current one is empty. */
+  function moveLegacyData() {
+    if (legacyMoved) return;
+    legacyMoved = true;
+    if (!config.legacyKeys?.length) return;
+    try {
+      // A present current key (even "[]") wins: the user is already migrated.
+      if (window.localStorage.getItem(config.storageKey) != null) return;
+      for (const key of config.legacyKeys) {
+        const raw = window.localStorage.getItem(key);
+        if (raw == null) continue;
+        window.localStorage.setItem(config.storageKey, raw);
+        window.localStorage.removeItem(key);
+        return;
+      }
+    } catch {
+      // A failed migration must never take the page down.
+    }
+  }
+
   function readStored(): T[] {
     if (typeof window === "undefined") return [];
+    moveLegacyData();
     try {
       const raw = window.localStorage.getItem(config.storageKey);
       if (!raw) return [];
       const parsed: unknown = JSON.parse(raw);
-      return Array.isArray(parsed) ? (parsed as T[]) : [];
+      if (!Array.isArray(parsed)) return [];
+      return config.migrateRow ? parsed.map(config.migrateRow) : (parsed as T[]);
     } catch {
       // Corrupt or unreadable storage must not take the page down.
       return [];

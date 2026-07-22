@@ -11,6 +11,8 @@ export type CropRepository = Repository<Crop, NewCrop>;
 export function createLocalStorageCropRepository(): CropRepository {
   return createLocalStorageRepository<Crop, NewCrop>({
     storageKey: "hub.crops.v1",
+    // Crops were stored as "fields" before the rename; keep that saved data.
+    legacyKeys: ["hub.fields.v1"],
     idPrefix: "f",
     samples: SAMPLE_CROPS,
     // Area is derived on create, never taken from the caller.
