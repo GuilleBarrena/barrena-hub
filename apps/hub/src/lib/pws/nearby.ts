@@ -6,7 +6,7 @@
  * only holds the small geo utilities the client and the provider share.
  */
 
-import type { LatLng } from "@/lib/fields/types";
+import type { LatLng } from "@/lib/crops/types";
 
 const EARTH_RADIUS_M = 6_371_000;
 const toRad = (deg: number) => (deg * Math.PI) / 180;

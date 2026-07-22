@@ -3,7 +3,7 @@ import type { StoredEntity } from "@/lib/storage/local-repository";
 /**
  * Status is a code union, not a display string, because it drives colour and
  * badge logic. Free-text attributes (type) store their Spanish label directly,
- * the same way a field stores its crop.
+ * the same way a crop stores its cropType.
  */
 export type VehicleStatus = "operational" | "maintenance" | "out-of-service";
 

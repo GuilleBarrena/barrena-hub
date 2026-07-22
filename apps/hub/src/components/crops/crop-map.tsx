@@ -11,8 +11,8 @@ import {
   SELECTABLE_PROVIDERS,
   type MapProviderId,
 } from "@/lib/map/providers";
-import { FARM_CENTER, INITIAL_ZOOM } from "@/lib/fields/seed";
-import type { Field, LatLng } from "@/lib/fields/types";
+import { FARM_CENTER, INITIAL_ZOOM } from "@/lib/crops/seed";
+import type { Crop, LatLng } from "@/lib/crops/types";
 
 /**
  * A place to fly the map to. `seq` is bumped on every search so re-selecting
@@ -24,7 +24,7 @@ export interface MapFocus {
   seq: number;
 }
 
-export function FieldMap({
+export function CropMap({
   points,
   onAddPoint,
   onCloseRing,
@@ -36,7 +36,7 @@ export function FieldMap({
   onAddPoint: (p: LatLng) => void;
   onCloseRing: () => void;
   closed: boolean;
-  existing?: Field[];
+  existing?: Crop[];
   focus?: MapFocus;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -104,7 +104,7 @@ export function FieldMap({
 
     // Transparent place-name overlay for basemaps that have no labels of their
     // own (satellite), so towns stay findable while drawing. It sits above the
-    // imagery but below the field vectors, which live in a higher pane.
+    // imagery but below the crop vectors, which live in a higher pane.
     labelsRef.current?.remove();
     labelsRef.current = null;
     if (provider.labelsUrl) {
@@ -127,7 +127,7 @@ export function FieldMap({
     }
   }, [focus]);
 
-  // Existing fields, as muted context beneath the one being drawn.
+  // Existing crops, as muted context beneath the one being drawn.
   useEffect(() => {
     const layer = existingLayerRef.current;
     if (!layer) return;
@@ -136,7 +136,7 @@ export function FieldMap({
     for (const f of existing) {
       if (f.ring.length < 3) continue;
       L.polygon(f.ring, {
-        className: "field-context",
+        className: "crop-context",
         weight: 1.5,
         opacity: 0.9,
         fillOpacity: 0.08,
@@ -154,8 +154,8 @@ export function FieldMap({
 
     if (points.length > 1) {
       const shape = closed
-        ? L.polygon(points, { className: "field-shape", weight: 2, fillOpacity: 0.25 })
-        : L.polyline(points, { className: "field-shape", weight: 2 });
+        ? L.polygon(points, { className: "crop-shape", weight: 2, fillOpacity: 0.25 })
+        : L.polyline(points, { className: "crop-shape", weight: 2 });
       shape.addTo(layer);
     }
 
@@ -163,7 +163,7 @@ export function FieldMap({
       const isFirst = i === 0;
       const marker = L.circleMarker(p, {
         radius: isFirst && !closed ? 7 : 5,
-        className: "field-vertex",
+        className: "crop-vertex",
         weight: 2,
         fillOpacity: 1,
       }).addTo(layer);

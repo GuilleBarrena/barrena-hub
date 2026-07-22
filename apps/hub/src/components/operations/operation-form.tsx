@@ -31,13 +31,13 @@ export function OperationForm() {
   const router = useRouter();
 
   const [workers, setWorkers] = useState<Choice[] | null>(null);
-  const [fields, setFields] = useState<Choice[] | null>(null);
+  const [crops, setCrops] = useState<Choice[] | null>(null);
   const [vehicles, setVehicles] = useState<Choice[] | null>(null);
 
   const [name, setName] = useState("");
   const [operationType, setOperationType] = useState(OPERATION_TYPES[0]);
   const [operatorId, setOperatorId] = useState("");
-  const [fieldId, setFieldId] = useState("");
+  const [cropId, setCropId] = useState("");
   const [vehicleId, setVehicleId] = useState("");
   const [status, setStatus] = useState<OperationStatus>("planned");
   const [scheduledFor, setScheduledFor] = useState(todayISO());
@@ -51,21 +51,21 @@ export function OperationForm() {
       .then((refs) => {
         if (!active) return;
         const w = [...refs.workers.values()].map((x) => ({ id: x.id, label: x.name }));
-        const f = [...refs.fields.values()].map((x) => ({ id: x.id, label: x.name }));
+        const f = [...refs.crops.values()].map((x) => ({ id: x.id, label: x.name }));
         const v = [...refs.vehicles.values()].map((x) => ({
           id: x.id,
           label: `${x.name} · ${x.plate}`,
         }));
         setWorkers(w);
-        setFields(f);
+        setCrops(f);
         setVehicles(v);
         setOperatorId((prev) => prev || w[0]?.id || "");
-        setFieldId((prev) => prev || f[0]?.id || "");
+        setCropId((prev) => prev || f[0]?.id || "");
       })
       .catch(() => {
         if (!active) return;
         setWorkers([]);
-        setFields([]);
+        setCrops([]);
         setVehicles([]);
       });
     return () => {
@@ -73,12 +73,12 @@ export function OperationForm() {
     };
   }, []);
 
-  const loaded = workers !== null && fields !== null && vehicles !== null;
+  const loaded = workers !== null && crops !== null && vehicles !== null;
   const canSave =
     loaded &&
     name.trim().length > 0 &&
     operatorId.length > 0 &&
-    fieldId.length > 0 &&
+    cropId.length > 0 &&
     scheduledFor.length > 0;
 
   async function save() {
@@ -90,7 +90,7 @@ export function OperationForm() {
         name: name.trim(),
         operationType,
         operatorId,
-        fieldId,
+        cropId,
         // Empty means the work needs no machine.
         vehicleId: vehicleId || null,
         status,
@@ -109,7 +109,7 @@ export function OperationForm() {
     return <p className="text-sm text-muted-foreground">Cargando datos…</p>;
   }
 
-  if (workers.length === 0 || fields.length === 0) {
+  if (workers.length === 0 || crops.length === 0) {
     return (
       <div className="max-w-xl rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm">
         <p className="text-sm text-foreground">
@@ -150,11 +150,11 @@ export function OperationForm() {
         />
 
         <SelectField
-          id="operation-field"
+          id="operation-crop"
           label="Parcela"
-          value={fieldId}
-          onChange={(e) => setFieldId(e.target.value)}
-          options={fields.map((f) => [f.id, f.label] as [string, string])}
+          value={cropId}
+          onChange={(e) => setCropId(e.target.value)}
+          options={crops.map((f) => [f.id, f.label] as [string, string])}
         />
 
         <SelectField

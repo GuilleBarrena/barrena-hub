@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-import { FieldMapLoader } from "@/components/fields/field-map-loader";
-import { LocationSearch } from "@/components/fields/location-search";
-import type { MapFocus } from "@/components/fields/field-map";
+import { CropMapLoader } from "@/components/crops/crop-map-loader";
+import { LocationSearch } from "@/components/crops/location-search";
+import type { MapFocus } from "@/components/crops/crop-map";
 import { Button } from "@barrena/ui/button";
-import { formatHectares, ringAreaHectares } from "@/lib/fields/geo";
-import { getFieldRepository } from "@/lib/fields/repository";
-import type { Field, LatLng } from "@/lib/fields/types";
+import { formatHectares, ringAreaHectares } from "@/lib/crops/geo";
+import { getCropRepository } from "@/lib/crops/repository";
+import type { Crop, LatLng } from "@/lib/crops/types";
 
 const CROP_TYPES = ["Viñedo", "Cereal", "Olivar", "Almendro", "Hortícola", "Barbecho"];
 
@@ -20,20 +20,20 @@ const STAGE =
   "relative -mx-5 -my-6 h-[calc(100dvh-5.75rem)] overflow-hidden bg-surface-2 " +
   "md:-m-8 md:h-screen";
 
-export function FieldForm() {
+export function CropForm() {
   const router = useRouter();
 
   const [points, setPoints] = useState<LatLng[]>([]);
   const [closed, setClosed] = useState(false);
   const [name, setName] = useState("");
   const [cropType, setCropType] = useState(CROP_TYPES[0]);
-  const [existing, setExisting] = useState<Field[]>([]);
+  const [existing, setExisting] = useState<Crop[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [focus, setFocus] = useState<MapFocus | undefined>();
 
   useEffect(() => {
-    getFieldRepository()
+    getCropRepository()
       .list()
       .then(setExisting)
       .catch(() => setExisting([]));
@@ -66,12 +66,12 @@ export function FieldForm() {
     setSaving(true);
     setError(null);
     try {
-      await getFieldRepository().create({
+      await getCropRepository().create({
         name: name.trim(),
         cropType,
         ring: points,
       });
-      router.push("/fields");
+      router.push("/crops");
       router.refresh();
     } catch {
       setError("No se pudo guardar la parcela en este navegador.");
@@ -81,7 +81,7 @@ export function FieldForm() {
 
   return (
     <div className={STAGE}>
-      <FieldMapLoader
+      <CropMapLoader
         points={points}
         onAddPoint={addPoint}
         onCloseRing={closeRing}
@@ -94,7 +94,7 @@ export function FieldForm() {
           the way Google Maps lets you fly to a location before working. */}
       <div className="pointer-events-none absolute left-3 top-3 z-[500] flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2">
         <Link
-          href="/fields"
+          href="/crops"
           className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
           ← Parcelas
@@ -139,17 +139,17 @@ export function FieldForm() {
             <p className="text-[12px] text-muted-foreground">{status}</p>
           </div>
 
-          {/* Field data + save. */}
+          {/* Crop data + save. */}
           <div className="mt-4 flex flex-col gap-4 border-t border-foreground/5 pt-4">
             <div className="flex flex-col gap-1.5">
               <label
-                htmlFor="field-name"
+                htmlFor="crop-name"
                 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
               >
                 Nombre
               </label>
               <input
-                id="field-name"
+                id="crop-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Parcela 12"
@@ -160,13 +160,13 @@ export function FieldForm() {
 
             <div className="flex flex-col gap-1.5">
               <label
-                htmlFor="field-crop"
+                htmlFor="crop-type"
                 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
               >
                 Cultivo
               </label>
               <select
-                id="field-crop"
+                id="crop-type"
                 value={cropType}
                 onChange={(e) => setCropType(e.target.value)}
                 className="h-10 rounded-lg bg-surface px-3 text-sm text-foreground outline-none

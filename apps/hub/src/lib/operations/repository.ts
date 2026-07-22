@@ -13,6 +13,15 @@ export function createLocalStorageOperationRepository(): OperationRepository {
     idPrefix: "op",
     samples: SAMPLE_OPERATIONS,
     build: (draft, base) => ({ ...draft, ...base }),
+    // The crop reference was called `fieldId` before the rename. Read older
+    // saved operations by folding it into `cropId`; idempotent once migrated.
+    migrateRow: (row) => {
+      const { fieldId, cropId, ...rest } = row as Operation & {
+        fieldId?: string;
+        cropId?: string;
+      };
+      return { ...rest, cropId: cropId ?? fieldId ?? "" } as Operation;
+    },
   });
 }
 

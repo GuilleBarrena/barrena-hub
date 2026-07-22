@@ -9,7 +9,7 @@
  * provider a reading came from.
  */
 
-import type { LatLng } from "@/lib/fields/types";
+import type { LatLng } from "@/lib/crops/types";
 
 export type PwsProvider = "weather_underground" | "ecowitt";
 

@@ -1,4 +1,4 @@
-import type { LatLng } from "@/lib/fields/types";
+import type { LatLng } from "@/lib/crops/types";
 import type { TrackPoint } from "./types";
 
 const EARTH_RADIUS_M = 6_371_000;

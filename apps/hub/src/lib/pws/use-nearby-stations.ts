@@ -15,7 +15,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import type { LatLng } from "@/lib/fields/types";
+import type { LatLng } from "@/lib/crops/types";
 import { usePwsSettings } from "./settings";
 import type { NearbyStation } from "./types";
 

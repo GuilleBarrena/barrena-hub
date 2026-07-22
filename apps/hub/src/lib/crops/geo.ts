@@ -1,10 +1,10 @@
-import type { Field, GeoJSONFeature, LatLng } from "./types";
+import type { Crop, GeoJSONFeature, LatLng } from "./types";
 
 const EARTH_RADIUS_M = 6378137;
 const toRad = (deg: number) => (deg * Math.PI) / 180;
 
 /**
- * Spherical-excess area of a lat/lng ring, in m². Accurate enough for field
+ * Spherical-excess area of a lat/lng ring, in m². Accurate enough for crop
  * boundaries at this scale; a planar shoelace over raw degrees would not be,
  * since a degree of longitude shrinks with latitude.
  */
@@ -45,18 +45,18 @@ export function ringCentroid(ring: LatLng[]): LatLng {
 }
 
 /** GeoJSON wants [lng, lat] and an explicitly closed ring. */
-export function toGeoJSON(field: Field): GeoJSONFeature {
-  const coords: [number, number][] = field.ring.map(([lat, lng]) => [lng, lat]);
+export function toGeoJSON(crop: Crop): GeoJSONFeature {
+  const coords: [number, number][] = crop.ring.map(([lat, lng]) => [lng, lat]);
   if (coords.length > 0) coords.push(coords[0]);
 
   return {
     type: "Feature",
     geometry: { type: "Polygon", coordinates: [coords] },
     properties: {
-      id: field.id,
-      name: field.name,
-      cropType: field.cropType,
-      areaHectares: Number(field.areaHectares.toFixed(4)),
+      id: crop.id,
+      name: crop.name,
+      cropType: crop.cropType,
+      areaHectares: Number(crop.areaHectares.toFixed(4)),
     },
   };
 }

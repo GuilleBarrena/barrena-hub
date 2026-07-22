@@ -64,7 +64,7 @@ export function OperationCalendar() {
       })
       .catch(() => {
         setOperations([]);
-        setRefs({ workers: new Map(), vehicles: new Map(), fields: new Map() });
+        setRefs({ workers: new Map(), vehicles: new Map(), crops: new Map() });
         setCursor(thisMonth);
       });
   }, []);

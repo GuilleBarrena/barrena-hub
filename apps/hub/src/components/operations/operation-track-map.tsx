@@ -11,20 +11,20 @@ import {
   SELECTABLE_PROVIDERS,
   type MapProviderId,
 } from "@/lib/map/providers";
-import type { Field } from "@/lib/fields/types";
+import type { Crop } from "@/lib/crops/types";
 import type { TrackPoint } from "@/lib/operations/types";
 
 /**
- * Renders a vehicle's pass over its field: the parcel outline for context, plus
- * the GPS trace drawn on top with start and end markers. Frames the field so
+ * Renders a vehicle's pass over its crop: the parcel outline for context, plus
+ * the GPS trace drawn on top with start and end markers. Frames the crop so
  * the whole plot is in view. Read-only, fills its positioned parent the same
- * way FieldViewMap does, so a caption can float over it.
+ * way CropViewMap does, so a caption can float over it.
  */
 export function OperationTrackMap({
-  field,
+  crop,
   track,
 }: {
-  field: Field;
+  crop: Crop;
   track: TrackPoint[];
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -83,8 +83,8 @@ export function OperationTrackMap({
     // The parcel outline sits underneath as context - muted, so the trace reads
     // as the subject.
     let framingBounds: L.LatLngBounds | null = null;
-    if (field.ring.length >= 3) {
-      const polygon = L.polygon(field.ring, {
+    if (crop.ring.length >= 3) {
+      const polygon = L.polygon(crop.ring, {
         color: "#ffffff",
         weight: 1.5,
         opacity: 0.7,
@@ -131,7 +131,7 @@ export function OperationTrackMap({
     if (framingBounds && framingBounds.isValid()) {
       map.fitBounds(framingBounds, { padding: [40, 40] });
     }
-  }, [field, track]);
+  }, [crop, track]);
 
   return (
     <>

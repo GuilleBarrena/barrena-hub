@@ -73,7 +73,7 @@ export function notificacionesSemilla(): Notificacion[] {
       prioridad: "media",
       ambito: "Operación",
       creadaEn: hace(420),
-      href: "/fields",
+      href: "/crops",
       accionLabel: "Ver parcelas",
     },
   ];

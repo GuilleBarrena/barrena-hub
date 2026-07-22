@@ -6,7 +6,7 @@ import type { StoredEntity } from "@/lib/storage/local-repository";
  * relational table would foreign-key back to the vehicle.
  *
  * `type` stores its Spanish label directly (like a vehicle's type or a
- * field's crop) rather than a code union - it never drives colour logic.
+ * crop's cropType) rather than a code union - it never drives colour logic.
  */
 export interface MaintenanceRecord extends StoredEntity {
   vehicleId: string;

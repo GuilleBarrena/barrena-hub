@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-/** Client-only, like the field map loaders: Leaflet needs `window`. Fills its
+/** Client-only, like the crop map loaders: Leaflet needs `window`. Fills its
  *  (positioned) parent so a caption can be layered on top. */
 export const OperationTrackMapLoader = dynamic(
   () => import("./operation-track-map").then((m) => m.OperationTrackMap),

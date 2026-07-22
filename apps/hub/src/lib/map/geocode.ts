@@ -7,7 +7,7 @@
 // pidiendo pocos resultados.
 // ---------------------------------------------------------------------------
 
-import type { LatLng } from "@/lib/fields/types";
+import type { LatLng } from "@/lib/crops/types";
 
 export interface GeocodeResult {
   /** Texto legible del lugar, p. ej. "Olite, Navarra, España". */

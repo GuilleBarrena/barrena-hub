@@ -1,14 +1,14 @@
-import type { LatLng } from "@/lib/fields/types";
+import type { LatLng } from "@/lib/crops/types";
 import type { StoredEntity } from "@/lib/storage/local-repository";
 
 /**
- * An operation is the link between an operator (worker), a field, and
+ * An operation is the link between an operator (worker), a crop, and
  * optionally a vehicle: the record of a task carried out on a parcel. When a
  * vehicle is assigned it can carry a GPS track, so the pass is drawn on the map.
  *
  * Status is a code union, not a display string, because it drives colour and
  * badge logic. `operationType` stores its Spanish label directly, the same way
- * a vehicle stores its type or a field its crop.
+ * a vehicle stores its type or a crop its cropType.
  */
 export type OperationStatus =
   | "planned"
@@ -16,7 +16,7 @@ export type OperationStatus =
   | "completed"
   | "cancelled";
 
-/** A single GPS fix along a vehicle's pass. Reuses the field [lat, lng] order. */
+/** A single GPS fix along a vehicle's pass. Reuses the same [lat, lng] order. */
 export interface TrackPoint {
   /** [lat, lng] - the order Leaflet uses, kept consistent end to end. */
   at: LatLng;
@@ -30,7 +30,7 @@ export interface Operation extends StoredEntity {
   /** Worker who runs the operation. Always set. */
   operatorId: string;
   /** Parcel the operation is carried out on. Always set. */
-  fieldId: string;
+  cropId: string;
   /** Machine assigned, if any. Null when the work needs no vehicle. */
   vehicleId: string | null;
   status: OperationStatus;
