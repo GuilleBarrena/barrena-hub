@@ -38,7 +38,7 @@ export default function DashboardHome() {
         <ActionablesPanel />
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-5">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Panel
           title="Actividad de flota"
           subtitle="Últimas pasadas registradas por vehículo."

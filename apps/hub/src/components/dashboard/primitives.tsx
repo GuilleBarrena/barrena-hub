@@ -13,7 +13,7 @@ export function Panel({
 }) {
   return (
     <section
-      className={`rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm ${className}`}
+      className={`min-w-0 rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm ${className}`}
     >
       <h2 className="text-sm font-semibold tracking-tight text-foreground">{title}</h2>
       {subtitle && (
