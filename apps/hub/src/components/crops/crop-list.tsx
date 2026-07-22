@@ -10,8 +10,8 @@ import { getCropRepository } from "@/lib/crops/repository";
 import type { Crop } from "@/lib/crops/types";
 
 const COLUMNS: Column<Crop>[] = [
-  { header: "Parcela", cell: (f) => f.name },
-  { header: "Cultivo", cell: (f) => f.cropType, className: "text-muted-foreground" },
+  { header: "Cultivo", cell: (f) => f.name },
+  { header: "Tipo de cultivo", cell: (f) => f.cropType, className: "text-muted-foreground" },
   {
     header: "Superficie",
     cell: (f) => formatHectares(f.areaHectares),
@@ -21,7 +21,7 @@ const COLUMNS: Column<Crop>[] = [
     header: "Origen",
     cell: (f) => (
       <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-        {f.source === "sample" ? "Muestra" : "Dibujada"}
+        {f.source === "sample" ? "Muestra" : "Dibujado"}
       </span>
     ),
   },
@@ -42,7 +42,7 @@ export function CropList() {
   // null = not loaded yet. Storage is browser-only, so the first paint has
   // nothing to show and must not claim the list is empty.
   if (crops === null) {
-    return <p className="text-sm text-muted-foreground">Cargando parcelas…</p>;
+    return <p className="text-sm text-muted-foreground">Cargando cultivos…</p>;
   }
 
   const totalHectares = crops.reduce((sum, f) => sum + f.areaHectares, 0);
@@ -51,11 +51,11 @@ export function CropList() {
     <>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          {crops.length} {crops.length === 1 ? "parcela" : "parcelas"} ·{" "}
+          {crops.length} {crops.length === 1 ? "cultivo" : "cultivos"} ·{" "}
           {formatHectares(totalHectares)} en total
         </p>
         <Button asChild>
-          <Link href="/crops/new">Añadir parcela</Link>
+          <Link href="/crops/new">Añadir cultivo</Link>
         </Button>
       </div>
 
@@ -70,7 +70,7 @@ export function CropList() {
       />
 
       <p className="mt-6 text-[11px] text-muted-foreground">
-        Las parcelas marcadas como muestra son datos de ejemplo. Las que dibuje se
+        Los cultivos marcados como muestra son datos de ejemplo. Los que dibuje se
         guardan únicamente en este navegador.
       </p>
     </>

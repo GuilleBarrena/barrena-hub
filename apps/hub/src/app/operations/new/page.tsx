@@ -21,7 +21,7 @@ export default function NewOperationPage() {
           Añadir operación
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Enlace un operario y una parcela, y opcionalmente un vehículo.
+          Enlace un operario y un cultivo, y opcionalmente un vehículo.
         </p>
       </header>
 

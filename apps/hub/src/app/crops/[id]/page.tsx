@@ -6,8 +6,8 @@ import { CropDetail } from "@/components/crops/crop-detail";
  * render time - hence a generic title rather than generateMetadata.
  */
 export const metadata: Metadata = {
-  title: "Parcela",
-  description: "Contorno y datos de la parcela.",
+  title: "Cultivo",
+  description: "Contorno y datos del cultivo.",
 };
 
 /** Full-screen map view: CropDetail breaks out of the dashboard padding and

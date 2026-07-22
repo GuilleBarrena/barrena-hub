@@ -82,7 +82,7 @@ export function ActionablesPanel() {
               {data && <MotorBadge motor={data.motor} />}
             </h2>
             <p className="text-[12px] text-muted-foreground">
-              La IA cruza meteo, parcelas, flota y cuadrillas
+              La IA cruza meteo, cultivos, flota y cuadrillas
             </p>
           </div>
         </div>

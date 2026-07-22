@@ -75,7 +75,7 @@ export function NearbyStations({
 
       {state.status === "ready" && state.stations.length === 0 && (
         <p className="mt-3 text-[12px] text-muted-foreground">
-          No hay estaciones públicas en el entorno de esta parcela.
+          No hay estaciones públicas en el entorno de este cultivo.
         </p>
       )}
 

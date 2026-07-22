@@ -14,7 +14,7 @@ import { SAMPLE_WORKERS } from "@/lib/workers/seed";
 import { WORKER_STATUS } from "@/lib/workers/types";
 
 // ---------------------------------------------------------------------------
-// Reúne TODOS los datos de entrada que vigila Hub (parcelas, flota, cuadrillas,
+// Reúne TODOS los datos de entrada que vigila Hub (cultivos, flota, cuadrillas,
 // meteo, alertas y actividad) en un único contexto que la capa de IA razona
 // para producir acciones. En producción estas fuentes se sustituirían por
 // integraciones reales; aquí son datos de muestra para que todo funcione de
@@ -25,7 +25,7 @@ export interface InstantaneaFinca {
   finca: string;
   resumen: typeof farmSummary;
   meteoActual: typeof currentWeather;
-  parcelas: { nombre: string; cultivo: string; hectareas: number }[];
+  cultivos: { nombre: string; tipoCultivo: string; hectareas: number }[];
   vehiculos: { nombre: string; tipo: string; estado: string; horas: number }[];
   operarios: { nombre: string; rol: string; cuadrilla: string; estado: string }[];
   alertas: { nivel: string; titulo: string; detalle: string }[];
@@ -38,9 +38,9 @@ export function reunirDatos(): InstantaneaFinca {
     finca: "Finca La Esperanza",
     resumen: farmSummary,
     meteoActual: currentWeather,
-    parcelas: SAMPLE_CROPS.map((f) => ({
+    cultivos: SAMPLE_CROPS.map((f) => ({
       nombre: f.name,
-      cultivo: f.cropType,
+      tipoCultivo: f.cropType,
       hectareas: Math.round(f.areaHectares * 10) / 10,
     })),
     vehiculos: SAMPLE_VEHICLES.map((v) => ({
@@ -95,9 +95,9 @@ export function datosAContexto(d: InstantaneaFinca): string {
       d.alertas.map((a) => `[${a.nivel}] ${a.titulo} — ${a.detalle}`).join("\n"),
     ),
     bloque(
-      "Parcelas",
-      d.parcelas
-        .map((p) => `${p.nombre}: ${p.cultivo}, ${p.hectareas} ha`)
+      "Cultivos",
+      d.cultivos
+        .map((p) => `${p.nombre}: ${p.tipoCultivo}, ${p.hectareas} ha`)
         .join("\n"),
     ),
     bloque(

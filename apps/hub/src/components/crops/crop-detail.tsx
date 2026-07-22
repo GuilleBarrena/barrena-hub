@@ -63,7 +63,7 @@ export function CropDetail() {
   if (state.status === "loading") {
     return (
       <div className={`${STAGE} flex items-center justify-center`}>
-        <p className="text-sm text-muted-foreground">Cargando parcela…</p>
+        <p className="text-sm text-muted-foreground">Cargando cultivo…</p>
       </div>
     );
   }
@@ -72,9 +72,9 @@ export function CropDetail() {
     return (
       <div className={`${STAGE} flex items-center justify-center px-6`}>
         <div className="max-w-sm rounded-2xl bg-card p-6 text-center shadow-sm ring-1 ring-black/5">
-          <p className="text-sm font-medium text-foreground">Parcela no encontrada</p>
+          <p className="text-sm font-medium text-foreground">Cultivo no encontrado</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Puede que se dibujara en otro navegador: las parcelas propias se guardan
+            Puede que se dibujara en otro navegador: los cultivos propios se guardan
             únicamente en este dispositivo.
           </p>
           <Button asChild variant="secondary" className="mt-4">
@@ -121,7 +121,7 @@ export function CropDetail() {
           href="/crops"
           className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
-          ← Parcelas
+          ← Cultivos
         </Link>
 
         <div className="pointer-events-auto flex min-h-0 flex-col overflow-y-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
@@ -140,7 +140,7 @@ export function CropDetail() {
           <dl className="mt-4 flex flex-col gap-2.5 border-t border-foreground/5 pt-4 text-[13px]">
             {(
               [
-                ["Cultivo", crop.cropType],
+                ["Tipo de cultivo", crop.cropType],
                 ["Superficie", formatHectares(crop.areaHectares)],
                 ["Vértices", String(crop.ring.length)],
                 [
@@ -151,7 +151,7 @@ export function CropDetail() {
                     year: "numeric",
                   }),
                 ],
-                ["Origen", crop.source === "sample" ? "Datos de muestra" : "Dibujada"],
+                ["Origen", crop.source === "sample" ? "Datos de muestra" : "Dibujado"],
               ] as [string, string][]
             ).map(([k, v]) => (
               <div key={k} className="flex items-baseline justify-between gap-4">
@@ -182,7 +182,7 @@ export function CropDetail() {
               className="mt-3 rounded-lg px-3 py-2 text-sm text-muted-foreground outline-none transition-colors
                          hover:text-red-600 focus-visible:ring-2 focus-visible:ring-ring"
             >
-              Eliminar parcela
+              Eliminar cultivo
             </button>
           )}
         </div>
@@ -195,7 +195,7 @@ export function CropDetail() {
         <div className="pointer-events-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
           <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-primary">
             <span className="size-1.5 rounded-full bg-brand-primary" />
-            Alertas de la parcela
+            Alertas del cultivo
           </p>
           {alerts.length > 0 ? (
             <ul className="mt-3 flex flex-col divide-y divide-foreground/5">
@@ -219,7 +219,7 @@ export function CropDetail() {
             </ul>
           ) : (
             <p className="mt-2 text-[12px] text-muted-foreground">
-              Sin alertas activas para esta parcela.
+              Sin alertas activas para este cultivo.
             </p>
           )}
         </div>

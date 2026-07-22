@@ -24,7 +24,7 @@ export interface Accionable {
   esfuerzo: Esfuerzo;
   /** Confianza del modelo, 0-100. */
   confianza: number;
-  /** Módulos de datos de los que procede, p. ej. ["Meteo", "Parcelas"]. */
+  /** Módulos de datos de los que procede, p. ej. ["Meteo", "Cultivos"]. */
   fuentes: string[];
   /** Pasos concretos para ejecutar. */
   pasos: string[];

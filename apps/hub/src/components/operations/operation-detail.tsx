@@ -132,7 +132,7 @@ export function OperationDetail() {
             items={[
               ["Tipo", operation.operationType],
               [
-                "Parcela",
+                "Cultivo",
                 crop ? refLink(`/crops/${crop.id}`, crop.name) : "—",
               ],
               [
