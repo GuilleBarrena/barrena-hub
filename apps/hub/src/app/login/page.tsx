@@ -260,7 +260,7 @@ function LoginVisual() {
             Toda tu explotación, en un solo panel.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-white/70">
-            Parcelas, flota, meteorología y tareas con la capa de inteligencia
+            Cultivos, flota, meteorología y tareas con la capa de inteligencia
             de Barrena Robotics convirtiendo tus datos en acciones.
           </p>
         </div>

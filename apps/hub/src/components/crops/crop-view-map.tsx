@@ -142,7 +142,7 @@ export function CropViewMap({
     }
 
     // Frame the crop, extended to include every station so the points are on
-    // screen the moment the parcela opens.
+    // screen the moment the crop opens.
     const bounds = L.latLngBounds(crop.ring);
     stations.forEach((s) => bounds.extend(s.location));
     map.fitBounds(bounds, { padding: [56, 56] });

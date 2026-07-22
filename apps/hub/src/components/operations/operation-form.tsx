@@ -113,10 +113,10 @@ export function OperationForm() {
     return (
       <div className="max-w-xl rounded-2xl bg-card p-5 ring-1 ring-black/5 shadow-sm">
         <p className="text-sm text-foreground">
-          Para crear una operación necesita al menos un operario y una parcela.
+          Para crear una operación necesita al menos un operario y un cultivo.
         </p>
         <p className="mt-2 text-[12px] text-muted-foreground">
-          Añada operarios en «Operarios» y parcelas en «Parcelas» y vuelva aquí.
+          Añada operarios en «Operarios» y cultivos en «Cultivos» y vuelva aquí.
         </p>
       </div>
     );
@@ -130,7 +130,7 @@ export function OperationForm() {
           label="Nombre"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Siembra Parcela 02"
+          placeholder="Siembra Cultivo 02"
         />
 
         <SelectField
@@ -151,7 +151,7 @@ export function OperationForm() {
 
         <SelectField
           id="operation-crop"
-          label="Parcela"
+          label="Cultivo"
           value={cropId}
           onChange={(e) => setCropId(e.target.value)}
           options={crops.map((f) => [f.id, f.label] as [string, string])}

@@ -65,7 +65,7 @@ const ring07 = cropById("f-sample-07")?.ring ?? [];
 export const SAMPLE_OPERATIONS: Operation[] = [
   {
     id: "op-sample-01",
-    name: "Pulverización Parcela 01",
+    name: "Pulverización Cultivo 01",
     operationType: "Pulverización",
     operatorId: "w-sample-02",
     cropId: "f-sample-01",
@@ -83,7 +83,7 @@ export const SAMPLE_OPERATIONS: Operation[] = [
   },
   {
     id: "op-sample-02",
-    name: "Siembra Parcela 02",
+    name: "Siembra Cultivo 02",
     operationType: "Siembra",
     operatorId: "w-sample-05",
     cropId: "f-sample-02",
@@ -101,7 +101,7 @@ export const SAMPLE_OPERATIONS: Operation[] = [
   },
   {
     id: "op-sample-03",
-    name: "Laboreo Parcela 07",
+    name: "Laboreo Cultivo 07",
     operationType: "Laboreo",
     operatorId: "w-sample-02",
     cropId: "f-sample-07",
@@ -118,7 +118,7 @@ export const SAMPLE_OPERATIONS: Operation[] = [
   },
   {
     id: "op-sample-04",
-    name: "Inspección Parcela 04",
+    name: "Inspección Cultivo 04",
     operationType: "Poda",
     operatorId: "w-sample-03",
     cropId: "f-sample-04",

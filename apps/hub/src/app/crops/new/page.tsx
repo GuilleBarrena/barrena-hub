@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { CropForm } from "@/components/crops/crop-form";
 
 export const metadata: Metadata = {
-  title: "Añadir parcela",
-  description: "Dibuje el contorno de una parcela sobre el mapa.",
+  title: "Añadir cultivo",
+  description: "Dibuje el contorno de un cultivo sobre el mapa.",
 };
 
 /** Full-screen drawing view: CropForm breaks out of the dashboard padding and

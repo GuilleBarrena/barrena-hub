@@ -16,7 +16,7 @@ export function accionablesLocales(d: InstantaneaFinca): {
 } {
   const accionables: Accionable[] = [];
 
-  // 1) Riesgo de helada cruzado con parcela y previsión.
+  // 1) Riesgo de helada cruzado con cultivo y previsión.
   const helada = d.alertas.find((a) => /helada/i.test(a.titulo));
   const noche = d.prevision.reduce(
     (min, p) => (p.tempMin < min.tempMin ? p : min),
@@ -25,14 +25,14 @@ export function accionablesLocales(d: InstantaneaFinca): {
   if (helada) {
     accionables.push({
       id: "acc-helada",
-      titulo: "Proteger Parcela 04 ante la helada del sábado",
+      titulo: "Proteger Cultivo 04 ante la helada del sábado",
       resumen: `Aviso crítico de helada en ${helada.detalle}. La previsión marca mínimas de ${noche.tempMin} °C (${noche.dia}); el viñedo en brotación es especialmente sensible.`,
       prioridad: "critica",
       ambito: "Meteo",
-      impacto: "Evita daño por helada en el viñedo de Parcela 04",
+      impacto: "Evita daño por helada en el viñedo de Cultivo 04",
       esfuerzo: "moderado",
       confianza: 90,
-      fuentes: ["Meteo", "Parcelas"],
+      fuentes: ["Meteo", "Cultivos"],
       pasos: [
         "Preparar riego antihelada o quemadores para la madrugada del sábado.",
         "Avisar a la Cuadrilla A para turno de vigilancia nocturna.",
@@ -46,7 +46,7 @@ export function accionablesLocales(d: InstantaneaFinca): {
   if (viento) {
     accionables.push({
       id: "acc-viento",
-      titulo: "Reprogramar la pulverización de Parcela 11",
+      titulo: "Reprogramar la pulverización de Cultivo 11",
       resumen: `Viento sostenido en ${viento.detalle}. Pulverizar ahora provoca deriva y desperdicia producto; hay ventana con viento flojo a media semana.`,
       prioridad: "alta",
       ambito: "Meteo",
@@ -79,7 +79,7 @@ export function accionablesLocales(d: InstantaneaFinca): {
       pasos: [
         "Diagnosticar la avería y pedir presupuesto de reparación urgente.",
         "Valorar alquiler de cosechadora de respaldo si la reparación supera 48 h.",
-        "Revisar el plan de recolección por si hay que reordenar parcelas.",
+        "Revisar el plan de recolección por si hay que reordenar cultivos.",
       ],
     });
   }
@@ -96,7 +96,7 @@ export function accionablesLocales(d: InstantaneaFinca): {
       fuentes: ["Flota"],
       pasos: [
         "Confirmar repuestos y fecha de finalización con el taller.",
-        "Planificar su reincorporación a las tareas de Parcela 02.",
+        "Planificar su reincorporación a las tareas de Cultivo 02.",
       ],
     });
   }
@@ -145,9 +145,9 @@ export function accionablesLocales(d: InstantaneaFinca): {
       impacto: "Siembra en condiciones óptimas de suelo",
       esfuerzo: "moderado",
       confianza: 71,
-      fuentes: ["Meteo", "Parcelas"],
+      fuentes: ["Meteo", "Cultivos"],
       pasos: [
-        "Programar la sembradora en Parcelas 01-03 de martes a jueves.",
+        "Programar la sembradora en Cultivos 01-03 de martes a jueves.",
         "Coordinar con el tractorista disponible de la Cuadrilla A.",
         "Cerrar la tarea antes de la lluvia prevista del viernes.",
       ],
@@ -189,11 +189,11 @@ export function respuestaLocal(
   }
 
   if (incluye(["helada", "frío", "frio", "meteo", "tiempo", "lluvia", "viento"])) {
-    return `El frente que viene marca la semana. El aviso crítico es la **helada de la madrugada del sábado en Parcela 04** (viñedo en brotación), con mínimas de 10 °C el domingo. Además hay **viento sostenido en Parcela 11** que desaconseja pulverizar.\n\nPlan: preparar riego antihelada y vigilancia nocturna para el sábado, y reprogramar la pasada del pulverizador a la ventana de viento flojo de mitad de semana.`;
+    return `El frente que viene marca la semana. El aviso crítico es la **helada de la madrugada del sábado en Cultivo 04** (viñedo en brotación), con mínimas de 10 °C el domingo. Además hay **viento sostenido en Cultivo 11** que desaconseja pulverizar.\n\nPlan: preparar riego antihelada y vigilancia nocturna para el sábado, y reprogramar la pasada del pulverizador a la ventana de viento flojo de mitad de semana.`;
   }
 
   if (incluye(["vehícul", "vehicul", "flota", "tractor", "cosechad", "máquina", "maquina", "mantenim"])) {
-    return `Dos frentes en la flota:\n\n1. **Claas Lexion fuera de servicio** — es la única cosechadora; conviene diagnosticar y valorar un alquiler de respaldo si la reparación se alarga.\n2. **Kubota M7 en mantenimiento** (4.015 h) — cerrar el mantenimiento libera un tractor para Parcela 02.\n\nEl resto de tractores está operativo, así que la prioridad clara es la cosechadora.`;
+    return `Dos frentes en la flota:\n\n1. **Claas Lexion fuera de servicio** — es la única cosechadora; conviene diagnosticar y valorar un alquiler de respaldo si la reparación se alarga.\n2. **Kubota M7 en mantenimiento** (4.015 h) — cerrar el mantenimiento libera un tractor para Cultivo 02.\n\nEl resto de tractores está operativo, así que la prioridad clara es la cosechadora.`;
   }
 
   if (incluye(["operar", "cuadrill", "personal", "gente", "baja", "peón", "peon"])) {
@@ -210,7 +210,7 @@ export function respuestaLocal(
     return `Hola, soy el agente de Hub. Veo todos los datos de la finca y las ${accionables.length} acciones que ha propuesto la IA. Pregúntame cosas como «¿por dónde empiezo?», «explícame el riesgo de helada» o «prepara un plan para la cosechadora».`;
   }
 
-  return `Mirando toda la operación, el titular es: un frente frío trae **helada el sábado en Parcela 04** mientras la **cosechadora Claas está fuera de servicio** justo antes de recolección.\n\nSi solo hicieras una cosa hoy: **${
+  return `Mirando toda la operación, el titular es: un frente frío trae **helada el sábado en Cultivo 04** mientras la **cosechadora Claas está fuera de servicio** justo antes de recolección.\n\nSi solo hicieras una cosa hoy: **${
     top?.titulo ?? "atender la acción prioritaria"
-  }** — ${top?.impacto ?? "el mayor impacto disponible"}. Puedo priorizar, preparar un plan o entrar en cualquier módulo (meteo, flota, cuadrillas, parcelas).`;
+  }** — ${top?.impacto ?? "el mayor impacto disponible"}. Puedo priorizar, preparar un plan o entrar en cualquier módulo (meteo, flota, cuadrillas, cultivos).`;
 }

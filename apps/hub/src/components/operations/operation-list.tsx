@@ -23,7 +23,7 @@ function columns(refs: OperationRefs): Column<Operation>[] {
     { header: "Operación", cell: (o) => o.name },
     { header: "Tipo", cell: (o) => o.operationType, className: "text-muted-foreground" },
     {
-      header: "Parcela",
+      header: "Cultivo",
       cell: (o) => refs.crops.get(o.cropId)?.name ?? "—",
       className: "text-muted-foreground",
     },

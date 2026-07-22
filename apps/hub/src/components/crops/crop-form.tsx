@@ -74,7 +74,7 @@ export function CropForm() {
       router.push("/crops");
       router.refresh();
     } catch {
-      setError("No se pudo guardar la parcela en este navegador.");
+      setError("No se pudo guardar el cultivo en este navegador.");
       setSaving(false);
     }
   }
@@ -97,7 +97,7 @@ export function CropForm() {
           href="/crops"
           className="pointer-events-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-[12px] font-medium text-foreground shadow-sm ring-1 ring-black/10 backdrop-blur transition-colors hover:text-brand-primary"
         >
-          ← Parcelas
+          ← Cultivos
         </Link>
         <LocationSearch
           onSelect={(r) =>
@@ -116,7 +116,7 @@ export function CropForm() {
       >
         <div className="pointer-events-auto flex min-h-0 flex-col overflow-y-auto rounded-2xl bg-background/95 p-4 shadow-sm ring-1 ring-black/10 backdrop-blur">
           <h1 className="text-sm font-semibold tracking-tight text-foreground">
-            Añadir parcela
+            Añadir cultivo
           </h1>
           <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
             Haga clic sobre el mapa para marcar los vértices del contorno y cierre
@@ -152,7 +152,7 @@ export function CropForm() {
                 id="crop-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Parcela 12"
+                placeholder="Cultivo 12"
                 className="h-10 rounded-lg bg-surface px-3 text-sm text-foreground outline-none
                            ring-1 ring-input focus-visible:ring-2 focus-visible:ring-ring"
               />
@@ -163,7 +163,7 @@ export function CropForm() {
                 htmlFor="crop-type"
                 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
               >
-                Cultivo
+                Tipo de cultivo
               </label>
               <select
                 id="crop-type"
@@ -197,7 +197,7 @@ export function CropForm() {
             )}
 
             <Button type="button" onClick={save} disabled={!canSave || saving}>
-              {saving ? "Guardando…" : "Guardar parcela"}
+              {saving ? "Guardando…" : "Guardar cultivo"}
             </Button>
 
             <p className="text-[11px] text-muted-foreground">

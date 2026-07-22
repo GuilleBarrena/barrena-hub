@@ -4,7 +4,7 @@ import { OperationsViewTabs } from "@/components/operations/operations-view-tabs
 
 export const metadata: Metadata = {
   title: "Operaciones",
-  description: "Trabajos que enlazan operario, parcela y vehículo.",
+  description: "Trabajos que enlazan operario, cultivo y vehículo.",
 };
 
 export default function OperationsPage() {
@@ -15,7 +15,7 @@ export default function OperationsPage() {
           Operaciones
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Trabajos de campo: cada uno enlaza un operario, una parcela y, si procede,
+          Trabajos de campo: cada uno enlaza un operario, un cultivo y, si procede,
           un vehículo.
         </p>
       </header>

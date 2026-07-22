@@ -26,6 +26,6 @@ export interface Notificacion {
   creadaEn: string;
   /** Destino donde accionar la notificación, si lo hay. */
   href?: string;
-  /** Etiqueta del enlace de acción, p. ej. "Ver parcela". */
+  /** Etiqueta del enlace de acción, p. ej. "Ver cultivo". */
   accionLabel?: string;
 }

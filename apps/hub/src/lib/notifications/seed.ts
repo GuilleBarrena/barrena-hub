@@ -23,13 +23,13 @@ export function notificacionesSemilla(): Notificacion[] {
   return [
     {
       id: "ntf-helada-p04",
-      titulo: "Helada prevista el sábado en Parcela 04",
+      titulo: "Helada prevista el sábado en Cultivo 04",
       mensaje:
         "La previsión marca mínimas de 0 °C de madrugada y el viñedo está en brotación. Conviene preparar protección antihelada.",
       prioridad: "critica",
       ambito: "Meteo",
       creadaEn: hace(8),
-      href: "/agent?accion=Proteger%20Parcela%2004%20ante%20la%20helada%20del%20s%C3%A1bado",
+      href: "/agent?accion=Proteger%20Cultivo%2004%20ante%20la%20helada%20del%20s%C3%A1bado",
       accionLabel: "Preparar plan",
     },
     {
@@ -45,7 +45,7 @@ export function notificacionesSemilla(): Notificacion[] {
     },
     {
       id: "ntf-viento-p11",
-      titulo: "Viento desaconseja pulverizar en Parcela 11",
+      titulo: "Viento desaconseja pulverizar en Cultivo 11",
       mensaje:
         "Rachas sostenidas por encima de 20 km/h hoy. Pulverizar ahora provoca deriva; hay ventana de viento flojo a media semana.",
       prioridad: "alta",
@@ -69,12 +69,12 @@ export function notificacionesSemilla(): Notificacion[] {
       id: "ntf-siembra",
       titulo: "Ventana de siembra favorable martes-jueves",
       mensaje:
-        "Suelo en tempero y sin lluvia relevante hasta el viernes: mejor momento para sembrar Parcelas 01-03 sin compactar.",
+        "Suelo en tempero y sin lluvia relevante hasta el viernes: mejor momento para sembrar Cultivos 01-03 sin compactar.",
       prioridad: "media",
       ambito: "Operación",
       creadaEn: hace(420),
       href: "/crops",
-      accionLabel: "Ver parcelas",
+      accionLabel: "Ver cultivos",
     },
   ];
 }

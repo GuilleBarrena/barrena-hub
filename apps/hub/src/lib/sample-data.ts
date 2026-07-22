@@ -36,23 +36,23 @@ export const alerts = [
   {
     level: "serious" as const,
     title: "Riesgo de helada",
-    detail: "Parcela 04 · madrugada del sábado",
+    detail: "Cultivo 04 · madrugada del sábado",
   },
   {
     level: "warning" as const,
     title: "Viento sostenido",
-    detail: "Parcela 11 · pulverización desaconsejada",
+    detail: "Cultivo 11 · pulverización desaconsejada",
   },
   {
     level: "good" as const,
     title: "Ventana de siembra",
-    detail: "Parcelas 01-03 · martes a jueves",
+    detail: "Cultivos 01-03 · martes a jueves",
   },
 ];
 
 export const fleetActivity = [
-  { vehicle: "John Deere 6R", field: "Parcela 04", status: "En curso", hours: "3,2 h" },
-  { vehicle: "New Holland T7", field: "Parcela 11", status: "En curso", hours: "1,8 h" },
-  { vehicle: "Kubota M7", field: "Parcela 02", status: "Detenido", hours: "0,0 h" },
-  { vehicle: "Fendt 700", field: "Parcela 07", status: "Finalizado", hours: "6,5 h" },
+  { vehicle: "John Deere 6R", field: "Cultivo 04", status: "En curso", hours: "3,2 h" },
+  { vehicle: "New Holland T7", field: "Cultivo 11", status: "En curso", hours: "1,8 h" },
+  { vehicle: "Kubota M7", field: "Cultivo 02", status: "Detenido", hours: "0,0 h" },
+  { vehicle: "Fendt 700", field: "Cultivo 07", status: "Finalizado", hours: "6,5 h" },
 ];

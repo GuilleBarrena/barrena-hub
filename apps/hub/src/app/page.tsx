@@ -27,7 +27,7 @@ export default function DashboardHome() {
       </header>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile label="Superficie" value={farmSummary.hectares} hint="12 parcelas" />
+        <StatTile label="Superficie" value={farmSummary.hectares} hint="12 cultivos" />
         <StatTile label="Vehículos activos" value={farmSummary.activeVehicles} hint="de 9 en flota" />
         <StatTile label="Cobertura" value={farmSummary.coverage} hint="campaña en curso" />
         <StatTile label="Tareas abiertas" value={farmSummary.openTasks} hint="4 vencen hoy" />
@@ -49,7 +49,7 @@ export default function DashboardHome() {
             <table className="w-full min-w-[420px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-border text-left">
-                  {["Vehículo", "Parcela", "Estado", "Horas"].map((h) => (
+                  {["Vehículo", "Cultivo", "Estado", "Horas"].map((h) => (
                     <th
                       key={h}
                       scope="col"
