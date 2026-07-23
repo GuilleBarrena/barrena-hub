@@ -14,7 +14,7 @@
  */
 
 import { haversineMeters } from "../nearby";
-import type { NearbyStation, PwsObservation } from "../types";
+import type { DailyForecast, Forecast, NearbyStation, PwsObservation } from "../types";
 
 const BASE = "https://api.weather.com";
 
@@ -98,6 +98,11 @@ interface CurrentResponse {
 const num = (v: number | null | undefined, fallback = 0): number =>
   typeof v === "number" && Number.isFinite(v) ? v : fallback;
 
+/** Like `num`, but keeps `null` when the API has no value — for fields whose
+ *  absence is meaningful (a missing high isn't a 0 °C high). */
+const numOrNull = (v: number | null | undefined): number | null =>
+  typeof v === "number" && Number.isFinite(v) ? v : null;
+
 function normalize(obs: CurrentObservation): PwsObservation | null {
   const m = obs.metric;
   if (!m) return null;
@@ -174,4 +179,98 @@ export async function fetchNearbyStations(opts: {
   return settled
     .filter((s): s is NearbyStation => s !== null)
     .sort((a, b) => a.distanceM - b.distanceM);
+}
+
+/**
+ * The `daypart` block: every field is a flat array of length `2 * days`,
+ * interleaved [day, night, day, night, …]. So day `i`'s daytime value sits at
+ * index `2i` and its nighttime value at `2i + 1`. The catch: after local midday
+ * the very first (today-daytime) slot is `null` while the rest stay aligned, so
+ * readers must tolerate a null head, never shift the array.
+ */
+interface DaypartBlock {
+  cloudCover?: (number | null)[];
+  iconCode?: (number | null)[];
+  precipChance?: (number | null)[];
+  precipType?: (string | null)[];
+  relativeHumidity?: (number | null)[];
+  uvIndex?: (number | null)[];
+  windDirection?: (number | null)[];
+  windSpeed?: (number | null)[];
+  wxPhraseLong?: (string | null)[];
+}
+
+interface DailyForecastResponse {
+  dayOfWeek?: (string | null)[];
+  validTimeLocal?: (string | null)[];
+  narrative?: (string | null)[];
+  calendarDayTemperatureMax?: (number | null)[];
+  calendarDayTemperatureMin?: (number | null)[];
+  temperatureMax?: (number | null)[];
+  temperatureMin?: (number | null)[];
+  qpf?: (number | null)[];
+  qpfSnow?: (number | null)[];
+  sunriseTimeLocal?: (string | null)[];
+  sunsetTimeLocal?: (string | null)[];
+  daypart?: (DaypartBlock | null)[];
+}
+
+/** Prefer day `i`'s daytime value; fall back to its nighttime value when the
+ *  daytime slot is null (i.e. today, after midday). */
+function daypartValue<T>(arr: (T | null)[] | undefined, dayIdx: number): T | null {
+  if (!arr) return null;
+  const day = arr[dayIdx * 2];
+  const night = arr[dayIdx * 2 + 1];
+  return (day ?? night) ?? null;
+}
+
+/**
+ * A daily forecast for the point `[lat, lng]`. Uses the same key and host as the
+ * PWS calls, but a different product (`/v3/wx/forecast/daily/{days}day`), which
+ * returns model data for the location rather than any single station's reading.
+ * We request `units=m` so everything arrives in metric, matching our store.
+ */
+export async function fetchForecast(opts: {
+  lat: number;
+  lng: number;
+  apiKey: string;
+  days?: 5 | 7 | 10 | 15;
+}): Promise<Forecast> {
+  const { lat, lng, apiKey, days = 7 } = opts;
+  const key = encodeURIComponent(apiKey);
+
+  const res = await getJson<DailyForecastResponse>(
+    `${BASE}/v3/wx/forecast/daily/${days}day?geocode=${lat},${lng}&units=m&language=es-ES&format=json&apiKey=${key}`,
+  );
+
+  const count = res.dayOfWeek?.length ?? res.validTimeLocal?.length ?? 0;
+  const dp = res.daypart?.[0] ?? undefined;
+
+  const built: DailyForecast[] = [];
+  for (let i = 0; i < count; i++) {
+    built.push({
+      date: (res.validTimeLocal?.[i] ?? "").slice(0, 10),
+      dayName: res.dayOfWeek?.[i]?.trim() || "",
+      // calendar-day extremes are present for every day (including today);
+      // the plain temperatureMax/Min are the fallback if the API omits them.
+      tempMaxC: numOrNull(res.calendarDayTemperatureMax?.[i] ?? res.temperatureMax?.[i]),
+      tempMinC: numOrNull(res.calendarDayTemperatureMin?.[i] ?? res.temperatureMin?.[i]),
+      conditionPhrase: daypartValue(dp?.wxPhraseLong, i)?.trim() || "",
+      narrative: res.narrative?.[i]?.trim() || "",
+      iconCode: numOrNull(daypartValue(dp?.iconCode, i)),
+      precipChancePct: num(daypartValue(dp?.precipChance, i)),
+      precipType: daypartValue(dp?.precipType, i)?.trim() || "precip",
+      qpfMm: num(res.qpf?.[i]),
+      qpfSnowCm: num(res.qpfSnow?.[i]),
+      humidityPct: num(daypartValue(dp?.relativeHumidity, i)),
+      windSpeedKph: num(daypartValue(dp?.windSpeed, i)),
+      windDirDeg: num(daypartValue(dp?.windDirection, i)),
+      cloudCoverPct: numOrNull(daypartValue(dp?.cloudCover, i)),
+      uvIndex: num(daypartValue(dp?.uvIndex, i)),
+      sunriseLocal: res.sunriseTimeLocal?.[i] ?? null,
+      sunsetLocal: res.sunsetTimeLocal?.[i] ?? null,
+    });
+  }
+
+  return { location: [lat, lng], days: built };
 }

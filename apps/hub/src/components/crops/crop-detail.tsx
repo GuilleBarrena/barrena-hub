@@ -5,12 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { CropViewMapLoader } from "@/components/crops/crop-view-map-loader";
+import { CropForecast } from "@/components/pws/crop-forecast";
 import { NearbyStations } from "@/components/pws/nearby-stations";
 import { Button } from "@barrena/ui/button";
 import { formatHectares, ringCentroid, toGeoJSON } from "@/lib/crops/geo";
 import { getCropRepository } from "@/lib/crops/repository";
 import { alertsForCrop } from "@/lib/crops/signals";
 import type { Crop } from "@/lib/crops/types";
+import { useForecast } from "@/lib/pws/use-forecast";
 import { useNearbyStations } from "@/lib/pws/use-nearby-stations";
 import { usePwsSettings } from "@/lib/pws/settings";
 
@@ -44,6 +46,7 @@ export function CropDetail() {
   const center =
     state.status === "found" ? ringCentroid(state.crop.ring) : null;
   const { state: nearby, activeId, setActiveId, reload } = useNearbyStations(center);
+  const { state: forecast, reload: reloadForecast } = useForecast(center);
   const stations = nearby.status === "ready" ? nearby.stations : [];
 
   useEffect(() => {
@@ -234,6 +237,8 @@ export function CropDetail() {
             </p>
           )}
         </div>
+
+        <CropForecast state={forecast} units={units} onRetry={reloadForecast} />
 
         <NearbyStations
           state={nearby}

@@ -58,6 +58,25 @@ export function observationRows(o: PwsObservation, units: Units): ObservationRow
   ];
 }
 
+/** Upper-cases the first letter — the forecast API returns day names lower-case
+ *  in Spanish ("jueves"), and we want "Jueves". */
+export function capitalize(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
+
+/** "07:12" from a local ISO timestamp. Reads the clock characters straight from
+ *  the string (the API already localizes them) rather than going through `Date`,
+ *  which would re-interpret the offset against the viewer's timezone. */
+export function formatLocalHm(iso: string | null): string {
+  if (!iso || iso.length < 16) return "—";
+  return iso.slice(11, 16);
+}
+
+/** Whole-percent label, e.g. humidity or precip chance. */
+export function formatPercent(pct: number): string {
+  return `${num(pct)} %`;
+}
+
 /** "hace 12 min" style relative label for an observation time. */
 export function formatObservedAt(iso: string, now: Date = new Date()): string {
   const diffMin = Math.round((now.getTime() - new Date(iso).getTime()) / 60000);
