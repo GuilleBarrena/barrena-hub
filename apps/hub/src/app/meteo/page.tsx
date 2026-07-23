@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { Panel } from "@/components/dashboard/primitives";
-import { PrecipitationChart } from "@/components/dashboard/precipitation-chart";
-import { TemperatureChart } from "@/components/dashboard/temperature-chart";
+import { MeteoForecast } from "@/components/pws/meteo-forecast";
 import { PwsNetwork } from "@/components/pws/pws-network";
 
 export const metadata: Metadata = {
@@ -17,31 +15,19 @@ export default function MeteoPage() {
           Meteo
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Lecturas en directo de las estaciones cercanas y predicción para Finca La Esperanza.
+          Lecturas en directo de las estaciones cercanas y predicción a 7 días de cada finca.
         </p>
       </header>
 
       <PwsNetwork />
 
-      {/* Two measures, two scales -> two charts. Never a second y-axis. */}
       <div className="mt-8">
-        <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-primary">
-          Predicción · próximos 7 días
-        </p>
-        <div className="grid gap-4 xl:grid-cols-2">
-          <Panel title="Temperatura" subtitle="Media diaria y rango mínima-máxima, en °C.">
-            <TemperatureChart />
-          </Panel>
-
-          <Panel title="Precipitación" subtitle="Acumulado diario previsto, en mm.">
-            <PrecipitationChart />
-          </Panel>
-        </div>
+        <MeteoForecast />
       </div>
 
       <p className="mt-6 text-[11px] text-muted-foreground">
-        Todos los valores mostrados son datos de muestra; no proceden de ninguna
-        estación ni servicio de predicción reales.
+        Estaciones vía Weather Underground (requiere API key); predicción diaria vía
+        Open-Meteo, calculada sobre el centro de cada finca.
       </p>
     </div>
   );

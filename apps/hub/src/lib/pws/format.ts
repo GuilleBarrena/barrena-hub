@@ -27,6 +27,17 @@ export function formatTemp(c: number, units: Units): string {
   return units === "imperial" ? `${num(cToF(c), 1)} °F` : `${num(c, 1)} °C`;
 }
 
+/** Compact degree with no unit label ("24°"), for tight forecast strips where
+ *  the unit is stated once elsewhere. Rounds to a whole degree. */
+export function formatTempShort(c: number, units: Units): string {
+  return `${num(units === "imperial" ? cToF(c) : c)}°`;
+}
+
+/** The bare unit label, for a one-off "en °C" caption. */
+export function tempUnitLabel(units: Units): string {
+  return units === "imperial" ? "°F" : "°C";
+}
+
 export function formatWind(kph: number, units: Units): string {
   return units === "imperial" ? `${num(kphToMph(kph))} mph` : `${num(kph)} km/h`;
 }
@@ -56,6 +67,34 @@ export function observationRows(o: PwsObservation, units: Units): ObservationRow
     { label: "Precip. hoy", value: formatPrecip(o.precipTotalMm, units) },
     { label: "UV", value: num(o.uv) },
   ];
+}
+
+/** Upper-cases the first letter — the forecast API returns day names lower-case
+ *  in Spanish ("jueves"), and we want "Jueves". */
+export function capitalize(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
+
+/** "07:12" from a local ISO timestamp. Reads the clock characters straight from
+ *  the string (the API already localizes them) rather than going through `Date`,
+ *  which would re-interpret the offset against the viewer's timezone. */
+export function formatLocalHm(iso: string | null): string {
+  if (!iso || iso.length < 16) return "—";
+  return iso.slice(11, 16);
+}
+
+/** Whole-percent label, e.g. humidity or precip chance. */
+export function formatPercent(pct: number): string {
+  return `${num(pct)} %`;
+}
+
+/** Capitalized 3-letter Spanish weekday for a `YYYY-MM-DD` date. Built from the
+ *  date parts (not `new Date(iso)`) so a UTC-midnight parse can't shift the day. */
+export function weekdayShort(date: string): string {
+  const [y, m, d] = date.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const wd = new Date(y, m - 1, d).toLocaleDateString("es-ES", { weekday: "short" });
+  return capitalize(wd).replace(".", "");
 }
 
 /** "hace 12 min" style relative label for an observation time. */
