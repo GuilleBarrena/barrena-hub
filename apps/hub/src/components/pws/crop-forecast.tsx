@@ -3,12 +3,12 @@
 import type { DailyForecast, Units } from "@/lib/pws/types";
 import type { ForecastState } from "@/lib/pws/use-forecast";
 import {
-  capitalize,
   formatLocalHm,
   formatPercent,
   formatPrecip,
   formatTemp,
   formatWind,
+  weekdayShort,
   windCardinal,
 } from "@/lib/pws/format";
 import { WeatherGlyph } from "./weather-glyph";
@@ -102,14 +102,9 @@ function ForecastDays({ days, units }: { days: DailyForecast[]; units: Units }) 
   );
 }
 
-/** "Hoy" for the first row, otherwise a capitalized 3-letter weekday derived
- *  from the local date (built from parts to dodge any UTC-parse day shift). */
+/** "Hoy" for the first row, otherwise a short weekday from the local date. */
 function dayLabel(day: DailyForecast, index: number): string {
-  if (index === 0) return "Hoy";
-  const [y, m, d] = day.date.split("-").map(Number);
-  if (!y || !m || !d) return "";
-  const wd = new Date(y, m - 1, d).toLocaleDateString("es-ES", { weekday: "short" });
-  return capitalize(wd).replace(".", "");
+  return index === 0 ? "Hoy" : weekdayShort(day.date);
 }
 
 /** Day-of-month from the ISO date, for the small secondary label. */

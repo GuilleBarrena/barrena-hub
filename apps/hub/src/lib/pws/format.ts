@@ -27,6 +27,17 @@ export function formatTemp(c: number, units: Units): string {
   return units === "imperial" ? `${num(cToF(c), 1)} °F` : `${num(c, 1)} °C`;
 }
 
+/** Compact degree with no unit label ("24°"), for tight forecast strips where
+ *  the unit is stated once elsewhere. Rounds to a whole degree. */
+export function formatTempShort(c: number, units: Units): string {
+  return `${num(units === "imperial" ? cToF(c) : c)}°`;
+}
+
+/** The bare unit label, for a one-off "en °C" caption. */
+export function tempUnitLabel(units: Units): string {
+  return units === "imperial" ? "°F" : "°C";
+}
+
 export function formatWind(kph: number, units: Units): string {
   return units === "imperial" ? `${num(kphToMph(kph))} mph` : `${num(kph)} km/h`;
 }
@@ -75,6 +86,15 @@ export function formatLocalHm(iso: string | null): string {
 /** Whole-percent label, e.g. humidity or precip chance. */
 export function formatPercent(pct: number): string {
   return `${num(pct)} %`;
+}
+
+/** Capitalized 3-letter Spanish weekday for a `YYYY-MM-DD` date. Built from the
+ *  date parts (not `new Date(iso)`) so a UTC-midnight parse can't shift the day. */
+export function weekdayShort(date: string): string {
+  const [y, m, d] = date.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const wd = new Date(y, m - 1, d).toLocaleDateString("es-ES", { weekday: "short" });
+  return capitalize(wd).replace(".", "");
 }
 
 /** "hace 12 min" style relative label for an observation time. */
