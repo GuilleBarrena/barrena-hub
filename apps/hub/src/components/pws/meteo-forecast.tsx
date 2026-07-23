@@ -38,13 +38,19 @@ export function MeteoForecast() {
     let active = true;
     getCropRepository()
       .list()
-      .then((rows) => active && setCrops(rows))
+      // Oldest first: the chips and the default selection both follow creation
+      // order, so the first finca created leads. ISO timestamps sort lexically.
+      .then((rows) => {
+        if (!active) return;
+        setCrops([...rows].sort((a, b) => a.createdAt.localeCompare(b.createdAt)));
+      })
       .catch(() => active && setCrops([]));
     return () => {
       active = false;
     };
   }, []);
 
+  // No explicit pick yet -> the first finca in creation order.
   const selected = crops?.find((c) => c.id === selectedId) ?? crops?.[0] ?? null;
   const center = selected ? ringCentroid(selected.ring) : null;
 
