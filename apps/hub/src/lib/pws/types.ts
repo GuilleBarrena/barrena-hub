@@ -59,52 +59,60 @@ export interface NearbyStation extends PwsStation {
 }
 
 /**
+ * A normalized sky condition — the union the forecast UI understands, decoupled
+ * from any provider's own coding. Providers map their native codes (Open-Meteo's
+ * WMO weather code, TWC's icon code, …) onto this small set, and the glyph is
+ * chosen from here so the icons stay identical whoever supplied the data.
+ */
+export type ForecastCondition =
+  | "clear"
+  | "partly"
+  | "cloudy"
+  | "fog"
+  | "rain"
+  | "snow"
+  | "storm";
+
+/**
  * Normalized daily forecast, one entry per calendar day, always in metric.
  *
- * Mirrors The Weather Company's `/v3/wx/forecast/daily/{n}day` product (the same
- * `api.weather.com` host and API key the PWS calls use — forecasts are a
- * separate product, not a personal-station reading). The top-level response is
- * a set of parallel arrays plus a `daypart` block that splits every day into a
- * day/night pair; we fold the day half — falling back to night once the daytime
- * period has passed (the API nulls it after local midday) — into a single
- * per-day summary so the UI gets exactly one row per day. Units are requested as
- * metric, so values land here as °C, km/h, mm and cm, ready for `format.ts` to
- * convert at the edge like every other observation.
+ * A forecast is model output for the field's coordinates, not a station reading
+ * — personal weather stations report the present, never a prediction. The data
+ * comes from Open-Meteo (`api.open-meteo.com/v1/forecast`, keyless), requested
+ * in metric so values land here as °C, km/h, mm and cm, ready for `format.ts` to
+ * convert at the edge like every other measure. The day-of-week label is derived
+ * at render from `date`, keeping this shape provider-agnostic.
  */
 export interface DailyForecast {
-  /** Local calendar date, ISO `YYYY-MM-DD` (date part of `validTimeLocal`). */
+  /** Local calendar date, ISO `YYYY-MM-DD`. */
   date: string;
-  /** Localized day-of-week label from `dayOfWeek` (Spanish, per `language`). */
-  dayName: string;
-  /** Whole-day high, `calendarDayTemperatureMax`. Null only if the API omits it. */
+  /** Whole-day high, °C. Null only if the provider omits it. */
   tempMaxC: number | null;
-  /** Whole-day low, `calendarDayTemperatureMin`. */
+  /** Whole-day low, °C. */
   tempMinC: number | null;
-  /** Long condition phrase for the day part, `wxPhraseLong` (e.g. "Parcialmente nublado"). */
+  /** Normalized sky condition, driving the glyph. */
+  condition: ForecastCondition;
+  /** Human phrase for the condition, in Spanish (e.g. "Parcialmente nublado"). */
   conditionPhrase: string;
-  /** Day narrative sentence, `narrative`. */
-  narrative: string;
-  /** TWC icon code 0–47, day part; drives the glyph. Null when unavailable. */
-  iconCode: number | null;
-  /** Chance of precipitation, %, day part `precipChance`. */
+  /** Chance of precipitation, %. */
   precipChancePct: number;
-  /** `rain` | `snow` | `precip`, day part `precipType`. */
-  precipType: string;
-  /** Liquid-equivalent precipitation forecast for the day, mm, `qpf`. */
+  /** Liquid-equivalent precipitation total for the day, mm. */
   qpfMm: number;
-  /** Forecast snow accumulation for the day, cm, `qpfSnow`. */
+  /** Forecast snow accumulation for the day, cm. */
   qpfSnowCm: number;
-  /** Relative humidity, %, day part `relativeHumidity`. */
+  /** Mean relative humidity, %. */
   humidityPct: number;
-  /** Sustained wind, day part `windSpeed`, km/h. */
+  /** Peak sustained wind for the day, km/h. */
   windSpeedKph: number;
-  /** Wind origin in meteorological degrees, day part `windDirection`. */
+  /** Peak wind gust for the day, km/h. */
+  windGustKph: number;
+  /** Dominant wind origin in meteorological degrees. */
   windDirDeg: number;
-  /** Cloud cover, %, day part `cloudCover`. Null when unavailable. */
+  /** Mean cloud cover, %. Null when unavailable. */
   cloudCoverPct: number | null;
-  /** Peak UV index for the day, day part `uvIndex`. */
+  /** Peak UV index for the day. */
   uvIndex: number;
-  /** Local sunrise/sunset ISO strings, `sunriseTimeLocal` / `sunsetTimeLocal`. */
+  /** Local sunrise/sunset ISO strings (no offset — already local). */
   sunriseLocal: string | null;
   sunsetLocal: string | null;
 }

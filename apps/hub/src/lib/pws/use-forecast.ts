@@ -1,12 +1,10 @@
 /**
  * Fetches the 7-day forecast for a point (a field's centroid).
  *
- * Same state machine as `use-nearby-stations`, so the field view can treat the
- * forecast and the station list identically:
- *   - `unconfigured` when no API key is stored — the UI prompts to set one up,
- *     never sample data;
- *   - `loading` / `error` around the request;
- *   - `ready` with the real forecast from the provider.
+ * Simpler than `use-nearby-stations`: the forecast source (Open-Meteo) is
+ * keyless, so there's no `unconfigured` state — a request is well-defined the
+ * moment we have a coordinate. The rest of the state machine (loading / error /
+ * ready) matches the station hook so the field view can treat both the same way.
  */
 
 "use client";
@@ -14,11 +12,9 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { LatLng } from "@/lib/crops/types";
-import { usePwsSettings } from "./settings";
 import type { Forecast } from "./types";
 
 export type ForecastState =
-  | { status: "unconfigured" }
   | { status: "loading" }
   | { status: "ready"; forecast: Forecast }
   | { status: "error"; message: string };
@@ -36,7 +32,6 @@ type FetchResult =
   | { key: string; status: "error"; message: string };
 
 export function useForecast(center: LatLng | null): ForecastResult {
-  const { apiKey, provider } = usePwsSettings();
   const [result, setResult] = useState<FetchResult | null>(null);
   const [nonce, setNonce] = useState(0);
 
@@ -46,14 +41,10 @@ export function useForecast(center: LatLng | null): ForecastResult {
   // not on every render that produces a fresh `center` array.
   const lat = center?.[0] ?? null;
   const lng = center?.[1] ?? null;
-  const key = apiKey.trim();
 
-  // A request is only well-defined once we have both a point and a key; `null`
-  // means there's nothing to fetch (still loading a field, or unconfigured).
-  const reqKey =
-    lat !== null && lng !== null && key !== ""
-      ? `${lat},${lng}|${provider}|${key}|${nonce}`
-      : null;
+  // A request is only well-defined once we have a point; `null` means there's
+  // nothing to fetch yet (still loading a field).
+  const reqKey = lat !== null && lng !== null ? `${lat},${lng}|${nonce}` : null;
 
   useEffect(() => {
     if (reqKey === null) return;
@@ -64,7 +55,7 @@ export function useForecast(center: LatLng | null): ForecastResult {
     fetch("/api/pws/forecast", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ lat, lng, apiKey: key, provider }),
+      body: JSON.stringify({ lat, lng }),
       signal: controller.signal,
     })
       .then(async (res) => {
@@ -91,20 +82,18 @@ export function useForecast(center: LatLng | null): ForecastResult {
       active = false;
       controller.abort();
     };
-  }, [reqKey, lat, lng, key, provider]);
+  }, [reqKey, lat, lng]);
 
   // Derived during render — no setState in the effect body. Loading covers both
   // "no field yet" and "request in flight for the current inputs".
   const state: ForecastState =
     lat === null || lng === null
       ? { status: "loading" }
-      : key === ""
-        ? { status: "unconfigured" }
-        : result?.key === reqKey
-          ? result.status === "ready"
-            ? { status: "ready", forecast: result.forecast }
-            : { status: "error", message: result.message }
-          : { status: "loading" };
+      : result?.key === reqKey
+        ? result.status === "ready"
+          ? { status: "ready", forecast: result.forecast }
+          : { status: "error", message: result.message }
+        : { status: "loading" };
 
   return { state, reload };
 }

@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
-
-import type { Units } from "@/lib/pws/types";
-import type { DailyForecast } from "@/lib/pws/types";
+import type { DailyForecast, Units } from "@/lib/pws/types";
 import type { ForecastState } from "@/lib/pws/use-forecast";
 import {
   capitalize,
@@ -19,13 +16,13 @@ import { WeatherGlyph } from "./weather-glyph";
 /**
  * The 7-day forecast for the field, one expandable row per day.
  *
- * Same card shell and state machine as `NearbyStations` so the two weather
- * panels read as a set: when there's no API key it prompts to configure one
- * rather than inventing data, and it surfaces load/error states the same way.
- * A collapsed row is a compact strip (glyph · day · precip chance · min→max with
- * a shared-scale range bar); expanding it reveals the full daily detail the
- * forecast product carries — wind, humidity, cloud cover, UV, sun times and the
- * narrative — because "as much data as possible" is the whole point here.
+ * Shares the card shell and (loading / error / ready) states with
+ * `NearbyStations` so the two weather panels read as a set — though this one has
+ * no "configure the API" prompt, because the forecast source is keyless. A
+ * collapsed row is a compact strip (glyph · day · precip chance · min→max with a
+ * shared-scale range bar); expanding it reveals the full daily detail the
+ * forecast carries — precip amount, wind, gusts, humidity, cloud cover, UV and
+ * sun times — because "as much data as possible" is the whole point here.
  */
 export function CropForecast({
   state,
@@ -49,20 +46,6 @@ export function CropForecast({
           </span>
         )}
       </p>
-
-      {state.status === "unconfigured" && (
-        <div className="mt-3">
-          <p className="text-[12px] text-muted-foreground">
-            Configura la API meteorológica para ver la predicción a 7 días de esta zona.
-          </p>
-          <Link
-            href="/settings"
-            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-brand-primary px-3 py-1.5 text-[12px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            Configurar API →
-          </Link>
-        </div>
-      )}
 
       {state.status === "loading" && (
         <p className="mt-3 text-[12px] text-muted-foreground">Cargando predicción…</p>
@@ -113,16 +96,20 @@ function ForecastDays({ days, units }: { days: DailyForecast[]; units: Units }) 
         ))}
       </ul>
       <p className="mt-3 text-[10px] text-muted-foreground">
-        Predicción diaria · vía Weather Underground
+        Predicción diaria · vía Open-Meteo
       </p>
     </>
   );
 }
 
-/** "Hoy" for the first row, otherwise a 3-letter day label. */
+/** "Hoy" for the first row, otherwise a capitalized 3-letter weekday derived
+ *  from the local date (built from parts to dodge any UTC-parse day shift). */
 function dayLabel(day: DailyForecast, index: number): string {
   if (index === 0) return "Hoy";
-  return capitalize(day.dayName).slice(0, 3);
+  const [y, m, d] = day.date.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const wd = new Date(y, m - 1, d).toLocaleDateString("es-ES", { weekday: "short" });
+  return capitalize(wd).replace(".", "");
 }
 
 /** Day-of-month from the ISO date, for the small secondary label. */
@@ -149,7 +136,7 @@ function ForecastRow({
       <details className="group py-2 first:pt-0 last:pb-0">
         <summary className="grid cursor-pointer list-none grid-cols-[1.25rem_2.75rem_1fr] items-center gap-2 marker:content-none">
           <WeatherGlyph
-            code={day.iconCode}
+            condition={day.condition}
             title={day.conditionPhrase || undefined}
             className="size-5 text-brand-primary"
           />
@@ -197,6 +184,7 @@ function ForecastDetail({ day, units }: { day: DailyForecast; units: Units }) {
     ["Prob. lluvia", formatPercent(day.precipChancePct)],
     ["Precip.", formatPrecip(day.qpfMm, units)],
     ["Viento", `${formatWind(day.windSpeedKph, units)} ${windCardinal(day.windDirDeg)}`],
+    ["Racha", formatWind(day.windGustKph, units)],
     ["Humedad", formatPercent(day.humidityPct)],
     ["Nubosidad", day.cloudCoverPct !== null ? formatPercent(day.cloudCoverPct) : "—"],
     ["UV", String(day.uvIndex)],
@@ -216,11 +204,6 @@ function ForecastDetail({ day, units }: { day: DailyForecast; units: Units }) {
           </div>
         ))}
       </dl>
-      {day.narrative && (
-        <p className="mt-2.5 border-t border-foreground/5 pt-2.5 text-[11px] leading-relaxed text-muted-foreground">
-          {day.narrative}
-        </p>
-      )}
     </div>
   );
 }
