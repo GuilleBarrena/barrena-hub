@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 import type { TlsOptions } from 'node:tls';
+import pg from 'pg';
 import type { DataSourceOptions } from 'typeorm';
 
 /** Environment variables read by {@link buildDataSourceOptions}. */
@@ -38,6 +39,9 @@ export function buildDataSourceOptions(
 
   return {
     type: 'postgres',
+    // Passed explicitly (instead of letting TypeORM require it at runtime) so
+    // bundlers such as Vercel's file tracer include `pg` in the function.
+    driver: pg,
     host: env.DATABASE_HOST,
     port: Number(env.DATABASE_PORT ?? 5432),
     database: env.DATABASE_NAME ?? 'postgres',
