@@ -16,3 +16,21 @@ npm run lint         # oxlint
 ```
 
 El puerto se configura con `PORT` (por defecto `3002`; `hub` usa 3000 y `landing` 3001).
+
+## Base de datos (Supabase + TypeORM)
+
+Copia `.env.example` a `.env` y rellena `DATABASE_URL` con la cadena de conexión de Supabase (session pooler, puerto 5432). `GET /health` comprueba la conexión.
+
+- Configuración compartida: `src/database/database.config.ts` (la usan la app y el CLI).
+- `synchronize` está desactivado: el esquema solo cambia con migraciones en `src/database/migrations`.
+- Registra las entidades en su módulo con `TypeOrmModule.forFeature([...])` (`autoLoadEntities` está activo). Nombra los ficheros `*.entity.ts` para que el CLI las encuentre.
+
+```bash
+npm run migration:generate -- src/database/migrations/NombreCambio  # a partir de las entidades
+npm run migration:create -- src/database/migrations/NombreCambio    # vacía
+npm run migration:run
+npm run migration:revert
+npm run migration:show
+```
+
+Los tests e2e necesitan una base de datos accesible desde `DATABASE_URL`.
