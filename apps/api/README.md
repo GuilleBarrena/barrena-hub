@@ -19,7 +19,7 @@ El puerto se configura con `PORT` (por defecto `3002`; `hub` usa 3000 y `landing
 
 ## Base de datos (Supabase + TypeORM)
 
-Copia `.env.example` a `.env` y rellena `DATABASE_URL` con la cadena de conexión de Supabase (session pooler, puerto 5432). `GET /health` comprueba la conexión.
+Copia `.env.example` a `.env` y rellena las variables `DATABASE_*` con los datos del session pooler de Supabase (puerto 5432). `DATABASE_PASSWORD` es la única sensible: guárdala como secret; el resto pueden ser variables normales. `GET /health` comprueba la conexión.
 
 - Configuración compartida: `src/database/database.config.ts` (la usan la app y el CLI).
 - `synchronize` está desactivado: el esquema solo cambia con migraciones en `src/database/migrations`.
@@ -33,4 +33,4 @@ npm run migration:revert
 npm run migration:show
 ```
 
-Los tests e2e necesitan una base de datos accesible desde `DATABASE_URL`.
+Los tests e2e necesitan una base de datos accesible con esas variables.
