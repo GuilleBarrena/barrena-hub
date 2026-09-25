@@ -8,7 +8,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 This repo (`barrena-webclients`) is an npm-workspaces + Turborepo monorepo:
 
-- `apps/*` — deployable Next.js apps (`hub`, `landing`). App-only code lives here.
+- `apps/*` — deployable apps: Next.js (`hub`, `landing`) and the NestJS backend (`api`, port 3002). App-only code lives here.
+- `apps/api` must never import `@barrena/ui` or other frontend code; share types with the frontends through a neutral package in `packages/*`.
 - `packages/*` — shared libraries. `@barrena/ui` holds the design system.
 
 ## Shared-UI rule
